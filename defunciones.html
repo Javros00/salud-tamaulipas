@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tablero Defunciones · Tamaulipas 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --rojo: #ab0033; --rojo-dark: #7a0025; --rojo-light: #F5E0E6;
+    --dorado: #bc955c; --dorado-dark: #8a6a30; --dorado-light: #F0E8D5;
+    --arena: #ddc9a3; --gris: #54565a; --gris-light: #E8E6E3;
+    --bg: #F5F0E8; --surface: #FFFFFF; --surface2: #EDE5D4;
+    --border: #D4C5A8; --text: #2A1A1A; --text2: #54565a; --text3: #9A8A7A;
+    --radius: 10px; --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  .header { background: linear-gradient(135deg, #ab0033 0%, #7a0025 100%); color: #fff; padding: 20px 28px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .header-title { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+  .header-sub { font-size: 13px; opacity: .75; margin-top: 2px; }
+  .header-badge { background: rgba(255,255,255,0.2); font-size: 12px; padding: 4px 12px; border-radius: 20px; font-family: 'DM Mono', monospace; }
+  .header-date { font-size: 12px; opacity: .6; margin-top: 5px; text-align: right; }
+  .stripe { height: 4px; background: linear-gradient(90deg, #ab0033 0%, #bc955c 50%, #ddc9a3 100%); }
+  .tabs-wrap { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 28px; display: flex; overflow-x: auto; }
+  .tab { padding: 14px 18px; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; border: none; background: none; border-bottom: 2.5px solid transparent; white-space: nowrap; transition: all .15s; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 7px; }
+  .tab:hover { color: var(--rojo); }
+  .tab.active { color: var(--rojo); border-bottom-color: var(--rojo); }
+  .content { padding: 24px 28px; max-width: 1200px; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .metric-card { background: var(--surface); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); border: 1px solid var(--border); position: relative; overflow: hidden; }
+  .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--mc, var(--rojo)); }
+  .metric-label { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px; }
+  .metric-value { font-size: 26px; font-weight: 600; color: var(--mc, var(--rojo)); letter-spacing: -0.5px; font-family: 'DM Mono', monospace; }
+  .metric-sub { font-size: 12px; color: var(--text2); margin-top: 4px; }
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 24px; }
+  .charts-grid.single { grid-template-columns: 1fr; }
+  .charts-grid.thirds { grid-template-columns: 2fr 1fr; }
+  @media(max-width:720px){ .charts-grid, .charts-grid.thirds { grid-template-columns: 1fr; } }
+  .chart-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 0; }
+  .chart-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .chart-sub { font-size: 12px; color: var(--text3); margin-bottom: 16px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text2); }
+  .legend-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+  .table-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; margin-bottom: 18px; }
+  .table-header { padding: 16px 20px 12px; border-bottom: 1px solid var(--border); }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--text3); background: var(--surface2); border-bottom: 1px solid var(--border); }
+  td { padding: 10px 16px; border-bottom: 1px solid #F0EBE0; color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #FAF7F2; }
+  .rank { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; margin-right: 6px; }
+  .bar-bg { background: #E8E0D0; border-radius: 3px; height: 5px; margin-top: 3px; }
+  .bar-fill { height: 5px; border-radius: 3px; background: var(--rojo); }
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+  .badge-red { background: var(--rojo-light); color: var(--rojo-dark); }
+  .badge-gold { background: var(--dorado-light); color: var(--dorado-dark); }
+  .badge-gray { background: var(--gris-light); color: var(--gris); }
+  .alert { border-radius: var(--radius); padding: 12px 16px; font-size: 13px; margin-top: 14px; display: flex; gap: 10px; align-items: flex-start; }
+  .alert-red { background: var(--rojo-light); color: var(--rojo-dark); border: 1px solid #D4A0B0; }
+  .alert-gold { background: var(--dorado-light); color: var(--dorado-dark); border: 1px solid var(--border); }
+  .footer { padding: 16px 28px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text3); display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; background: var(--surface); margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-icon">📋</div>
+    <div>
+      <div class="header-title">Tablero de Defunciones · Tamaulipas</div>
+      <div class="header-sub">Sector Salud · Certificados de Defunción 2026</div>
+    </div>
+  </div>
+  <div style="text-align:right">
+    <div class="header-badge">10,949 registros</div>
+    <div class="header-date">Enero – Junio 2026</div>
+  </div>
+</div>
+<div class="stripe"></div>
+
+<div class="tabs-wrap">
+  <button class="tab active" onclick="showTab('resumen',this)">📊 Resumen general</button>
+  <button class="tab" onclick="showTab('causas',this)">🏥 Causas de defunción</button>
+  <button class="tab" onclick="showTab('municipios',this)">📍 Municipios</button>
+  <button class="tab" onclick="showTab('sitios',this)">🏨 Sitios y unidades</button>
+  <button class="tab" onclick="showTab('perfil',this)">👤 Perfil del fallecido</button>
+</div>
+
+<div class="content">
+
+  <!-- RESUMEN -->
+  <div id="tab-resumen" class="section active">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#ab0033">
+        <div class="metric-label">Total defunciones</div>
+        <div class="metric-value">10,949</div>
+        <div class="metric-sub">Enero – Junio 2026</div>
+      </div>
+      <div class="metric-card" style="--mc:#ab0033">
+        <div class="metric-label">Promedio mensual</div>
+        <div class="metric-value">1,825</div>
+        <div class="metric-sub">6 meses registrados</div>
+      </div>
+      <div class="metric-card" style="--mc:#54565a">
+        <div class="metric-label">Hombres</div>
+        <div class="metric-value">6,033</div>
+        <div class="metric-sub">55.1% del total</div>
+      </div>
+      <div class="metric-card" style="--mc:#bc955c">
+        <div class="metric-label">Mujeres</div>
+        <div class="metric-value">4,916</div>
+        <div class="metric-sub">44.9% del total</div>
+      </div>
+      <div class="metric-card" style="--mc:#7a0025">
+        <div class="metric-label">Edad promedio</div>
+        <div class="metric-value">67.9</div>
+        <div class="metric-sub">Mediana: 70 años</div>
+      </div>
+      <div class="metric-card" style="--mc:#8a6a30">
+        <div class="metric-label">Sin afiliación médica</div>
+        <div class="metric-value">2,862</div>
+        <div class="metric-sub">26.1% sin cobertura</div>
+      </div>
+    </div>
+
+    <div class="charts-grid thirds">
+      <div class="chart-card">
+        <div class="chart-title">Defunciones por mes</div>
+        <div class="chart-sub">Total de registros enero–junio 2026</div>
+        <div style="height:230px"><canvas id="c-mes"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Sexo del fallecido</div>
+        <div class="chart-sub">Distribución por sexo</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Hombre 55.1%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Mujer 44.9%</div>
+        </div>
+        <div style="height:170px"><canvas id="c-sexo"></canvas></div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Distribución por grupo de edad</div>
+        <div class="chart-sub">Concentración de defunciones en adultos mayores</div>
+        <div style="height:240px"><canvas id="c-edad"></canvas></div>
+        <div class="alert alert-red">
+          <span>⚠️</span><span>El 75.5% de las defunciones ocurre en mayores de 60 años (7,716 personas).</span>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Afiliación a servicios de salud</div>
+        <div class="chart-sub">Derechohabiencia al momento del deceso</div>
+        <div style="height:240px"><canvas id="c-afil"></canvas></div>
+        <div class="alert alert-gold">
+          <span>ℹ️</span><span>2,862 personas (26.1%) fallecieron sin ningún tipo de afiliación médica.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAUSAS -->
+  <div id="tab-causas" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#ab0033">
+        <div class="metric-label">Principal causa básica</div>
+        <div class="metric-value" style="font-size:15px;line-height:1.3">Infarto / Cardiopatía</div>
+        <div class="metric-sub">2,069 defunciones · 18.9%</div>
+      </div>
+      <div class="metric-card" style="--mc:#7a0025">
+        <div class="metric-label">Diabetes mellitus</div>
+        <div class="metric-value">1,342</div>
+        <div class="metric-sub">12.3% del total</div>
+      </div>
+      <div class="metric-card" style="--mc:#bc955c">
+        <div class="metric-label">Tumores malignos</div>
+        <div class="metric-value">1,054</div>
+        <div class="metric-sub">9.6% del total</div>
+      </div>
+      <div class="metric-card" style="--mc:#54565a">
+        <div class="metric-label">Enf. respiratoria</div>
+        <div class="metric-value">833</div>
+        <div class="metric-sub">7.6% del total</div>
+      </div>
+    </div>
+
+    <div class="charts-grid single">
+      <div class="chart-card">
+        <div class="chart-title">Causa básica de defunción — grupos CIE-10</div>
+        <div class="chart-sub">Clasificación Internacional de Enfermedades — principales grupos</div>
+        <div style="height:320px"><canvas id="c-causa-grupo"></canvas></div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Top 10 — Primera causa de defunción</div>
+        <div class="chart-sub">Causa inmediata registrada en certificado (descripcion_causa_a)</div>
+        <div style="height:320px"><canvas id="c-causa-a"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Top 10 — Causa básica CIE-10</div>
+        <div class="chart-sub">Diagnóstico etiológico principal del deceso</div>
+        <div style="height:320px"><canvas id="c-cie10"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MUNICIPIOS -->
+  <div id="tab-municipios" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#ab0033">
+        <div class="metric-label">Municipio con más defunciones</div>
+        <div class="metric-value" style="font-size:18px">Reynosa</div>
+        <div class="metric-sub">1,930 · 17.6% del total</div>
+      </div>
+      <div class="metric-card" style="--mc:#ab0033">
+        <div class="metric-label">Top 3 concentran</div>
+        <div class="metric-value">45.2%</div>
+        <div class="metric-sub">Reynosa + Matamoros + Victoria</div>
+      </div>
+      <div class="metric-card" style="--mc:#bc955c">
+        <div class="metric-label">Municipios registrados</div>
+        <div class="metric-value">20+</div>
+        <div class="metric-sub">Con defunciones activas</div>
+      </div>
+    </div>
+
+    <div class="charts-grid single">
+      <div class="chart-card">
+        <div class="chart-title">Defunciones por municipio — Top 15</div>
+        <div class="chart-sub">Municipio donde ocurrió la defunción</div>
+        <div style="height:400px"><canvas id="c-mun"></canvas></div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-header">
+        <div class="chart-title">Tabla detallada — Top 15 municipios</div>
+        <div class="chart-sub">Ordenados por número de defunciones</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Municipio</th><th>Defunciones</th><th>% del total</th><th style="width:120px">Distribución</th></tr></thead>
+          <tbody id="mun-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SITIOS Y UNIDADES -->
+  <div id="tab-sitios" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#ab0033">
+        <div class="metric-label">Defunciones en hogar</div>
+        <div class="metric-value">3,752</div>
+        <div class="metric-sub">34.3% ocurridas en casa</div>
+      </div>
+      <div class="metric-card" style="--mc:#7a0025">
+        <div class="metric-label">Defunciones en IMSS</div>
+        <div class="metric-value">2,947</div>
+        <div class="metric-sub">26.9% del total</div>
+      </div>
+      <div class="metric-card" style="--mc:#bc955c">
+        <div class="metric-label">Principal unidad</div>
+        <div class="metric-value" style="font-size:14px">HGR 6 Cd. Madero</div>
+        <div class="metric-sub">803 defunciones</div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Sitio de defunción</div>
+        <div class="chart-sub">Lugar donde ocurrió el deceso</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Hogar 34.3%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#7a0025"></div>IMSS 26.9%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>IMSS Bienestar 17.0%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#8a6a30"></div>ISSSTE 4.9%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>Privado 4.7%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>Otros 12.2%</div>
+        </div>
+        <div style="height:280px"><canvas id="c-sitio"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Top 10 unidades médicas</div>
+        <div class="chart-sub">Con mayor número de defunciones registradas</div>
+        <div style="height:310px"><canvas id="c-unidad"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERFIL -->
+  <div id="tab-perfil" class="section">
+    <div class="charts-grid single">
+      <div class="chart-card">
+        <div class="chart-title">Escolaridad del fallecido</div>
+        <div class="chart-sub">Nivel educativo alcanzado</div>
+        <div style="height:320px"><canvas id="c-escol"></canvas></div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Población indígena</div>
+        <div class="chart-sub">Se considera indígena</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>No 98.2%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Sí 0.8%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>Se ignora 1.0%</div>
+        </div>
+        <div style="height:220px"><canvas id="c-indigena"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Distribución por edad y sexo</div>
+        <div class="chart-sub">Pirámide de defunciones por grupo etario</div>
+        <div style="height:260px"><canvas id="c-piramide"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span>📁 Fuente: Certificados de Defunción CED · Secretaría de Salud Tamaulipas</span>
+  <span>📅 Período: Enero–Junio 2026 · 10,949 registros</span>
+</div>
+
+<script>
+const TOTAL = 10949;
+const gridC = 'rgba(0,0,0,0.05)';
+const tc = '#9A8A7A';
+const initialized = {};
+
+const DEFS = {
+  resumen: () => {
+    new Chart(document.getElementById('c-mes'), {
+      type: 'bar',
+      data: { labels:['Enero','Febrero','Marzo','Abril','Mayo','Junio'],
+        datasets:[{ data:[2512,2197,2049,1912,2076,203],
+          backgroundColor:['#ab0033','#ab0033','#ab0033','#ab0033','#ab0033','#ddc9a3'], borderRadius:5 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y.toLocaleString()} defunciones`}}},
+        scales:{ y:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, x:{ticks:{color:tc},grid:{display:false}} } }
+    });
+    new Chart(document.getElementById('c-sexo'), {
+      type:'doughnut',
+      data:{ labels:['Hombre','Mujer'], datasets:[{ data:[6033,4916], backgroundColor:['#ab0033','#bc955c'], borderWidth:0, hoverOffset:6 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, cutout:'65%' }
+    });
+    new Chart(document.getElementById('c-edad'), {
+      type:'bar',
+      data:{ labels:['0–11','12–17','18–29','30–44','45–59','60–74','75+'],
+        datasets:[{ data:[239,70,284,708,1918,3357,4359],
+          backgroundColor:['#ddc9a3','#ddc9a3','#ddc9a3','#bc955c','#bc955c','#ab0033','#7a0025'], borderRadius:5 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+        scales:{ y:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, x:{ticks:{color:tc},grid:{display:false}} } }
+    });
+    new Chart(document.getElementById('c-afil'), {
+      type:'bar',
+      data:{ labels:['IMSS','NINGUNA','ISSSTE','IMSS Bienestar','SE IGNORA','PEMEX','OPD IMSS B.','OTROS'],
+        datasets:[{ data:[4820,2862,984,723,710,415,283,152],
+          backgroundColor:['#ab0033','#54565a','#bc955c','#8a6a30','#9A8A7A','#ddc9a3','#7a0025','#D4C5A8'], borderRadius:4 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+        scales:{ y:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, x:{ticks:{color:tc,font:{size:11}},grid:{display:false}} } }
+    });
+  },
+  causas: () => {
+    new Chart(document.getElementById('c-causa-grupo'), {
+      type:'bar',
+      data:{ labels:['Otras causas','Infarto /\nCardiopatía','Diabetes\nmellitus','Tumor\nmaligno','Enf.\nrespiratoria','Cirrosis /\nHepática','Enf.\nrenal','Enf.\ncerebrovascular','Sepsis','Hipertensión'],
+        datasets:[{ data:[4085,2069,1342,1054,833,496,482,276,187,120],
+          backgroundColor:['#D4C5A8','#ab0033','#7a0025','#bc955c','#8a6a30','#ddc9a3','#54565a','#9A8A7A','#E8E6E3','#F5E0E6'], borderRadius:5 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+        scales:{ y:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, x:{ticks:{color:tc,font:{size:11}},grid:{display:false}} } }
+    });
+    new Chart(document.getElementById('c-causa-a'), {
+      type:'bar',
+      data:{ labels:['Infarto agudo\nmiocardio','Choque\nséptico','Insuf. resp.\naguda','Infarto al\nmiocardio','Choque\nhipovolémico','Choque\ncardiogénico','Infarto agudo\ndel miocardio','Falla orgánica\nmúltiple','Insuf.\nrespiratoria','Arritmia\ncardíaca'],
+        datasets:[{ data:[1559,1036,738,541,350,317,249,220,167,165], backgroundColor:'#ab0033', borderRadius:4 }] },
+      options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+        scales:{ x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, y:{ticks:{color:tc,font:{size:11}},grid:{display:false}} } }
+    });
+    new Chart(document.getElementById('c-cie10'), {
+      type:'bar',
+      data:{ labels:['Infarto agudo\nmiocardio NE','Diabetes DM2\notras comp.','Neumonía\nno espec.','Cirrosis\nhepática','DM2 comp.\nmúltiples','DM NE otras\ncomp.','DM2 comp.\nrenales','Enf. renal\ncrónica NE','Sepsis\nno espec.','Tumor maligno\nde mama'],
+        datasets:[{ data:[1965,391,386,267,215,190,180,146,143,130], backgroundColor:'#bc955c', borderRadius:4 }] },
+      options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+        scales:{ x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, y:{ticks:{color:tc,font:{size:11}},grid:{display:false}} } }
+    });
+  },
+  municipios: () => {
+    const muns = [['REYNOSA',1930],['MATAMOROS',1554],['VICTORIA',1486],['CIUDAD MADERO',1369],['TAMPICO',1208],['NUEVO LAREDO',1150],['EL MANTE',619],['ALTAMIRA',323],['RIO BRAVO',289],['VALLE HERMOSO',153],['SAN FERNANDO',124],['ALDAMA',81],['GONZALEZ',73],['SOTO LA MARINA',70],['MIGUEL ALEMAN',61]];
+    const colors = muns.map((_,i) => i<3?'#ab0033':i<6?'#bc955c':'#ddc9a3');
+    new Chart(document.getElementById('c-mun'), {
+      type:'bar',
+      data:{ labels:muns.map(m=>m[0]), datasets:[{ data:muns.map(m=>m[1]), backgroundColor:colors, borderRadius:5 }] },
+      options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x.toLocaleString()} (${((ctx.parsed.x/TOTAL)*100).toFixed(1)}%)`}}},
+        scales:{ x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, y:{ticks:{color:tc,font:{size:12}},grid:{display:false}} } }
+    });
+    const tbody = document.getElementById('mun-tbody');
+    muns.forEach(([name,n],i) => {
+      const pct = ((n/TOTAL)*100).toFixed(1);
+      const bw = Math.round((n/1930)*100);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td><span class="rank">${String(i+1).padStart(2,'0')}</span></td><td><strong>${name}</strong></td><td><span style="font-family:'DM Mono',monospace;font-weight:500">${n.toLocaleString()}</span></td><td><span class="badge ${i<3?'badge-red':i<6?'badge-gold':'badge-gray'}">${pct}%</span></td><td><div class="bar-bg"><div class="bar-fill" style="width:${bw}%;background:${i<3?'#ab0033':i<6?'#bc955c':'#ddc9a3'}"></div></div></td>`;
+      tbody.appendChild(tr);
+    });
+  },
+  sitios: () => {
+    new Chart(document.getElementById('c-sitio'), {
+      type:'doughnut',
+      data:{ labels:['Hogar','IMSS','IMSS Bienestar','Otro lugar','ISSSTE','Privado','Vía pública','PEMEX','Otros'],
+        datasets:[{ data:[3752,2947,1856,622,531,516,273,267,185],
+          backgroundColor:['#ab0033','#7a0025','#bc955c','#54565a','#8a6a30','#ddc9a3','#9A8A7A','#E8E6E3','#D4C5A8'], borderWidth:0, hoverOffset:6 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right',labels:{font:{size:11},color:tc,boxWidth:10}}}, cutout:'50%' }
+    });
+    new Chart(document.getElementById('c-unidad'), {
+      type:'bar',
+      data:{ labels:['HGR 6 Cd. Madero','HGZ 13 Matamoros','HGZ 11 Nuevo Laredo','HGZUMAA 15 Reynosa','Hosp. Gral. Matamoros','HGZ 3 Mante','Hosp. Gral. Tampico','HGR 270 Reynosa','HGZMF 1 Victoria','Hosp. Gral. Reynosa'],
+        datasets:[{ data:[803,484,355,316,305,301,300,292,283,257], backgroundColor:'#7a0025', borderRadius:4 }] },
+      options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+        scales:{ x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, y:{ticks:{color:tc,font:{size:11}},grid:{display:false}} } }
+    });
+  },
+  perfil: () => {
+    new Chart(document.getElementById('c-escol'), {
+      type:'bar',
+      data:{ labels:['Primaria\ncompleta','Primaria\nincompleta','Secundaria\ncompleta','Bachillerato\ncompleto','Ninguna','Licenciatura\ncompleta','Secundaria\nincompleta','Se ignora','No aplica','Bachillerato\nincompleto'],
+        datasets:[{ data:[2633,2295,1649,1078,1044,998,297,293,227,209],
+          backgroundColor:['#ab0033','#bc955c','#ab0033','#bc955c','#7a0025','#8a6a30','#ddc9a3','#54565a','#9A8A7A','#ddc9a3'], borderRadius:5 }] },
+      options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+        scales:{ x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, y:{ticks:{color:tc,font:{size:11}},grid:{display:false}} } }
+    });
+    new Chart(document.getElementById('c-indigena'), {
+      type:'doughnut',
+      data:{ labels:['No','Se ignora','Sí'],
+        datasets:[{ data:[10753,105,91], backgroundColor:['#54565a','#ddc9a3','#ab0033'], borderWidth:0, hoverOffset:6 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, cutout:'60%' }
+    });
+    // Pirámide edad x sexo (estimados)
+    new Chart(document.getElementById('c-piramide'), {
+      type:'bar',
+      data:{ labels:['0–11','12–17','18–29','30–44','45–59','60–74','75+'],
+        datasets:[
+          { label:'Hombre', data:[130,38,156,390,1056,1849,2399], backgroundColor:'#ab0033', borderRadius:3 },
+          { label:'Mujer',  data:[109,32,128,318,862,1508,1960], backgroundColor:'#bc955c', borderRadius:3 }
+        ] },
+      options:{ responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{ labels:{ color:tc, font:{size:12}, boxWidth:10 } } },
+        scales:{ y:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC},stacked:false}, x:{ticks:{color:tc},grid:{display:false}} } }
+    });
+  }
+};
+
+function showTab(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  setTimeout(() => { if (!initialized[name]) { DEFS[name](); initialized[name] = true; } }, 30);
+}
+DEFS['resumen'](); initialized['resumen'] = true;
+</script>
+</body>
+</html>

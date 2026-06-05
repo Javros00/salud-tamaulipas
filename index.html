@@ -101,7 +101,7 @@
       </div>
     </div>
     <div class="header-right">
-      <div class="header-badge">2 tableros activos</div>
+      <div class="header-badge">3 tableros activos</div>
       <div class="header-date">Actualizado: junio 2026</div>
     </div>
   </div>
@@ -114,6 +114,7 @@
     <button class="nav-item active" id="nav-inicio" onclick="showPortal()">🏠 Inicio</button>
     <button class="nav-item" id="nav-nac" onclick="showTablero('nacimientos')">👶 Nacimientos</button>
     <button class="nav-item" id="nav-disc" onclick="showTablero('discapacidad')">♿ Discapacidad</button>
+    <button class="nav-item" id="nav-def" onclick="showTablero('defunciones')">📋 Defunciones</button>
   </div>
 </div>
 
@@ -173,23 +174,23 @@
           </div>
         </a>
 
-        <!-- PRÓXIMAMENTE: DEFUNCIONES -->
-        <div class="dash-card" style="--card-color:#54565a; --card-light:#E8E6E3; cursor:default; opacity:.6;">
+        <!-- DEFUNCIONES -->
+        <a class="dash-card" href="#" onclick="showTablero('defunciones'); return false;" style="--card-color:#7a0025; --card-light:#F5E0E6;">
           <div class="card-top">
-            <div class="card-icon" style="background:#E8E6E3;">📋</div>
+            <div class="card-icon">📋</div>
             <div class="card-title">Defunciones</div>
-            <div class="card-desc">Registros de defunciones por municipio, causa de muerte, institución y grupos de edad. Próximamente disponible.</div>
+            <div class="card-desc">Registros de defunciones por municipio, causa CIE-10, sitio, unidad médica, afiliación y perfil del fallecido.</div>
           </div>
           <div class="card-stats">
-            <div class="stat"><div class="stat-val" style="color:#54565a;">—</div><div class="stat-label">Registros</div></div>
-            <div class="stat"><div class="stat-val" style="color:#54565a;">—</div><div class="stat-label">Municipios</div></div>
-            <div class="stat"><div class="stat-val" style="color:#54565a;">2026</div><div class="stat-label">Período</div></div>
+            <div class="stat"><div class="stat-val">10,949</div><div class="stat-label">Registros</div></div>
+            <div class="stat"><div class="stat-val">15</div><div class="stat-label">Municipios</div></div>
+            <div class="stat"><div class="stat-val">Ene–Jun</div><div class="stat-label">Período</div></div>
           </div>
           <div class="card-footer">
-            <span class="card-source">Próximamente</span>
-            <span style="font-size:12px;color:#54565a;">En desarrollo</span>
+            <span class="card-source">CED · Certificados</span>
+            <span class="card-cta" style="color:#7a0025;">Ver tablero →</span>
           </div>
-        </div>
+        </a>
 
       </div>
     </div>
@@ -204,6 +205,18 @@
         </div>
       </div>
       <iframe class="tablero" id="iframe-nac" src="" height="900" title="Tablero de Nacimientos Tamaulipas 2026"></iframe>
+    </div>
+
+    <!-- TABLERO DEFUNCIONES -->
+    <div class="iframe-view" id="view-defunciones">
+      <div class="iframe-bar">
+        <div class="iframe-title">📋 <strong>Defunciones · Tamaulipas 2026</strong> · 10,949 registros · Ene–Jun</div>
+        <div class="iframe-actions">
+          <button class="btn" onclick="showPortal()">← Inicio</button>
+          <a class="btn btn-primary" href="defunciones.html" target="_blank">Abrir en pantalla completa ↗</a>
+        </div>
+      </div>
+      <iframe class="tablero" id="iframe-def" src="" height="900" title="Tablero de Defunciones Tamaulipas 2026"></iframe>
     </div>
 
     <!-- TABLERO DISCAPACIDAD -->
@@ -234,6 +247,7 @@
 function showPortal() {
   document.getElementById('view-portal').style.display = 'block';
   document.getElementById('view-nacimientos').style.display = 'none';
+  document.getElementById('view-defunciones').style.display = 'none';
   document.getElementById('view-discapacidad').style.display = 'none';
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-inicio').classList.add('active');
@@ -243,6 +257,7 @@ function showPortal() {
 function showTablero(name) {
   document.getElementById('view-portal').style.display = 'none';
   document.getElementById('view-nacimientos').style.display = 'none';
+  document.getElementById('view-defunciones').style.display = 'none';
   document.getElementById('view-discapacidad').style.display = 'none';
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
@@ -251,6 +266,11 @@ function showTablero(name) {
     document.getElementById('nav-nac').classList.add('active');
     const f = document.getElementById('iframe-nac');
     if (!f.src || f.src === window.location.href) f.src = 'nacimientos.html';
+  } else if (name === 'defunciones') {
+    document.getElementById('view-defunciones').style.display = 'block';
+    document.getElementById('nav-def').classList.add('active');
+    const fd = document.getElementById('iframe-def');
+    if (!fd.src || fd.src === window.location.href) fd.src = 'defunciones.html';
   } else {
     document.getElementById('view-discapacidad').style.display = 'block';
     document.getElementById('nav-disc').classList.add('active');
