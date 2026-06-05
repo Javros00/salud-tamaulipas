@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sector Salud Tamaulipas · Tablero de Nacimientos 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --c-bg: #F5F0E8;
+    --c-surface: #FFFFFF;
+    --c-surface2: #EDE5D4;
+    --c-border: #D4C5A8;
+    --c-text: #2A1A1A;
+    --c-text2: #54565a;
+    --c-text3: #9A8A7A;
+    --c-blue: #ab0033;
+    --c-blue-light: #F5E0E6;
+    --c-green: #8a6a30;
+    --c-green-light: #F0E8D5;
+    --c-red: #7a0025;
+    --c-red-light: #F5D5DC;
+    --c-amber: #8a6a30;
+    --c-amber-light: #F0E8D5;
+    --c-purple: #54565a;
+    --c-purple-light: #E8E6E3;
+    --c-accent: #ab0033;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--c-bg);
+    color: var(--c-text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #ab0033 0%, #7a0025 100%);
+    color: #fff;
+    padding: 20px 28px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-icon {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .header-title { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+  .header-sub { font-size: 13px; opacity: .75; margin-top: 2px; }
+  .header-meta { text-align: right; }
+  .header-badge {
+    background: rgba(255,255,255,0.2);
+    font-size: 12px; padding: 4px 12px;
+    border-radius: 20px; font-family: 'DM Mono', monospace;
+    letter-spacing: 0.3px;
+  }
+  .header-date { font-size: 12px; opacity: .6; margin-top: 5px; }
+
+  /* TABS */
+  .tabs-wrap {
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--c-border);
+    padding: 0 28px;
+    display: flex; gap: 0; overflow-x: auto;
+  }
+  .tab {
+    padding: 14px 18px;
+    font-size: 13px; font-weight: 500;
+    color: var(--c-text2);
+    cursor: pointer;
+    border: none; background: none;
+    border-bottom: 2.5px solid transparent;
+    white-space: nowrap;
+    transition: all .15s;
+    font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .tab:hover { color: #ab0033; }
+  .tab.active { color: #ab0033; border-bottom-color: #ab0033; }
+  .tab-icon { font-size: 15px; }
+
+  /* CONTENT */
+  .content { padding: 24px 28px; max-width: 1200px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* METRICS GRID */
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .metric-card {
+    background: #FFFFFF;
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--c-border);
+    position: relative; overflow: hidden;
+  }
+  .metric-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--metric-color, var(--c-blue));
+  }
+  .metric-label { font-size: 11px; font-weight: 500; color: var(--c-text3); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px; }
+  .metric-value { font-size: 26px; font-weight: 600; color: var(--metric-color, var(--c-blue)); letter-spacing: -0.5px; font-family: 'DM Mono', monospace; }
+  .metric-sub { font-size: 12px; color: var(--c-text2); margin-top: 4px; }
+
+  /* CHARTS GRID */
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 24px; }
+  .charts-grid.single { grid-template-columns: 1fr; }
+  .charts-grid.thirds { grid-template-columns: 2fr 1fr; }
+  @media (max-width: 720px) { .charts-grid, .charts-grid.thirds { grid-template-columns: 1fr; } }
+
+  .chart-card {
+    background: #FFFFFF;
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--c-border);
+  }
+  .chart-title { font-size: 13px; font-weight: 600; color: var(--c-text); margin-bottom: 4px; }
+  .chart-sub { font-size: 12px; color: var(--c-text3); margin-bottom: 16px; }
+  .chart-wrap { position: relative; }
+
+  /* LEGEND */
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--c-text2); }
+  .legend-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+
+  /* TABLE */
+  .table-card {
+    background: #FFFFFF;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--c-border);
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .table-header { padding: 16px 20px 12px; border-bottom: 1px solid var(--c-border); }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--c-text3); background: var(--c-surface2); border-bottom: 1px solid var(--c-border); }
+  td { padding: 10px 16px; border-bottom: 1px solid #F0F2F7; color: var(--c-text); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #F8F9FC; }
+  .rank { font-size: 11px; color: var(--c-text3); font-family: 'DM Mono', monospace; margin-right: 6px; }
+  .pct-bar { width: 80px; }
+  .bar-bg { background: #E8EDF5; border-radius: 3px; height: 5px; margin-top: 3px; }
+  .bar-fill { height: 5px; border-radius: 3px; background: linear-gradient(135deg, #ab0033 0%, #7a0025 100%); }
+
+  /* BADGE */
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+  .badge-blue { background: #F5E0E6; color: #ab0033; }
+  .badge-green { background: #F0E8D5; color: #8a6a30; }
+  .badge-red { background: #F5D5DC; color: #7a0025; }
+  .badge-amber { background: var(--c-amber-light); color: var(--c-amber); }
+
+  /* ALERT */
+  .alert { border-radius: var(--radius); padding: 12px 16px; font-size: 13px; margin-bottom: 18px; display: flex; gap: 10px; align-items: flex-start; }
+  .alert-amber { background: #F0E8D5; color: #7a0025; border: 1px solid #D4C5A8; }
+  .alert-blue { background: #F5E0E6; color: #7a0025; border: 1px solid #D4A0B0; }
+
+  /* FOOTER */
+  .footer { padding: 16px 28px; border-top: 1px solid var(--c-border); font-size: 12px; color: var(--c-text3); display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; background: #FFFFFF; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-icon">🏥</div>
+    <div>
+      <div class="header-title">Tablero de Nacimientos · Tamaulipas</div>
+      <div class="header-sub">Sector Salud · Seguimiento mensual 2026</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="header-badge">13,425 registros</div>
+    <div class="header-date">Corte: 26 de mayo 2026 · Enero–Mayo</div>
+  </div>
+</div>
+
+<div style="height:4px; background: linear-gradient(90deg, #ab0033 0%, #bc955c 50%, #ddc9a3 100%);"></div>
+<!-- TABS -->
+<div class="tabs-wrap">
+  <button class="tab active" onclick="showTab('resumen',this)"><span class="tab-icon">📊</span> Resumen general</button>
+  <button class="tab" onclick="showTab('municipios',this)"><span class="tab-icon">📍</span> Municipios</button>
+  <button class="tab" onclick="showTab('atencion',this)"><span class="tab-icon">🏨</span> Atención médica</button>
+  <button class="tab" onclick="showTab('madre',this)"><span class="tab-icon">👩</span> Perfil de la madre</button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ===== RESUMEN ===== -->
+  <div id="tab-resumen" class="section active">
+    <div class="metrics">
+      <div class="metric-card" style="--metric-color:#ab0033">
+        <div class="metric-label">Total nacimientos</div>
+        <div class="metric-value">13,425</div>
+        <div class="metric-sub">Enero – Mayo 2026</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#ab0033">
+        <div class="metric-label">Promedio mensual</div>
+        <div class="metric-value">2,685</div>
+        <div class="metric-sub">5 meses registrados</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#8a6a30">
+        <div class="metric-label">Sobrevivieron al parto</div>
+        <div class="metric-value">100%</div>
+        <div class="metric-sub">13,423 confirmados</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#ab0033">
+        <div class="metric-label">Peso promedio RN</div>
+        <div class="metric-value">3,145g</div>
+        <div class="metric-sub">Rango: 445–5,320 g</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#54565a">
+        <div class="metric-label">Edad gestacional prom.</div>
+        <div class="metric-value">38.3</div>
+        <div class="metric-sub">Semanas promedio</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#8a6a30">
+        <div class="metric-label">Con atención prenatal</div>
+        <div class="metric-value">97.3%</div>
+        <div class="metric-sub">13,061 madres</div>
+      </div>
+    </div>
+
+    <div class="charts-grid thirds">
+      <div class="chart-card">
+        <div class="chart-title">Nacimientos por mes</div>
+        <div class="chart-sub">Total de registros enero–mayo 2026</div>
+        <div class="chart-wrap" style="height:240px"><canvas id="c-mes"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Sexo del recién nacido</div>
+        <div class="chart-sub">Distribución por sexo registrado</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Hombre 50.6%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Mujer 49.4%</div>
+        </div>
+        <div class="chart-wrap" style="height:180px"><canvas id="c-sexo"></canvas></div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Tipo de resolución del embarazo</div>
+        <div class="chart-sub">Cesárea, parto eutócico y distócico</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#7a0025"></div>Cesárea 68.6%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Eutócico 30.3%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Distócico 1.1%</div>
+        </div>
+        <div class="chart-wrap" style="height:220px"><canvas id="c-resol"></canvas></div>
+        <div class="alert alert-amber" style="margin-top:14px; margin-bottom:0;">
+          <span>⚠️</span>
+          <span>La OMS recomienda una tasa de cesáreas de 10–15%. El 68.6% registrado en Tamaulipas supera este umbral significativamente.</span>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Atención prenatal — Primer trimestre</div>
+        <div class="chart-sub">Momento de inicio de la consulta prenatal</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#8a6a30"></div>1er trimestre 79.5%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>2do trimestre 13.9%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#7a0025"></div>3er trimestre 3.2%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>No recibió 2.6%</div>
+        </div>
+        <div class="chart-wrap" style="height:220px"><canvas id="c-prenatal"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MUNICIPIOS ===== -->
+  <div id="tab-municipios" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--metric-color:#ab0033">
+        <div class="metric-label">Municipio con más nacimientos</div>
+        <div class="metric-value" style="font-size:18px;">Reynosa</div>
+        <div class="metric-sub">3,200 nacimientos · 23.8%</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#ab0033">
+        <div class="metric-label">Top 3 concentran</div>
+        <div class="metric-value">50.6%</div>
+        <div class="metric-sub">Reynosa + Matamoros + Nuevo Laredo</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#54565a">
+        <div class="metric-label">Municipios registrados</div>
+        <div class="metric-value">43+</div>
+        <div class="metric-sub">En toda la entidad</div>
+      </div>
+    </div>
+
+    <div class="charts-grid single">
+      <div class="chart-card">
+        <div class="chart-title">Nacimientos por municipio — Top 15</div>
+        <div class="chart-sub">Municipio de residencia de la madre</div>
+        <div class="chart-wrap" style="height:380px"><canvas id="c-mun"></canvas></div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-header">
+        <div class="chart-title">Tabla detallada — Top 15 municipios</div>
+        <div class="chart-sub">Ordenados por número de nacimientos</div>
+      </div>
+      <div class="table-wrap">
+        <table id="mun-table">
+          <thead><tr><th>#</th><th>Municipio</th><th>Nacimientos</th><th>% del total</th><th style="width:120px">Distribución</th></tr></thead>
+          <tbody id="mun-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ATENCIÓN ===== -->
+  <div id="tab-atencion" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--metric-color:#54565a">
+        <div class="metric-label">Principal unidad</div>
+        <div class="metric-value" style="font-size:16px;">Privada</div>
+        <div class="metric-sub">4,892 nacimientos · 36.4%</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#8a6a30">
+        <div class="metric-label">IMSS Bienestar</div>
+        <div class="metric-value">34.3%</div>
+        <div class="metric-sub">4,607 nacimientos</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#ab0033">
+        <div class="metric-label">IMSS</div>
+        <div class="metric-value">24.4%</div>
+        <div class="metric-sub">3,271 nacimientos</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#7a0025">
+        <div class="metric-label">Sin afiliación</div>
+        <div class="metric-value">37.2%</div>
+        <div class="metric-sub">4,999 madres sin cobertura</div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Lugar de nacimiento</div>
+        <div class="chart-sub">Tipo de unidad médica donde ocurrió el nacimiento</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>Privada 36.4%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#8a6a30"></div>IMSS Bienestar 34.3%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>IMSS 24.4%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>SSA 1.6%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>Otros 3.3%</div>
+        </div>
+        <div class="chart-wrap" style="height:250px"><canvas id="c-lugar"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Afiliación de la madre</div>
+        <div class="chart-sub">Derechohabiencia al momento del registro</div>
+        <div class="chart-wrap" style="height:290px"><canvas id="c-afil"></canvas></div>
+        <div class="alert alert-blue" style="margin-top:14px; margin-bottom:0;">
+          <span>ℹ️</span>
+          <span>37.2% de madres (4,999) sin afiliación. Oportunidad de mejora en cobertura del sistema de salud.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Fuente del certificado de nacimiento</div>
+      <div class="chart-sub">Sistema de origen del registro (CEN_2022 vs SINBA2)</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>CEN_2022 · 13,309 registros (99.1%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>SINBA2 · 114 registros (0.9%)</div>
+      </div>
+      <div class="chart-wrap" style="height:160px"><canvas id="c-fuente"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ===== MADRE ===== -->
+  <div id="tab-madre" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--metric-color:#ab0033">
+        <div class="metric-label">Escolaridad más frecuente</div>
+        <div class="metric-value" style="font-size:15px;">Bachillerato</div>
+        <div class="metric-sub">3,743 madres · 27.9%</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#8a6a30">
+        <div class="metric-label">Con licenciatura o más</div>
+        <div class="metric-value">24.1%</div>
+        <div class="metric-sub">3,204 madres</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#7a0025">
+        <div class="metric-label">Sin escolaridad / primaria inc.</div>
+        <div class="metric-value">1.7%</div>
+        <div class="metric-sub">226 madres</div>
+      </div>
+      <div class="metric-card" style="--metric-color:#8a6a30">
+        <div class="metric-label">Consulta prenatal 1er trim.</div>
+        <div class="metric-value">79.5%</div>
+        <div class="metric-sub">10,665 madres</div>
+      </div>
+    </div>
+
+    <div class="chart-card" style="margin-bottom:18px;">
+      <div class="chart-title">Escolaridad de la madre</div>
+      <div class="chart-sub">Nivel educativo al momento del registro del nacimiento</div>
+      <div class="chart-wrap" style="height:360px"><canvas id="c-escol"></canvas></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>📁 Fuente: CEN_2022 / SINBA2 · Secretaría de Salud Tamaulipas</span>
+  <span>📅 Período: Enero–Mayo 2026 · Corte 26 mayo 2026</span>
+  <span>📊 13,425 registros procesados</span>
+</div>
+
+<script>
+const TOTAL = 13425;
+const MAX_MUN = 3200;
+const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const gridC = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.05)';
+const tc = isDark ? '#9AA3B5' : '#8A93A8';
+
+const PAL = ['#ab0033','#bc955c','#7a0025','#ddc9a3','#54565a','#8a6a30','#2A1A1A','#E8E6E3'];
+
+const initialized = {};
+
+const CHART_DEFS = {
+  resumen: () => {
+    // Nacimientos por mes
+    new Chart(document.getElementById('c-mes'), {
+      type: 'bar',
+      data: {
+        labels: ['Enero','Febrero','Marzo','Abril','Mayo'],
+        datasets: [{ data: [3048,2569,2847,2795,2164],
+          backgroundColor: ['#ab0033','#ab0033','#ab0033','#ab0033','#ddc9a3'],
+          borderRadius: 6 }]
+      },
+      options: { responsive:true, maintainAspectRatio:false,
+        plugins: { legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.parsed.y.toLocaleString()} nacimientos` } } },
+        scales: { y:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, x:{ticks:{color:tc},grid:{display:false}} }
+      }
+    });
+    // Sexo
+    new Chart(document.getElementById('c-sexo'), {
+      type: 'doughnut',
+      data: { labels:['Hombre','Mujer'], datasets:[{ data:[6799,6623], backgroundColor:['#ab0033','#bc955c'], borderWidth:0, hoverOffset:6 }] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, cutout:'65%' }
+    });
+    // Resolución
+    new Chart(document.getElementById('c-resol'), {
+      type: 'doughnut',
+      data: { labels:['Cesárea','Eutócico','Distócico'], datasets:[{ data:[9211,4062,150], backgroundColor:['#7a0025','#ab0033','#bc955c'], borderWidth:0, hoverOffset:6 }] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, cutout:'60%' }
+    });
+    // Prenatal
+    new Chart(document.getElementById('c-prenatal'), {
+      type: 'doughnut',
+      data: { labels:['1er trimestre','2do trimestre','3er trimestre','No recibió','Se ignora'], datasets:[{ data:[10665,1871,434,343,110], backgroundColor:['#8a6a30','#bc955c','#7a0025','#54565a','#ddc9a3'], borderWidth:0, hoverOffset:6 }] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, cutout:'60%' }
+    });
+  },
+  municipios: () => {
+    const muns = [['REYNOSA',3200],['MATAMOROS',1876],['NUEVO LAREDO',1763],['VICTORIA',1197],['ALTAMIRA',882],['TAMPICO',810],['RIO BRAVO',537],['CIUDAD MADERO',524],['EL MANTE',324],['VALLE HERMOSO',210],['PUEBLO VIEJO',187],['SAN FERNANDO',162],['PANUCO',159],['GONZALEZ',134],['TULA',123]];
+    const colors = muns.map((_,i) => i < 3 ? '#ab0033' : i < 6 ? '#bc955c' : '#ddc9a3');
+    new Chart(document.getElementById('c-mun'), {
+      type: 'bar',
+      data: { labels: muns.map(m=>m[0]), datasets:[{ data:muns.map(m=>m[1]), backgroundColor:colors, borderRadius:5 }] },
+      options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.parsed.x.toLocaleString()} nacimientos (${((ctx.parsed.x/TOTAL)*100).toFixed(1)}%)` } } },
+        scales:{ x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, y:{ticks:{color:tc,font:{size:12}},grid:{display:false}} }
+      }
+    });
+    // Table
+    const tbody = document.getElementById('mun-tbody');
+    muns.forEach(([name, n], i) => {
+      const pct = ((n/TOTAL)*100).toFixed(1);
+      const barW = Math.round((n/MAX_MUN)*100);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><span class="rank">${String(i+1).padStart(2,'0')}</span></td>
+        <td><strong>${name}</strong></td>
+        <td><span style="font-family:'DM Mono',monospace;font-weight:500">${n.toLocaleString()}</span></td>
+        <td><span class="badge badge-blue">${pct}%</span></td>
+        <td class="pct-bar"><div class="bar-bg"><div class="bar-fill" style="width:${barW}%"></div></div></td>`;
+      tbody.appendChild(tr);
+    });
+  },
+  atencion: () => {
+    // Lugar nacimiento
+    new Chart(document.getElementById('c-lugar'), {
+      type: 'doughnut',
+      data: { labels:['Privada','IMSS Bienestar','IMSS','SSA','ISSSTE','Otra pública','Otros'],
+        datasets:[{ data:[4892,4607,3271,218,117,110,210], backgroundColor:['#ab0033','#bc955c','#7a0025','#ddc9a3','#8a6a30','#54565a','#2A1A1A'], borderWidth:0, hoverOffset:6 }] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, cutout:'60%' }
+    });
+    // Afiliación
+    new Chart(document.getElementById('c-afil'), {
+      type: 'bar',
+      data: {
+        labels: ['Ninguna','IMSS','Se ignora','OPD IMSS B.','IMSS B.','ISSSTE','Seg. Pop.','Otros'],
+        datasets:[{ data:[4999,4735,1224,899,828,317,206,217], backgroundColor:['#7a0025','#ab0033','#54565a','#bc955c','#8a6a30','#ddc9a3','#9A8A7A','#E8E6E3'], borderRadius:5 }]
+      },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+        scales:{ y:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, x:{ticks:{color:tc,font:{size:11}},grid:{display:false}} }
+      }
+    });
+    // Fuente
+    new Chart(document.getElementById('c-fuente'), {
+      type: 'bar',
+      data: {
+        labels: ['CEN_2022','SINBA2'],
+        datasets:[{ data:[13309,114], backgroundColor:['#ab0033','#bc955c'], borderRadius:6, barThickness:40 }]
+      },
+      options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+        scales:{ x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, y:{ticks:{color:tc},grid:{display:false}} }
+      }
+    });
+  },
+  madre: () => {
+    const escol = [
+      ['Bachillerato/Prepa completa',3743],['Secundaria completa',3530],['Licenciatura completa',2985],
+      ['Prepa incompleta',879],['Primaria completa',695],['Licenciatura incompleta',588],
+      ['Secundaria incompleta',497],['Primaria incompleta',190],['Posgrado completo',167],['Técnico/Otros',56]
+    ];
+    new Chart(document.getElementById('c-escol'), {
+      type: 'bar',
+      data: { labels: escol.map(e=>e[0]), datasets:[{ data:escol.map(e=>e[1]),
+        backgroundColor: ['#ab0033','#ab0033','#ab0033','#bc955c','#bc955c','#bc955c','#ddc9a3','#ddc9a3','#8a6a30','#54565a'],
+        borderRadius:5 }] },
+      options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.parsed.x.toLocaleString()} madres (${((ctx.parsed.x/TOTAL)*100).toFixed(1)}%)` } } },
+        scales:{ x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}}, y:{ticks:{color:tc,font:{size:12}},grid:{display:false}} }
+      }
+    });
+  }
+};
+
+function showTab(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  setTimeout(() => {
+    if (!initialized[name]) { CHART_DEFS[name](); initialized[name] = true; }
+  }, 30);
+}
+// Init first tab
+CHART_DEFS['resumen'](); initialized['resumen'] = true;
+</script>
+</body>
+</html>
