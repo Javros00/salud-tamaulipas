@@ -8,70 +8,58 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --rojo: #ab0033; --rojo-dark: #7a0025; --rojo-light: #F5E0E6;
-    --dorado: #bc955c; --dorado-dark: #8a6a30; --dorado-light: #F0E8D5;
-    --arena: #ddc9a3; --gris: #54565a; --gris-light: #E8E6E3;
-    --bg: #F5F0E8; --surface: #FFFFFF; --surface2: #EDE5D4;
-    --border: #D4C5A8; --text: #2A1A1A; --text2: #54565a; --text3: #9A8A7A;
-    --radius: 10px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
-  }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-  .header { background: linear-gradient(135deg, #ab0033 0%, #7a0025 100%); color: #fff; padding: 20px 28px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-  .header-left { display: flex; align-items: center; gap: 14px; }
-  .header-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-  .header-title { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
-  .header-sub { font-size: 13px; opacity: .75; margin-top: 2px; }
-  .header-badge { background: rgba(255,255,255,0.2); font-size: 12px; padding: 4px 12px; border-radius: 20px; font-family: 'DM Mono', monospace; }
-  .header-date { font-size: 12px; opacity: .6; margin-top: 5px; text-align: right; }
-  .stripe { height: 4px; background: linear-gradient(90deg, #ab0033 0%, #bc955c 50%, #ddc9a3 100%); }
-  .tabs-wrap { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 28px; display: flex; gap: 0; overflow-x: auto; }
-  .tab { padding: 14px 18px; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; border: none; background: none; border-bottom: 2.5px solid transparent; white-space: nowrap; transition: all .15s; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 7px; }
-  .tab:hover { color: var(--rojo); }
-  .tab.active { color: var(--rojo); border-bottom-color: var(--rojo); }
-  .content { padding: 24px 28px; max-width: 1200px; }
-  .section { display: none; }
-  .section.active { display: block; }
-  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 14px; margin-bottom: 24px; }
-  .metric-card { background: var(--surface); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); border: 1px solid var(--border); position: relative; overflow: hidden; }
-  .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--mc, var(--rojo)); }
-  .metric-label { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px; }
-  .metric-value { font-size: 26px; font-weight: 600; color: var(--mc, var(--rojo)); letter-spacing: -0.5px; font-family: 'DM Mono', monospace; }
-  .metric-sub { font-size: 12px; color: var(--text2); margin-top: 4px; }
-  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 24px; }
-  .charts-grid.single { grid-template-columns: 1fr; }
-  .charts-grid.thirds { grid-template-columns: 2fr 1fr; }
-  @media(max-width:720px){ .charts-grid, .charts-grid.thirds { grid-template-columns: 1fr; } }
-  .chart-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
-  .chart-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-  .chart-sub { font-size: 12px; color: var(--text3); margin-bottom: 16px; }
-  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
-  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text2); }
-  .legend-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
-  .table-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; margin-bottom: 18px; }
-  .table-header { padding: 16px 20px 12px; border-bottom: 1px solid var(--border); }
-  .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--text3); background: var(--surface2); border-bottom: 1px solid var(--border); }
-  td { padding: 10px 16px; border-bottom: 1px solid #F0EBE0; color: var(--text); }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #FAF7F2; }
-  .rank { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; margin-right: 6px; }
-  .bar-bg { background: #E8E0D0; border-radius: 3px; height: 5px; margin-top: 3px; }
-  .bar-fill { height: 5px; border-radius: 3px; background: var(--rojo); }
-  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
-  .badge-red { background: var(--rojo-light); color: var(--rojo-dark); }
-  .badge-gold { background: var(--dorado-light); color: var(--dorado-dark); }
-  .alert { border-radius: var(--radius); padding: 12px 16px; font-size: 13px; margin-bottom: 18px; display: flex; gap: 10px; align-items: flex-start; }
-  .alert-red { background: var(--rojo-light); color: var(--rojo-dark); border: 1px solid #D4A0B0; }
-  .alert-gold { background: var(--dorado-light); color: var(--dorado-dark); border: 1px solid var(--border); }
-  .footer { padding: 16px 28px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text3); display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; background: var(--surface); }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--rojo:#ab0033;--rojo-dark:#7a0025;--rojo-light:#F5E0E6;--dorado:#bc955c;--dorado-dark:#8a6a30;--dorado-light:#F0E8D5;--arena:#ddc9a3;--gris:#54565a;--gris-light:#E8E6E3;--bg:#F5F0E8;--surface:#FFFFFF;--surface2:#EDE5D4;--border:#D4C5A8;--text:#2A1A1A;--text2:#54565a;--text3:#9A8A7A;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,0.08);}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+  .header{background:linear-gradient(135deg,#ab0033 0%,#7a0025 100%);color:#fff;padding:20px 28px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .header-left{display:flex;align-items:center;gap:14px;}
+  .header-icon{width:44px;height:44px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+  .header-title{font-size:20px;font-weight:600;letter-spacing:-0.3px;}
+  .header-sub{font-size:13px;opacity:.75;margin-top:2px;}
+  .header-badge{background:rgba(255,255,255,0.2);font-size:12px;padding:4px 12px;border-radius:20px;font-family:'DM Mono',monospace;}
+  .header-date{font-size:12px;opacity:.6;margin-top:5px;text-align:right;}
+  .stripe{height:4px;background:linear-gradient(90deg,#ab0033 0%,#bc955c 50%,#ddc9a3 100%);}
+  .tabs-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;overflow-x:auto;}
+  .tab{padding:14px 18px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;white-space:nowrap;transition:all .15s;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:7px;}
+  .tab:hover{color:var(--rojo);}.tab.active{color:var(--rojo);border-bottom-color:var(--rojo);}
+  .content{padding:24px 28px;max-width:1200px;}
+  .section{display:none;}.section.active{display:block;}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin-bottom:24px;}
+  .metric-card{background:var(--surface);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden;}
+  .metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--mc,var(--rojo));}
+  .metric-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
+  .metric-value{font-size:26px;font-weight:600;color:var(--mc,var(--rojo));letter-spacing:-0.5px;font-family:'DM Mono',monospace;}
+  .metric-sub{font-size:12px;color:var(--text2);margin-top:4px;}
+  .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
+  .charts-grid.single{grid-template-columns:1fr;}.charts-grid.thirds{grid-template-columns:2fr 1fr;}
+  @media(max-width:720px){.charts-grid,.charts-grid.thirds{grid-template-columns:1fr;}}
+  .chart-card{background:var(--surface);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);border:1px solid var(--border);}
+  .chart-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
+  .chart-sub{font-size:12px;color:var(--text3);margin-bottom:16px;}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2);}
+  .legend-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
+  .table-card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;margin-bottom:18px;}
+  .table-header{padding:16px 20px 12px;border-bottom:1px solid var(--border);}
+  .table-wrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{padding:10px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border);}
+  td{padding:10px 16px;border-bottom:1px solid #F0EBE0;color:var(--text);}
+  tr:last-child td{border-bottom:none;}tr:hover td{background:#FAF7F2;}
+  .rank{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-right:6px;}
+  .bar-bg{background:#E8E0D0;border-radius:3px;height:5px;margin-top:3px;}
+  .bar-fill{height:5px;border-radius:3px;background:var(--rojo);}
+  .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;}
+  .badge-red{background:var(--rojo-light);color:var(--rojo-dark);}
+  .badge-gold{background:var(--dorado-light);color:var(--dorado-dark);}
+  .badge-gray{background:var(--gris-light);color:var(--gris);}
+  .alert{border-radius:var(--radius);padding:12px 16px;font-size:13px;margin-top:14px;display:flex;gap:10px;align-items:flex-start;}
+  .alert-red{background:var(--rojo-light);color:var(--rojo-dark);border:1px solid #D4A0B0;}
+  .alert-gold{background:var(--dorado-light);color:var(--dorado-dark);border:1px solid var(--border);}
+  .footer{padding:16px 28px;border-top:1px solid var(--border);font-size:12px;color:var(--text3);display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;background:var(--surface);margin-top:8px;}
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="header-left">
     <div class="header-icon">♿</div>
@@ -81,12 +69,11 @@
     </div>
   </div>
   <div style="text-align:right">
-    <div class="header-badge">763 certificados</div>
-    <div class="header-date">Corte: 01 julio 2026</div>
+    <div class="header-badge">744 certificados</div>
+    <div class="header-date">Corte: 15 julio 2026</div>
   </div>
 </div>
 <div class="stripe"></div>
-
 <div class="tabs-wrap">
   <button class="tab active" onclick="showTab('resumen',this)">📊 Resumen general</button>
   <button class="tab" onclick="showTab('condicion',this)">🏥 Condición de salud</button>
@@ -94,44 +81,18 @@
   <button class="tab" onclick="showTab('perfil',this)">👤 Perfil de la persona</button>
   <button class="tab" onclick="showTab('unidades',this)">🏨 Unidades médicas</button>
 </div>
-
 <div class="content">
 
   <!-- RESUMEN -->
   <div id="tab-resumen" class="section active">
     <div class="metrics">
-      <div class="metric-card" style="--mc:#ab0033">
-        <div class="metric-label">Total certificados</div>
-        <div class="metric-value">763</div>
-        <div class="metric-sub">Registros activos 2026</div>
-      </div>
-      <div class="metric-card" style="--mc:#ab0033">
-        <div class="metric-label">Hombres</div>
-        <div class="metric-value">488</div>
-        <div class="metric-sub">63.9% del total</div>
-      </div>
-      <div class="metric-card" style="--mc:#bc955c">
-        <div class="metric-label">Mujeres</div>
-        <div class="metric-value">275</div>
-        <div class="metric-sub">36.1% del total</div>
-      </div>
-      <div class="metric-card" style="--mc:#54565a">
-        <div class="metric-label">Grupo edad más frecuente</div>
-        <div class="metric-value" style="font-size:18px;">45–59</div>
-        <div class="metric-sub">313 personas (41%)</div>
-      </div>
-      <div class="metric-card" style="--mc:#7a0025">
-        <div class="metric-label">Sin afiliación médica</div>
-        <div class="metric-value">91</div>
-        <div class="metric-sub">11.9% sin cobertura</div>
-      </div>
-      <div class="metric-card" style="--mc:#8a6a30">
-        <div class="metric-label">No trabaja por barreras</div>
-        <div class="metric-value">338</div>
-        <div class="metric-sub">44.3% con barreras</div>
-      </div>
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Total certificados</div><div class="metric-value">744</div><div class="metric-sub">Corte 15 julio 2026</div></div>
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Hombres</div><div class="metric-value">479</div><div class="metric-sub">64.4% del total</div></div>
+      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">Mujeres</div><div class="metric-value">265</div><div class="metric-sub">35.6% del total</div></div>
+      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">Grupo edad más frecuente</div><div class="metric-value" style="font-size:18px">45–59</div><div class="metric-sub">305 personas · 41%</div></div>
+      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">Sin afiliación médica</div><div class="metric-value">86</div><div class="metric-sub">11.6% sin cobertura</div></div>
+      <div class="metric-card" style="--mc:#8a6a30"><div class="metric-label">No trabaja por barreras</div><div class="metric-value">330</div><div class="metric-sub">44.4% con barreras</div></div>
     </div>
-
     <div class="charts-grid thirds">
       <div class="chart-card">
         <div class="chart-title">Distribución por grupo de edad</div>
@@ -142,21 +103,18 @@
         <div class="chart-title">Sexo</div>
         <div class="chart-sub">Distribución por sexo registrado</div>
         <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Hombre 63.9%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Mujer 36.1%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Hombre 64.4%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Mujer 35.6%</div>
         </div>
         <div style="height:170px"><canvas id="c-sexo"></canvas></div>
       </div>
     </div>
-
     <div class="charts-grid">
       <div class="chart-card">
         <div class="chart-title">Afiliación a servicios de salud</div>
         <div class="chart-sub">Derechohabiencia de las personas certificadas</div>
         <div style="height:260px"><canvas id="c-afil"></canvas></div>
-        <div class="alert alert-gold" style="margin-top:14px;margin-bottom:0">
-          <span>ℹ️</span><span>91 personas (11.9%) sin ningún tipo de afiliación — oportunidad de vinculación a programas sociales.</span>
-        </div>
+        <div class="alert alert-gold"><span>ℹ️</span><span>86 personas (11.6%) sin ningún tipo de afiliación — oportunidad de vinculación a programas sociales.</span></div>
       </div>
       <div class="chart-card">
         <div class="chart-title">Situación conyugal</div>
@@ -166,39 +124,21 @@
     </div>
   </div>
 
-  <!-- CONDICIÓN SALUD -->
+  <!-- CONDICIÓN -->
   <div id="tab-condicion" class="section">
     <div class="metrics">
-      <div class="metric-card" style="--mc:#ab0033">
-        <div class="metric-label">Condición más frecuente</div>
-        <div class="metric-value" style="font-size:14px;line-height:1.3">TEA</div>
-        <div class="metric-sub">136 personas · 17.8%</div>
-      </div>
-      <div class="metric-card" style="--mc:#bc955c">
-        <div class="metric-label">Discap. musculoesquelética</div>
-        <div class="metric-value">83</div>
-        <div class="metric-sub">10.9% del total</div>
-      </div>
-      <div class="metric-card" style="--mc:#54565a">
-        <div class="metric-label">Discap. intelectual</div>
-        <div class="metric-value">50</div>
-        <div class="metric-sub">6.6% del total</div>
-      </div>
-      <div class="metric-card" style="--mc:#7a0025">
-        <div class="metric-label">Parálisis cerebral</div>
-        <div class="metric-value">41</div>
-        <div class="metric-sub">5.4% del total</div>
-      </div>
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Condición más frecuente</div><div class="metric-value" style="font-size:14px">TEA</div><div class="metric-sub">135 personas · 18.1%</div></div>
+      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">Discap. musculoesquelética</div><div class="metric-value">81</div><div class="metric-sub">10.9% del total</div></div>
+      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">Discap. intelectual</div><div class="metric-value">48</div><div class="metric-sub">6.5% del total</div></div>
+      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">Parálisis cerebral</div><div class="metric-value">38</div><div class="metric-sub">5.1% del total</div></div>
     </div>
-
     <div class="charts-grid single">
       <div class="chart-card">
         <div class="chart-title">Condición de salud — grupos principales</div>
         <div class="chart-sub">Agrupación de diagnósticos por categoría clínica</div>
-        <div style="height:320px"><canvas id="c-condicion"></canvas></div>
+        <div style="height:300px"><canvas id="c-condicion"></canvas></div>
       </div>
     </div>
-
     <div class="charts-grid">
       <div class="chart-card">
         <div class="chart-title">Ayudas técnicas utilizadas</div>
@@ -208,15 +148,13 @@
       <div class="chart-card">
         <div class="chart-title">Actividad económica</div>
         <div class="chart-sub">Situación laboral y de estudios</div>
-        <div style="height:300px"><canvas id="c-actividad"></canvas></div>
-        <div class="alert alert-red" style="margin-top:14px;margin-bottom:0">
-          <span>⚠️</span><span>338 personas (44.3%) no trabajan ni estudian debido a barreras ambientales o sociales.</span>
-        </div>
+        <div style="height:280px"><canvas id="c-actividad"></canvas></div>
+        <div class="alert alert-red"><span>⚠️</span><span>330 personas (44.4%) no trabajan ni estudian debido a barreras ambientales o sociales.</span></div>
       </div>
     </div>
   </div>
 
-  <!-- FUNCIONAL / ESTRUCTURAL -->
+  <!-- FUNCIONAL -->
   <div id="tab-funcional" class="section">
     <div class="charts-grid">
       <div class="chart-card">
@@ -230,14 +168,13 @@
         <div style="height:320px"><canvas id="c-estructuras"></canvas></div>
       </div>
     </div>
-
     <div class="chart-card">
       <div class="chart-title">Lectoescritura de las personas certificadas</div>
       <div class="chart-sub">Capacidad de leer y escribir</div>
       <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#8a6a30"></div>Sí sabe 65.9%</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>No sabe 21.1%</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>No aplica 12.3%</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#8a6a30"></div>Sí sabe 66.4%</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>No sabe 20.7%</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>No aplica 12.2%</div>
         <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>No sabe/responde 0.7%</div>
       </div>
       <div style="height:200px"><canvas id="c-lectura"></canvas></div>
@@ -253,7 +190,6 @@
         <div style="height:340px"><canvas id="c-escol"></canvas></div>
       </div>
     </div>
-
     <div class="charts-grid">
       <div class="chart-card">
         <div class="chart-title">Entidad de nacimiento</div>
@@ -265,40 +201,23 @@
         <div class="chart-sub">Distribución por municipio</div>
         <div class="legend">
           <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Matamoros 65.9%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Victoria 18.6%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>Xicotencatl 13.6%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>Otros 1.9%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Victoria 19.0%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>Xicotencatl 13.3%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>Otros 1.8%</div>
         </div>
         <div style="height:230px"><canvas id="c-municipio"></canvas></div>
       </div>
     </div>
   </div>
 
-  <!-- UNIDADES MÉDICAS -->
+  <!-- UNIDADES -->
   <div id="tab-unidades" class="section">
     <div class="metrics">
-      <div class="metric-card" style="--mc:#ab0033">
-        <div class="metric-label">Unidades registradas</div>
-        <div class="metric-value">4</div>
-        <div class="metric-sub">Con certificados activos</div>
-      </div>
-      <div class="metric-card" style="--mc:#ab0033">
-        <div class="metric-label">Principal unidad</div>
-        <div class="metric-value" style="font-size:16px">TSIMB000893</div>
-        <div class="metric-sub">502 certificados · 65.8%</div>
-      </div>
-      <div class="metric-card" style="--mc:#bc955c">
-        <div class="metric-label">2da unidad</div>
-        <div class="metric-value" style="font-size:16px">TSIMB001955</div>
-        <div class="metric-sub">141 certificados · 18.5%</div>
-      </div>
-      <div class="metric-card" style="--mc:#54565a">
-        <div class="metric-label">3ra unidad</div>
-        <div class="metric-value" style="font-size:16px">TSIMB002351</div>
-        <div class="metric-sub">104 certificados · 13.6%</div>
-      </div>
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Unidades registradas</div><div class="metric-value">4</div><div class="metric-sub">Con certificados activos</div></div>
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Principal unidad</div><div class="metric-value" style="font-size:16px">TSIMB000893</div><div class="metric-sub">489 certificados · 65.7%</div></div>
+      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">2da unidad</div><div class="metric-value" style="font-size:16px">TSIMB001955</div><div class="metric-sub">140 certificados · 18.8%</div></div>
+      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">3ra unidad</div><div class="metric-value" style="font-size:16px">TSIMB002351</div><div class="metric-sub">99 certificados · 13.3%</div></div>
     </div>
-
     <div class="charts-grid thirds">
       <div class="chart-card">
         <div class="chart-title">Certificados por unidad médica (CLUES)</div>
@@ -309,28 +228,24 @@
         <div class="chart-title">Distribución porcentual</div>
         <div class="chart-sub">Por unidad médica</div>
         <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>TSIMB000893 65.8%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>TSIMB001955 18.5%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>TSIMB002351 13.6%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>TSIMB003232 2.1%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>TSIMB000893 65.7%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>TSIMB001955 18.8%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>TSIMB002351 13.3%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>TSIMB003232 2.2%</div>
         </div>
         <div style="height:200px"><canvas id="c-clues-pie"></canvas></div>
       </div>
     </div>
-
     <div class="table-card">
-      <div class="table-header">
-        <div class="chart-title">Detalle por unidad médica</div>
-        <div class="chart-sub">CLUES · certificados emitidos · porcentaje del total</div>
-      </div>
+      <div class="table-header"><div class="chart-title">Detalle por unidad médica</div><div class="chart-sub">CLUES · certificados · porcentaje</div></div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>#</th><th>CLUES</th><th>Municipio</th><th>Certificados</th><th>% del total</th><th style="width:120px">Distribución</th></tr></thead>
+          <thead><tr><th>#</th><th>CLUES</th><th>Municipio</th><th>Certificados</th><th>%</th><th style="width:120px">Distribución</th></tr></thead>
           <tbody>
-            <tr><td><span class="rank">01</span></td><td><strong>TSIMB000893</strong></td><td>Matamoros</td><td><span style="font-family:'DM Mono',monospace;font-weight:500">502</span></td><td><span class="badge badge-red">65.8%</span></td><td><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></td></tr>
-            <tr><td><span class="rank">02</span></td><td><strong>TSIMB001955</strong></td><td>Victoria</td><td><span style="font-family:'DM Mono',monospace;font-weight:500">141</span></td><td><span class="badge badge-gold">18.5%</span></td><td><div class="bar-bg"><div class="bar-fill" style="width:28%;background:#bc955c"></div></div></td></tr>
-            <tr><td><span class="rank">03</span></td><td><strong>TSIMB002351</strong></td><td>Xicotencatl</td><td><span style="font-family:'DM Mono',monospace;font-weight:500">104</span></td><td><span class="badge badge-gold">13.6%</span></td><td><div class="bar-bg"><div class="bar-fill" style="width:20%;background:#ddc9a3"></div></div></td></tr>
-            <tr><td><span class="rank">04</span></td><td><strong>TSIMB003232</strong></td><td>Tamaulipas</td><td><span style="font-family:'DM Mono',monospace;font-weight:500">16</span></td><td><span class="badge" style="background:var(--gris-light);color:var(--gris)">2.1%</span></td><td><div class="bar-bg"><div class="bar-fill" style="width:3%;background:#54565a"></div></div></td></tr>
+            <tr><td><span class="rank">01</span></td><td><strong>TSIMB000893</strong></td><td>Matamoros</td><td><span style="font-family:'DM Mono',monospace;font-weight:500">489</span></td><td><span class="badge badge-red">65.7%</span></td><td><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></td></tr>
+            <tr><td><span class="rank">02</span></td><td><strong>TSIMB001955</strong></td><td>Victoria</td><td><span style="font-family:'DM Mono',monospace;font-weight:500">140</span></td><td><span class="badge badge-gold">18.8%</span></td><td><div class="bar-bg"><div class="bar-fill" style="width:29%;background:#bc955c"></div></div></td></tr>
+            <tr><td><span class="rank">03</span></td><td><strong>TSIMB002351</strong></td><td>Xicotencatl</td><td><span style="font-family:'DM Mono',monospace;font-weight:500">99</span></td><td><span class="badge badge-gold">13.3%</span></td><td><div class="bar-bg"><div class="bar-fill" style="width:20%;background:#ddc9a3"></div></div></td></tr>
+            <tr><td><span class="rank">04</span></td><td><strong>TSIMB003232</strong></td><td>Tamaulipas</td><td><span style="font-family:'DM Mono',monospace;font-weight:500">16</span></td><td><span class="badge badge-gray">2.2%</span></td><td><div class="bar-bg"><div class="bar-fill" style="width:3%;background:#54565a"></div></div></td></tr>
           </tbody>
         </table>
       </div>
@@ -338,137 +253,43 @@
   </div>
 
 </div>
-
 <div class="footer">
   <span>📁 Fuente: Sistema de Certificados de Discapacidad · Sector Salud Tamaulipas</span>
-  <span>📅 Corte: 01 julio 2026 · 763 registros procesados</span>
+  <span>📅 Corte: 15 julio 2026 · 744 registros procesados</span>
 </div>
-
 <script>
-const gridC = 'rgba(0,0,0,0.05)';
-const tc = '#9A8A7A';
-const initialized = {};
-
-const DEFS = {
-  resumen: () => {
-    new Chart(document.getElementById('c-edad'), {
-      type: 'bar',
-      data: { labels: ['0–11','12–17','18–29','30–44','45–59','60–74','75+'],
-        datasets: [{ data: [171,31,74,96,313,71,5],
-          backgroundColor: ['#ddc9a3','#ddc9a3','#bc955c','#bc955c','#ab0033','#7a0025','#54565a'], borderRadius: 5 }] },
-      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
-        scales:{ y:{ticks:{color:tc},grid:{color:gridC}}, x:{ticks:{color:tc},grid:{display:false}} } }
-    });
-    new Chart(document.getElementById('c-sexo'), {
-      type: 'doughnut',
-      data: { labels:['Hombre','Mujer'], datasets:[{ data:[488,275], backgroundColor:['#ab0033','#bc955c'], borderWidth:0, hoverOffset:6 }] },
-      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, cutout:'65%' }
-    });
-    new Chart(document.getElementById('c-afil'), {
-      type: 'bar',
-      data: { labels:['IMSS','IMSS Bienestar','NINGUNA','OTRA','ISSSTE','IMSS-PROSPERA','No espec.','ESTATAL'],
-        datasets:[{ data:[284,247,91,63,41,25,8,4], backgroundColor:['#ab0033','#7a0025','#54565a','#bc955c','#8a6a30','#ddc9a3','#9A8A7A','#E8E6E3'], borderRadius:4 }] },
-      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
-        scales:{ y:{ticks:{color:tc},grid:{color:gridC}}, x:{ticks:{color:tc,font:{size:11}},grid:{display:false}} } }
-    });
-    new Chart(document.getElementById('c-conyugal'), {
-      type: 'doughnut',
-      data: { labels:['Soltero(a)','Casado(a)','No aplica','Unión libre','Divorciado(a)','Separado(a)','Viudo(a)'],
-        datasets:[{ data:[227,201,176,65,36,33,24], backgroundColor:['#ab0033','#bc955c','#ddc9a3','#7a0025','#8a6a30','#54565a','#9A8A7A'], borderWidth:0, hoverOffset:6 }] },
-      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right', labels:{font:{size:11},color:tc,boxWidth:10}}}, cutout:'55%' }
-    });
+const TOTAL=744;
+const gridC='rgba(0,0,0,0.05)',tc='#9A8A7A';
+const initialized={};
+const DEFS={
+  resumen:()=>{
+    new Chart(document.getElementById('c-edad'),{type:'bar',data:{labels:['0–11','12–17','18–29','30–44','45–59','60–74','75+'],datasets:[{data:[165,31,73,93,305,70,5],backgroundColor:['#ddc9a3','#ddc9a3','#bc955c','#bc955c','#ab0033','#7a0025','#54565a'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-sexo'),{type:'doughnut',data:{labels:['Hombre','Mujer'],datasets:[{data:[479,265],backgroundColor:['#ab0033','#bc955c'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'65%'}});
+    new Chart(document.getElementById('c-afil'),{type:'bar',data:{labels:['IMSS','IMSS Bienestar','NINGUNA','OTRA','ISSSTE','IMSS-PROSPERA','No espec.','ESTATAL'],datasets:[{data:[277,242,86,63,39,25,8,4],backgroundColor:['#ab0033','#7a0025','#54565a','#bc955c','#8a6a30','#ddc9a3','#9A8A7A','#E8E6E3'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-conyugal'),{type:'doughnut',data:{labels:['Soltero(a)','Casado(a)','No aplica','Unión libre','Separado(a)','Divorciado(a)','Viudo(a)','No espec.'],datasets:[{data:[222,196,170,65,33,33,24,1],backgroundColor:['#ab0033','#bc955c','#ddc9a3','#7a0025','#8a6a30','#54565a','#9A8A7A','#D4C5A8'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},color:tc,boxWidth:10}}},cutout:'55%'}});
   },
-  condicion: () => {
-    new Chart(document.getElementById('c-condicion'), {
-      type: 'bar',
-      data: { labels:['Trastorno espectro\nautista','Discap.\nmusculoesquelética','Discap.\nintelectual','Parálisis\ncerebral','Discap.\nvisual','Trastorno\nmental','Accidente\ncerebrovascular','Discap.\nauditiva','Otras\ncondiciones'],
-        datasets:[{ data:[136,83,50,41,40,19,12,13,369], backgroundColor:['#ab0033','#bc955c','#7a0025','#8a6a30','#ddc9a3','#54565a','#9A8A7A','#E8E6E3','#D4C5A8'], borderRadius:5 }] },
-      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
-        scales:{ y:{ticks:{color:tc},grid:{color:gridC}}, x:{ticks:{color:tc,font:{size:11}},grid:{display:false}} } }
-    });
-    new Chart(document.getElementById('c-ayudas'), {
-      type: 'bar',
-      data: { labels:['Ninguno','Bastón/Palo','Terapia','Silla ruedas','Andador','Lentes/Gafas','Muletas','Com. aum.','Órtesis','Audífono'],
-        datasets:[{ data:[302,134,89,87,34,21,19,14,13,9], backgroundColor:'#bc955c', borderRadius:4 }] },
-      options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
-        scales:{ x:{ticks:{color:tc},grid:{color:gridC}}, y:{ticks:{color:tc,font:{size:11}},grid:{display:false}} } }
-    });
-    new Chart(document.getElementById('c-actividad'), {
-      type: 'doughnut',
-      data: { labels:['No trabaja/estudia\n(barreras)','No aplica','Jubilado/\nPensionado','Tiene trabajo','Quehaceres\nhogar','Estudiante','Otros'],
-        datasets:[{ data:[338,182,97,58,45,33,10], backgroundColor:['#ab0033','#ddc9a3','#bc955c','#8a6a30','#54565a','#7a0025','#9A8A7A'], borderWidth:0, hoverOffset:6 }] },
-      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right', labels:{font:{size:11},color:tc,boxWidth:10}}}, cutout:'50%' }
-    });
+  condicion:()=>{
+    new Chart(document.getElementById('c-condicion'),{type:'bar',data:{labels:['Trastorno espectro\nautista','Discap.\nmusculoesquelética','Discap.\nintelectual','Discap.\nvisual','Parálisis\ncerebral','Trastorno\nmental','Discap.\nauditiva','Accidente\ncerebrovascular','Otras\ncondiciones'],datasets:[{data:[135,81,48,40,38,18,13,12,359],backgroundColor:['#ab0033','#bc955c','#7a0025','#ddc9a3','#8a6a30','#54565a','#9A8A7A','#D4C5A8','#E8E6E3'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-ayudas'),{type:'bar',data:{labels:['Ninguno','Bastón','Silla ruedas','Terapia','Andador','Lentes/Gafas','Muletas','Órtesis','Com. aum.','Audífono','Otros'],datasets:[{data:[294,133,86,81,34,18,18,13,13,10,44],backgroundColor:'#bc955c',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-actividad'),{type:'doughnut',data:{labels:['No trabaja/estudia\n(barreras)','No aplica','Jubilado/\nPensionado','Tiene trabajo','Quehaceres\nhogar','Estudiante','Otros'],datasets:[{data:[330,176,97,55,44,32,10],backgroundColor:['#ab0033','#ddc9a3','#bc955c','#8a6a30','#54565a','#7a0025','#9A8A7A'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},color:tc,boxWidth:10}}},cutout:'50%'}});
   },
-  funcional: () => {
-    new Chart(document.getElementById('c-funciones'), {
-      type: 'bar',
-      data: { labels:['Movilidad articulaciones','Funciones intelectuales','Fuerza muscular','Funciones visuales','Funciones psicosociales','Sensación de dolor','Funciones cognitivas','Patrón de la marcha','Otras'],
-        datasets:[{ data:[121,99,78,56,90,64,54,32,69], backgroundColor:'#ab0033', borderRadius:4 }] },
-      options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
-        scales:{ x:{ticks:{color:tc},grid:{color:gridC}}, y:{ticks:{color:tc,font:{size:11}},grid:{display:false}} } }
-    });
-    new Chart(document.getElementById('c-estructuras'), {
-      type: 'doughnut',
-      data: { labels:['Extremidad inferior','Estructura del cerebro','Médula espinal','Estructura ocular','Extremidad superior','Ambas extremidades','Estructura del oído','Otras estructuras'],
-        datasets:[{ data:[129,100,101,45,35,25,25,303], backgroundColor:['#ab0033','#7a0025','#bc955c','#8a6a30','#ddc9a3','#54565a','#9A8A7A','#D4C5A8'], borderWidth:0, hoverOffset:6 }] },
-      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right', labels:{font:{size:11},color:tc,boxWidth:10}}}, cutout:'50%' }
-    });
-    new Chart(document.getElementById('c-lectura'), {
-      type: 'doughnut',
-      data: { labels:['Sí sabe','No sabe','No aplica','No sabe/responde'],
-        datasets:[{ data:[503,161,94,5], backgroundColor:['#8a6a30','#ab0033','#ddc9a3','#54565a'], borderWidth:0, hoverOffset:6 }] },
-      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, cutout:'60%' }
-    });
+  funcional:()=>{
+    new Chart(document.getElementById('c-funciones'),{type:'bar',data:{labels:['Funciones\nintelectuales','Movilidad\narticulaciones','Funciones\npsicosociales','Sensación\nde dolor','Funciones\nvisuales','Patrón de\nla marcha','Fuerza\nmuscular','Funciones\ncognitivas','Otras\nfunciones'],datasets:[{data:[155,111,105,85,77,42,38,11,120],backgroundColor:'#ab0033',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-estructuras'),{type:'doughnut',data:{labels:['Extremidad inferior','Médula espinal','Estructura del cerebro','Estructura ocular','Extremidad superior','Ambas extremidades','Estructura del oído','Otras estructuras'],datasets:[{data:[127,100,98,44,35,25,23,292],backgroundColor:['#ab0033','#7a0025','#bc955c','#8a6a30','#ddc9a3','#54565a','#9A8A7A','#D4C5A8'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},color:tc,boxWidth:10}}},cutout:'50%'}});
+    new Chart(document.getElementById('c-lectura'),{type:'doughnut',data:{labels:['Sí sabe','No sabe','No aplica','No sabe/responde'],datasets:[{data:[494,154,91,5],backgroundColor:['#8a6a30','#ab0033','#ddc9a3','#54565a'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
   },
-  perfil: () => {
-    new Chart(document.getElementById('c-escol'), {
-      type: 'bar',
-      data: { labels:['Secundaria completa','Primaria incompleta','Bachillerato completo','No aplica','Primaria completa','Licenciatura completa','Bachillerato incompleto','Secundaria incompleta','Ninguna','Lic. incompleta'],
-        datasets:[{ data:[144,125,98,86,84,70,41,36,36,23],
-          backgroundColor:['#ab0033','#bc955c','#ab0033','#54565a','#bc955c','#8a6a30','#ddc9a3','#ddc9a3','#7a0025','#9A8A7A'], borderRadius:5 }] },
-      options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
-        scales:{ x:{ticks:{color:tc},grid:{color:gridC}}, y:{ticks:{color:tc,font:{size:11}},grid:{display:false}} } }
-    });
-    new Chart(document.getElementById('c-entidad'), {
-      type: 'bar',
-      data: { labels:['Tamaulipas','Veracruz','San Luis P.','Cd. México','Nuevo León','No aplica','Otros'],
-        datasets:[{ data:[616,42,41,11,10,8,35], backgroundColor:['#ab0033','#bc955c','#bc955c','#ddc9a3','#ddc9a3','#54565a','#9A8A7A'], borderRadius:4 }] },
-      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
-        scales:{ y:{ticks:{color:tc},grid:{color:gridC}}, x:{ticks:{color:tc,font:{size:11}},grid:{display:false}} } }
-    });
-    new Chart(document.getElementById('c-municipio'), {
-      type: 'doughnut',
-      data: { labels:['Matamoros','Victoria','Xicotencatl','Otros'],
-        datasets:[{ data:[503,142,104,14], backgroundColor:['#ab0033','#bc955c','#ddc9a3','#54565a'], borderWidth:0, hoverOffset:6 }] },
-      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, cutout:'60%' }
-    });
+  perfil:()=>{
+    new Chart(document.getElementById('c-escol'),{type:'bar',data:{labels:['Secundaria\ncompleta','Primaria\nincompleta','Bachillerato\ncompleto','No aplica','Primaria\ncompleta','Licenciatura\ncompleta','Bach.\nincompleto','Secundaria\nincompleta','Ninguna','Lic.\nincompleta'],datasets:[{data:[142,120,96,83,81,67,41,36,36,23],backgroundColor:['#ab0033','#bc955c','#ab0033','#54565a','#bc955c','#8a6a30','#ddc9a3','#ddc9a3','#7a0025','#9A8A7A'],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-entidad'),{type:'bar',data:{labels:['Tamaulipas','San Luis P.','Veracruz','Cd. México','Nuevo León','No aplica','México','Hidalgo'],datasets:[{data:[598,41,41,11,10,8,4,4],backgroundColor:['#ab0033','#bc955c','#bc955c','#ddc9a3','#ddc9a3','#54565a','#9A8A7A','#9A8A7A'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-municipio'),{type:'doughnut',data:{labels:['Matamoros','Victoria','Xicotencatl','Otros'],datasets:[{data:[490,141,99,14],backgroundColor:['#ab0033','#bc955c','#ddc9a3','#54565a'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
   },
-  unidades: () => {
-    new Chart(document.getElementById('c-clues-bar'), {
-      type: 'bar',
-      data: { labels:['TSIMB000893','TSIMB001955','TSIMB002351','TSIMB003232'],
-        datasets:[{ data:[502,141,104,16], backgroundColor:['#ab0033','#bc955c','#ddc9a3','#54565a'], borderRadius:6 }] },
-      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
-        scales:{ y:{ticks:{color:tc},grid:{color:gridC}}, x:{ticks:{color:tc},grid:{display:false}} } }
-    });
-    new Chart(document.getElementById('c-clues-pie'), {
-      type: 'doughnut',
-      data: { labels:['TSIMB000893','TSIMB001955','TSIMB002351','TSIMB003232'],
-        datasets:[{ data:[502,141,104,16], backgroundColor:['#ab0033','#bc955c','#ddc9a3','#54565a'], borderWidth:0, hoverOffset:6 }] },
-      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, cutout:'60%' }
-    });
+  unidades:()=>{
+    new Chart(document.getElementById('c-clues-bar'),{type:'bar',data:{labels:['TSIMB000893','TSIMB001955','TSIMB002351','TSIMB003232'],datasets:[{data:[489,140,99,16],backgroundColor:['#ab0033','#bc955c','#ddc9a3','#54565a'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-clues-pie'),{type:'doughnut',data:{labels:['TSIMB000893','TSIMB001955','TSIMB002351','TSIMB003232'],datasets:[{data:[489,140,99,16],backgroundColor:['#ab0033','#bc955c','#ddc9a3','#54565a'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
   }
 };
-
-function showTab(name, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  btn.classList.add('active');
-  setTimeout(() => { if (!initialized[name]) { DEFS[name](); initialized[name] = true; } }, 30);
-}
-DEFS['resumen'](); initialized['resumen'] = true;
+function showTab(name,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');btn.classList.add('active');setTimeout(()=>{if(!initialized[name]){DEFS[name]();initialized[name]=true;}},30);}
+DEFS['resumen']();initialized['resumen']=true;
 </script>
 </body>
 </html>
