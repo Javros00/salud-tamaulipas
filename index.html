@@ -101,7 +101,7 @@
       </div>
     </div>
     <div class="header-right">
-      <div class="header-badge">3 tableros activos</div>
+      <div class="header-badge">4 tableros activos</div>
       <div class="header-date">Actualizado: 29 junio 2026</div>
     </div>
   </div>
@@ -115,6 +115,7 @@
     <button class="nav-item" id="nav-nac" onclick="showTablero('nacimientos')">👶 Nacimientos</button>
     <button class="nav-item" id="nav-disc" onclick="showTablero('discapacidad')">♿ Discapacidad</button>
     <button class="nav-item" id="nav-def" onclick="showTablero('defunciones')">📋 Defunciones</button>
+    <button class="nav-item" id="nav-egr" onclick="showTablero('egresos')">🏥 Egresos Hosp.</button>
   </div>
 </div>
 
@@ -207,6 +208,18 @@
       <iframe class="tablero" id="iframe-nac" src="" height="900" title="Tablero de Nacimientos Tamaulipas 2026"></iframe>
     </div>
 
+    <!-- TABLERO EGRESOS -->
+    <div class="iframe-view" id="view-egresos">
+      <div class="iframe-bar">
+        <div class="iframe-title">🏥 <strong>Egresos Hospitalarios · Tamaulipas 2026</strong> · 24,898 registros · Ene–May</div>
+        <div class="iframe-actions">
+          <button class="btn" onclick="showPortal()">← Inicio</button>
+          <a class="btn btn-primary" href="egresos-hospitalarios.html" target="_blank">Abrir en pantalla completa ↗</a>
+        </div>
+      </div>
+      <iframe class="tablero" id="iframe-egr" src="" height="900" title="Egresos Hospitalarios Tamaulipas 2026"></iframe>
+    </div>
+
     <!-- TABLERO DEFUNCIONES -->
     <div class="iframe-view" id="view-defunciones">
       <div class="iframe-bar">
@@ -248,6 +261,7 @@ function showPortal() {
   document.getElementById('view-portal').style.display = 'block';
   document.getElementById('view-nacimientos').style.display = 'none';
   document.getElementById('view-defunciones').style.display = 'none';
+  document.getElementById('view-egresos').style.display = 'none';
   document.getElementById('view-discapacidad').style.display = 'none';
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-inicio').classList.add('active');
@@ -258,6 +272,7 @@ function showTablero(name) {
   document.getElementById('view-portal').style.display = 'none';
   document.getElementById('view-nacimientos').style.display = 'none';
   document.getElementById('view-defunciones').style.display = 'none';
+  document.getElementById('view-egresos').style.display = 'none';
   document.getElementById('view-discapacidad').style.display = 'none';
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
@@ -266,6 +281,11 @@ function showTablero(name) {
     document.getElementById('nav-nac').classList.add('active');
     const f = document.getElementById('iframe-nac');
     if (!f.src || f.src === window.location.href) f.src = 'nacimientos.html';
+  } else if (name === 'egresos') {
+    document.getElementById('view-egresos').style.display = 'block';
+    document.getElementById('nav-egr').classList.add('active');
+    const fe = document.getElementById('iframe-egr');
+    if (!fe.src || fe.src === window.location.href) fe.src = 'egresos-hospitalarios.html';
   } else if (name === 'defunciones') {
     document.getElementById('view-defunciones').style.display = 'block';
     document.getElementById('nav-def').classList.add('active');
