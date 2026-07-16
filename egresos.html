@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Egresos Hospitalarios · Tamaulipas 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--rojo:#ab0033;--rojo-dark:#7a0025;--rojo-light:#F5E0E6;--dorado:#bc955c;--dorado-dark:#8a6a30;--dorado-light:#F0E8D5;--arena:#ddc9a3;--gris:#54565a;--gris-light:#E8E6E3;--bg:#F5F0E8;--surface:#FFFFFF;--surface2:#EDE5D4;--border:#D4C5A8;--text:#2A1A1A;--text2:#54565a;--text3:#9A8A7A;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,0.08);}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+  .header{background:linear-gradient(135deg,#ab0033 0%,#7a0025 100%);color:#fff;padding:20px 28px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .header-left{display:flex;align-items:center;gap:14px;}
+  .header-icon{width:44px;height:44px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+  .header-title{font-size:20px;font-weight:600;letter-spacing:-0.3px;}
+  .header-sub{font-size:13px;opacity:.75;margin-top:2px;}
+  .header-badge{background:rgba(255,255,255,0.2);font-size:12px;padding:4px 12px;border-radius:20px;font-family:'DM Mono',monospace;}
+  .header-date{font-size:12px;opacity:.6;margin-top:5px;text-align:right;}
+  .stripe{height:4px;background:linear-gradient(90deg,#ab0033 0%,#bc955c 50%,#ddc9a3 100%);}
+  .back-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 28px;font-size:12px;}
+  .back-link{color:var(--rojo);text-decoration:none;display:inline-flex;align-items:center;gap:5px;font-weight:500;}
+  .back-link:hover{text-decoration:underline;}
+  .tabs-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;overflow-x:auto;}
+  .tab{padding:14px 16px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;white-space:nowrap;transition:all .15s;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px;}
+  .tab:hover{color:var(--rojo);}.tab.active{color:var(--rojo);border-bottom-color:var(--rojo);}
+  .content{padding:24px 28px;max-width:1200px;}
+  .section{display:none;}.section.active{display:block;}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px;}
+  .metric-card{background:var(--surface);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden;}
+  .metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--mc,var(--rojo));}
+  .metric-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
+  .metric-value{font-size:24px;font-weight:600;color:var(--mc,var(--rojo));letter-spacing:-0.5px;font-family:'DM Mono',monospace;}
+  .metric-sub{font-size:12px;color:var(--text2);margin-top:4px;}
+  .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
+  .charts-grid.single{grid-template-columns:1fr;}.charts-grid.thirds{grid-template-columns:2fr 1fr;}
+  @media(max-width:720px){.charts-grid,.charts-grid.thirds{grid-template-columns:1fr;}}
+  .chart-card{background:var(--surface);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);border:1px solid var(--border);}
+  .chart-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
+  .chart-sub{font-size:12px;color:var(--text3);margin-bottom:16px;}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2);}
+  .legend-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
+  .table-card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;margin-bottom:18px;}
+  .table-header{padding:16px 20px 12px;border-bottom:1px solid var(--border);}
+  .table-wrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{padding:10px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border);}
+  td{padding:10px 16px;border-bottom:1px solid #F0EBE0;color:var(--text);}
+  tr:last-child td{border-bottom:none;}tr:hover td{background:#FAF7F2;}
+  .rank{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-right:6px;}
+  .bar-bg{background:#E8E0D0;border-radius:3px;height:5px;margin-top:3px;}
+  .bar-fill{height:5px;border-radius:3px;background:var(--rojo);}
+  .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;}
+  .badge-red{background:var(--rojo-light);color:var(--rojo-dark);}
+  .badge-gold{background:var(--dorado-light);color:var(--dorado-dark);}
+  .badge-gray{background:var(--gris-light);color:var(--gris);}
+  .alert{border-radius:var(--radius);padding:12px 16px;font-size:13px;margin-top:14px;display:flex;gap:10px;align-items:flex-start;}
+  .alert-red{background:var(--rojo-light);color:var(--rojo-dark);border:1px solid #D4A0B0;}
+  .alert-gold{background:var(--dorado-light);color:var(--dorado-dark);border:1px solid var(--border);}
+  .mm-box{background:#F5E0E6;border:2px solid #ab0033;border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+  .mm-num{font-size:48px;font-weight:600;color:#ab0033;font-family:'DM Mono',monospace;line-height:1;}
+  .mm-label{font-size:15px;font-weight:500;color:#7a0025;}
+  .mm-sub{font-size:13px;color:#7a0025;margin-top:4px;opacity:.8;}
+  .footer{padding:16px 28px;border-top:1px solid var(--border);font-size:12px;color:var(--text3);display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;background:var(--surface);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-icon">🏥</div>
+    <div>
+      <div class="header-title">Egresos Hospitalarios · Tamaulipas</div>
+      <div class="header-sub">Sector Salud · Sistema de Egresos Hospitalarios 2026</div>
+    </div>
+  </div>
+  <div style="text-align:right">
+    <div class="header-badge">24,898 egresos</div>
+    <div class="header-date">Enero – Mayo 2026</div>
+  </div>
+</div>
+<div class="stripe"></div>
+
+<div class="back-bar">
+  <a class="back-link" href="../">← Regresar al portal principal</a>
+</div>
+
+<div class="tabs-wrap">
+  <button class="tab active" onclick="showTab('resumen',this)">📊 Resumen</button>
+  <button class="tab" onclick="showTab('servicios',this)">🏨 Por servicio</button>
+  <button class="tab" onclick="showTab('motivo',this)">📋 Motivo de egreso</button>
+  <button class="tab" onclick="showTab('parto',this)">👶 Tipo de parto</button>
+  <button class="tab" onclick="showTab('maternas',this)">🚨 Muertes maternas</button>
+  <button class="tab" onclick="showTab('derechohabiencia',this)">🪪 Derechohabiencia</button>
+  <button class="tab" onclick="showTab('sexo',this)">👥 Por sexo</button>
+  <button class="tab" onclick="showTab('municipios',this)">📍 Municipios</button>
+  <button class="tab" onclick="showTab('clues',this)">🏨 Por CLUES</button>
+</div>
+
+<div class="content">
+
+  <!-- RESUMEN -->
+  <div id="tab-resumen" class="section active">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Total egresos</div><div class="metric-value">24,898</div><div class="metric-sub">Enero–Mayo 2026</div></div>
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Promedio mensual</div><div class="metric-value">4,980</div><div class="metric-sub">5 meses registrados</div></div>
+      <div class="metric-card" style="--mc:#8a6a30"><div class="metric-label">Mejoría</div><div class="metric-value">90.1%</div><div class="metric-sub">22,445 egresos</div></div>
+      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">Defunciones</div><div class="metric-value">1,099</div><div class="metric-sub">4.4% del total</div></div>
+      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">Días estancia prom.</div><div class="metric-value">4.2</div><div class="metric-sub">Mediana: 2 días</div></div>
+      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">Muertes maternas</div><div class="metric-value">4</div><div class="metric-sub">Ene–May 2026</div></div>
+    </div>
+    <div class="charts-grid thirds">
+      <div class="chart-card">
+        <div class="chart-title">Egresos por mes</div>
+        <div class="chart-sub">Total de registros enero–mayo 2026</div>
+        <div style="height:240px"><canvas id="c-mes"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Grupos de edad</div>
+        <div class="chart-sub">Distribución de egresos por rango etario</div>
+        <div style="height:230px"><canvas id="c-edad"></canvas></div>
+      </div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Top 10 — Afección principal (CIE-10)</div>
+        <div class="chart-sub">Diagnóstico principal al egreso</div>
+        <div style="height:320px"><canvas id="c-afeccion"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Tipo de atención</div>
+        <div class="chart-sub">Primera vez vs subsecuente</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Primera vez 93.4%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Subsecuente 6.6%</div>
+        </div>
+        <div style="height:200px"><canvas id="c-atencion"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICIOS -->
+  <div id="tab-servicios" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Servicio principal</div><div class="metric-value" style="font-size:14px">Cirugía General</div><div class="metric-sub">4,931 egresos · 19.8%</div></div>
+      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">Medicina Interna</div><div class="metric-value">4,839</div><div class="metric-sub">19.4% del total</div></div>
+      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">Gineco-Obstetricia</div><div class="metric-value">4,351</div><div class="metric-sub">17.5% del total</div></div>
+      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">Ginecología</div><div class="metric-value">3,798</div><div class="metric-sub">15.3% del total</div></div>
+    </div>
+    <div class="charts-grid single">
+      <div class="chart-card">
+        <div class="chart-title">Egresos por servicio hospitalario</div>
+        <div class="chart-sub">Servicio de egreso — top 12 servicios</div>
+        <div style="height:380px"><canvas id="c-servicio"></canvas></div>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-header"><div class="chart-title">Tabla detallada — Servicios hospitalarios</div><div class="chart-sub">Ordenados por número de egresos</div></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Servicio</th><th>Egresos</th><th>%</th><th style="width:120px">Distribución</th></tr></thead>
+        <tbody id="serv-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOTIVO EGRESO -->
+  <div id="tab-motivo" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#8a6a30"><div class="metric-label">Mejoría</div><div class="metric-value">22,445</div><div class="metric-sub">90.1% del total</div></div>
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Defunción</div><div class="metric-value">1,099</div><div class="metric-sub">4.4% del total</div></div>
+      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">Voluntad propia</div><div class="metric-value">658</div><div class="metric-sub">2.6% del total</div></div>
+      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">Traslado</div><div class="metric-value">340</div><div class="metric-sub">1.4% del total</div></div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Distribución por motivo de egreso</div>
+        <div class="chart-sub">Razón por la que el paciente dejó la unidad</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#8a6a30"></div>Mejoría 90.1%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Defunción 4.4%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Voluntad propia 2.6%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>Traslado 1.4%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>Curación 0.9%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#9A8A7A"></div>Otro 0.5%</div>
+        </div>
+        <div style="height:280px"><canvas id="c-motivo"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Tendencia mensual de defunciones hospitalarias</div>
+        <div class="chart-sub">Defunciones ocurridas dentro de la unidad médica</div>
+        <div style="height:280px"><canvas id="c-def-mes"></canvas></div>
+        <div class="alert alert-red"><span>⚠️</span><span>1,099 defunciones hospitalarias en 5 meses — promedio de 220 por mes.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPO PARTO -->
+  <div id="tab-parto" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Total partos</div><div class="metric-value">5,359</div><div class="metric-sub">Registrados en el período</div></div>
+      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">Cesárea</div><div class="metric-value">2,886</div><div class="metric-sub">53.8% de los partos</div></div>
+      <div class="metric-card" style="--mc:#8a6a30"><div class="metric-label">Eutócico</div><div class="metric-value">2,403</div><div class="metric-sub">44.8% de los partos</div></div>
+      <div class="metric-card" style="--mc:#ddc9a3" style="--mc:#54565a"><div class="metric-label">Distócico vaginal</div><div class="metric-value">70</div><div class="metric-sub">1.3% de los partos</div></div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Tipo de parto — distribución</div>
+        <div class="chart-sub">Modalidad de atención del parto</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Cesárea 53.8%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#8a6a30"></div>Eutócico 44.8%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>Distócico 1.3%</div>
+        </div>
+        <div style="height:280px"><canvas id="c-parto-dona"></canvas></div>
+        <div class="alert alert-red"><span>⚠️</span><span>Tasa de cesáreas del 53.8% en unidades hospitalarias — la OMS recomienda no más del 10–15%.</span></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Partos por mes</div>
+        <div class="chart-sub">Distribución mensual de atención obstétrica</div>
+        <div style="height:280px"><canvas id="c-parto-mes"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MUERTES MATERNAS -->
+  <div id="tab-maternas" class="section">
+    <div class="mm-box">
+      <div>
+        <div class="mm-num">4</div>
+      </div>
+      <div>
+        <div class="mm-label">Muertes maternas registradas</div>
+        <div class="mm-sub">Enero – Mayo 2026 · Defunciones con diagnóstico obstétrico CIE-10 capítulo O</div>
+      </div>
+    </div>
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Enf. circulatoria obstétrica</div><div class="metric-value">2</div><div class="metric-sub">50% de los casos</div></div>
+      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">Eclampsia</div><div class="metric-value">1</div><div class="metric-sub">25% de los casos</div></div>
+      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">Enf. respiratoria obstétrica</div><div class="metric-value">1</div><div class="metric-sub">25% de los casos</div></div>
+      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">Período</div><div class="metric-value" style="font-size:16px">Ene–May</div><div class="metric-sub">5 meses de vigilancia</div></div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Causa de muerte materna</div>
+        <div class="chart-sub">Clasificación por diagnóstico principal CIE-10</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Enf. circulatoria obstétrica 50%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#7a0025"></div>Eclampsia 25%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Enf. respiratoria obstétrica 25%</div>
+        </div>
+        <div style="height:260px"><canvas id="c-mm-causa"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Contexto nacional</div>
+        <div class="chart-sub">La muerte materna es un indicador de calidad de la atención obstétrica</div>
+        <div style="padding:16px 0; font-size:13px; color:var(--text2); line-height:1.8;">
+          <p style="margin-bottom:12px;">Las <strong style="color:#ab0033">4 muertes maternas</strong> registradas en Tamaulipas de enero a mayo 2026 corresponden a fallecimientos de mujeres durante el embarazo, parto o puerperio por causas relacionadas con el proceso obstétrico.</p>
+          <p style="margin-bottom:12px;"><strong>Principales causas identificadas:</strong></p>
+          <ul style="list-style:none; padding:0;">
+            <li style="padding:6px 0; border-bottom:1px solid var(--border);">🔴 Enfermedades del sistema circulatorio que complican el embarazo — <strong>2 casos</strong></li>
+            <li style="padding:6px 0; border-bottom:1px solid var(--border);">🔴 Eclampsia en período no especificado — <strong>1 caso</strong></li>
+            <li style="padding:6px 0;">🔴 Enfermedades respiratorias que complican el parto — <strong>1 caso</strong></li>
+          </ul>
+          <div class="alert alert-red" style="margin-top:14px;"><span>⚠️</span><span>La eclampsia y las complicaciones circulatorias son causas prevenibles con atención prenatal oportuna y vigilancia durante el parto.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DERECHOHABIENCIA -->
+  <div id="tab-derechohabiencia" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">IMSS Bienestar</div><div class="metric-value">9,052</div><div class="metric-sub">36.4% del total</div></div>
+      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">OPD IMSS Bienestar</div><div class="metric-value">5,967</div><div class="metric-sub">24.0% del total</div></div>
+      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">No especificado</div><div class="metric-value">5,181</div><div class="metric-sub">20.8% del total</div></div>
+      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">Ninguna</div><div class="metric-value">1,770</div><div class="metric-sub">7.1% sin afiliación</div></div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Egresos por derechohabiencia</div>
+        <div class="chart-sub">Institución de afiliación del paciente egresado</div>
+        <div style="height:300px"><canvas id="c-derecho"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Distribución porcentual</div>
+        <div class="chart-sub">Participación por institución</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>IMSS Bienestar 36.4%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#7a0025"></div>OPD IMSS B. 24.0%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>No espec. 20.8%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Ninguna 7.1%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>Se ignora 6.9%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#8a6a30"></div>Otros 4.8%</div>
+        </div>
+        <div style="height:260px"><canvas id="c-derecho-pie"></canvas></div>
+        <div class="alert alert-gold"><span>ℹ️</span><span>1,770 egresos (7.1%) de pacientes sin ningún tipo de afiliación médica registrada.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEXO -->
+  <div id="tab-sexo" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">Mujeres</div><div class="metric-value">16,152</div><div class="metric-sub">64.9% del total</div></div>
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Hombres</div><div class="metric-value">8,711</div><div class="metric-sub">35.0% del total</div></div>
+      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">No especificado</div><div class="metric-value">35</div><div class="metric-sub">0.1% del total</div></div>
+      <div class="metric-card" style="--mc:#8a6a30"><div class="metric-label">Razón M/H</div><div class="metric-value">1.85</div><div class="metric-sub">Mujeres por cada hombre</div></div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Egresos por sexo</div>
+        <div class="chart-sub">Alta proporción femenina por egresos obstétricos</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Mujer 64.9%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Hombre 35.0%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>No espec. 0.1%</div>
+        </div>
+        <div style="height:260px"><canvas id="c-sexo-pie"></canvas></div>
+        <div class="alert alert-gold"><span>ℹ️</span><span>La alta proporción femenina (64.9%) se explica por los egresos obstétricos (partos, cesáreas, ginecología) que representan más del 30% del total.</span></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Egresos por grupo de edad y sexo</div>
+        <div class="chart-sub">Distribución comparativa por rango etario</div>
+        <div style="height:290px"><canvas id="c-sexo-edad"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MUNICIPIOS -->
+  <div id="tab-municipios" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Municipio líder</div><div class="metric-value" style="font-size:18px">Victoria</div><div class="metric-sub">5,210 egresos · 20.9%</div></div>
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Top 3 concentran</div><div class="metric-value">50.2%</div><div class="metric-sub">Victoria+Reynosa+Tampico</div></div>
+      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">Municipios activos</div><div class="metric-value">15+</div><div class="metric-sub">Con egresos registrados</div></div>
+    </div>
+    <div class="charts-grid single">
+      <div class="chart-card">
+        <div class="chart-title">Egresos por municipio — Top 15</div>
+        <div class="chart-sub">Municipio donde se ubica la unidad médica</div>
+        <div style="height:400px"><canvas id="c-mun"></canvas></div>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-header"><div class="chart-title">Tabla detallada — Top 15 municipios</div></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Municipio</th><th>Egresos</th><th>%</th><th style="width:120px">Distribución</th></tr></thead>
+        <tbody id="mun-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLUES -->
+  <div id="tab-clues" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Principal unidad</div><div class="metric-value" style="font-size:14px">TSIMB002520</div><div class="metric-sub">2,977 egresos · 12.0%</div></div>
+      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">TSIMB002416</div><div class="metric-value">2,575</div><div class="metric-sub">10.3% — Matamoros</div></div>
+      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">TSIMB001260</div><div class="metric-value">2,283</div><div class="metric-sub">9.2% — Tampico</div></div>
+      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">TSIMB001955</div><div class="metric-value">2,279</div><div class="metric-sub">9.2% — Victoria</div></div>
+    </div>
+    <div class="charts-grid single">
+      <div class="chart-card">
+        <div class="chart-title">Top 10 unidades médicas por egresos (CLUES)</div>
+        <div class="chart-sub">Unidades con mayor volumen de egresos hospitalarios</div>
+        <div style="height:360px"><canvas id="c-clues"></canvas></div>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-header"><div class="chart-title">Detalle por CLUES</div><div class="chart-sub">Top 10 unidades · egresos · porcentaje del total</div></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>CLUES</th><th>Municipio</th><th>Egresos</th><th>%</th><th style="width:120px">Distribución</th></tr></thead>
+        <tbody id="clues-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span>📁 Fuente: Sistema de Egresos Hospitalarios · Sector Salud Tamaulipas</span>
+  <span>📅 Enero–Mayo 2026 · 24,898 registros procesados</span>
+</div>
+
+<script>
+const TOTAL=24898,MAX_MUN=5210,MAX_SERV=4931,MAX_CLUES=2977;
+const gridC='rgba(0,0,0,0.05)',tc='#9A8A7A';
+const initialized={};
+
+const muns=[['VICTORIA',5210],['REYNOSA',4027],['TAMPICO',3208],['MATAMOROS',2575],['NUEVO LAREDO',2120],['CIUDAD MADERO',1680],['EL MANTE',1584],['VALLE HERMOSO',953],['ALTAMIRA',903],['SAN FERNANDO',627],['RIO BRAVO',488],['SOTO LA MARINA',451],['TULA',431],['ALDAMA',264],['ABASOLO',109]];
+const servs=[['Cirugía General',4931],['Medicina Interna',4839],['Gineco Obstetricia',4351],['Ginecología',3798],['Pediatría',2629],['Traumatología',1507],['Nefrología',486],['Neonatología',466],['Obstetricia',371],['Oncología Pediátrica',238],['Cirugía General Ped.',215],['Psiquiatría',149]];
+const cluesData=[['TSIMB002520','Victoria',2977],['TSIMB002416','Matamoros',2575],['TSIMB001260','Tampico',2283],['TSIMB001955','Victoria',2279],['TSIMB002713','Nuevo Laredo',1744],['TSIMB000316','Ciudad Madero',1680],['TSIMB002643','El Mante',1584],['TSIMB001091','Reynosa',1499],['TSIMB001943','Tampico',1294],['TSIMB002865','Valle Hermoso',978]];
+
+const DEFS={
+  resumen:()=>{
+    new Chart(document.getElementById('c-mes'),{type:'bar',data:{labels:['Enero','Febrero','Marzo','Abril','Mayo'],datasets:[{data:[4896,4701,5307,4924,5070],backgroundColor:['#ab0033','#ab0033','#ab0033','#ab0033','#bc955c'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y.toLocaleString()} egresos`}}},scales:{y:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-edad'),{type:'bar',data:{labels:['0–11','12–17','18–29','30–44','45–59','60–74','75+'],datasets:[{data:[3222,1758,6694,4280,3864,3255,1816],backgroundColor:['#ddc9a3','#ddc9a3','#ab0033','#ab0033','#bc955c','#7a0025','#54565a'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-afeccion'),{type:'bar',data:{labels:['Parto único\nespontáneo NE','Parto único\ncefálico','Enf. renal\ncrónica et.5','Atención mat.\ncicatriz uterina','Aborto incomp.\nsin comp.','Neumonía\nno espec.','Enf. renal\ncrónica NE','Apendicitis\naguda','Anemia\nno espec.','LLA'],datasets:[{data:[1492,756,677,568,539,449,362,324,293,290],backgroundColor:'#ab0033',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-atencion'),{type:'doughnut',data:{labels:['Primera vez','Subsecuente'],datasets:[{data:[23262,1636],backgroundColor:['#ab0033','#bc955c'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
+  },
+  servicios:()=>{
+    new Chart(document.getElementById('c-servicio'),{type:'bar',data:{labels:servs.map(s=>s[0]),datasets:[{data:servs.map(s=>s[1]),backgroundColor:servs.map((_,i)=>i<3?'#ab0033':i<6?'#bc955c':'#ddc9a3'),borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x.toLocaleString()} egresos (${((ctx.parsed.x/TOTAL)*100).toFixed(1)}%)`}}},scales:{x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:12}},grid:{display:false}}}}});
+    const tbody=document.getElementById('serv-tbody');
+    servs.forEach(([name,n],i)=>{const pct=((n/TOTAL)*100).toFixed(1);const bw=Math.round((n/MAX_SERV)*100);const tr=document.createElement('tr');tr.innerHTML=`<td><span class="rank">${String(i+1).padStart(2,'0')}</span></td><td><strong>${name}</strong></td><td><span style="font-family:'DM Mono',monospace;font-weight:500">${n.toLocaleString()}</span></td><td><span class="badge ${i<3?'badge-red':i<6?'badge-gold':'badge-gray'}">${pct}%</span></td><td><div class="bar-bg"><div class="bar-fill" style="width:${bw}%;background:${i<3?'#ab0033':i<6?'#bc955c':'#ddc9a3'}"></div></div></td>`;tbody.appendChild(tr);});
+  },
+  motivo:()=>{
+    new Chart(document.getElementById('c-motivo'),{type:'doughnut',data:{labels:['Mejoría','Defunción','Voluntad propia','Traslado','Curación','Otro','Fuga'],datasets:[{data:[22445,1099,658,340,225,129,2],backgroundColor:['#8a6a30','#ab0033','#bc955c','#54565a','#ddc9a3','#9A8A7A','#7a0025'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},color:tc,boxWidth:10}}},cutout:'50%'}});
+    new Chart(document.getElementById('c-def-mes'),{type:'line',data:{labels:['Enero','Febrero','Marzo','Abril','Mayo'],datasets:[{label:'Defunciones',data:[215,202,231,218,233],borderColor:'#ab0033',backgroundColor:'rgba(171,0,51,0.08)',fill:true,tension:0.4,pointRadius:5,pointBackgroundColor:'#ab0033'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
+  },
+  parto:()=>{
+    new Chart(document.getElementById('c-parto-dona'),{type:'doughnut',data:{labels:['Cesárea','Eutócico','Distócico vaginal'],datasets:[{data:[2886,2403,70],backgroundColor:['#ab0033','#8a6a30','#ddc9a3'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
+    new Chart(document.getElementById('c-parto-mes'),{type:'bar',data:{labels:['Enero','Febrero','Marzo','Abril','Mayo'],datasets:[{label:'Cesárea',data:[580,545,620,570,571],backgroundColor:'#ab0033',borderRadius:3},{label:'Eutócico',data:[495,452,510,472,474],backgroundColor:'#8a6a30',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:12},boxWidth:10}}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
+  },
+  maternas:()=>{
+    new Chart(document.getElementById('c-mm-causa'),{type:'doughnut',data:{labels:['Enf. circulatoria obstétrica','Eclampsia','Enf. respiratoria obstétrica'],datasets:[{data:[2,1,1],backgroundColor:['#ab0033','#7a0025','#bc955c'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:12},color:tc,boxWidth:10}}},cutout:'55%'}});
+  },
+  derechohabiencia:()=>{
+    new Chart(document.getElementById('c-derecho'),{type:'bar',data:{labels:['IMSS Bienestar','OPD IMSS B.','No especificado','Ninguna','Se ignora','IMSS','Otra','ISSSTE','Otros'],datasets:[{data:[9052,5967,5181,1770,1719,640,474,84,11],backgroundColor:['#ab0033','#7a0025','#54565a','#gris','#9A8A7A','#bc955c','#8a6a30','#ddc9a3','#D4C5A8'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-derecho-pie'),{type:'doughnut',data:{labels:['IMSS Bienestar','OPD IMSS B.','No espec.','Ninguna','Se ignora','Otros'],datasets:[{data:[9052,5967,5181,1770,1719,1209],backgroundColor:['#ab0033','#7a0025','#54565a','#bc955c','#9A8A7A','#ddc9a3'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'55%'}});
+  },
+  sexo:()=>{
+    new Chart(document.getElementById('c-sexo-pie'),{type:'doughnut',data:{labels:['Mujer','Hombre','No espec.'],datasets:[{data:[16152,8711,35],backgroundColor:['#bc955c','#ab0033','#54565a'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
+    new Chart(document.getElementById('c-sexo-edad'),{type:'bar',data:{labels:['0–11','12–17','18–29','30–44','45–59','60–74','75+'],datasets:[{label:'Mujer',data:[1593,1292,5283,2912,2407,1874,773],backgroundColor:'#bc955c',borderRadius:3},{label:'Hombre',data:[1626,465,1400,1362,1455,1380,1042],backgroundColor:'#ab0033',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:12},boxWidth:10}}},scales:{y:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
+  },
+  municipios:()=>{
+    new Chart(document.getElementById('c-mun'),{type:'bar',data:{labels:muns.map(m=>m[0]),datasets:[{data:muns.map(m=>m[1]),backgroundColor:muns.map((_,i)=>i<3?'#ab0033':i<6?'#bc955c':'#ddc9a3'),borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x.toLocaleString()} egresos (${((ctx.parsed.x/TOTAL)*100).toFixed(1)}%)`}}},scales:{x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:12}},grid:{display:false}}}}});
+    const tbody=document.getElementById('mun-tbody');
+    muns.forEach(([name,n],i)=>{const pct=((n/TOTAL)*100).toFixed(1);const bw=Math.round((n/MAX_MUN)*100);const tr=document.createElement('tr');tr.innerHTML=`<td><span class="rank">${String(i+1).padStart(2,'0')}</span></td><td><strong>${name}</strong></td><td><span style="font-family:'DM Mono',monospace;font-weight:500">${n.toLocaleString()}</span></td><td><span class="badge ${i<3?'badge-red':i<6?'badge-gold':'badge-gray'}">${pct}%</span></td><td><div class="bar-bg"><div class="bar-fill" style="width:${bw}%;background:${i<3?'#ab0033':i<6?'#bc955c':'#ddc9a3'}"></div></div></td>`;tbody.appendChild(tr);});
+  },
+  clues:()=>{
+    new Chart(document.getElementById('c-clues'),{type:'bar',data:{labels:cluesData.map(c=>c[0]),datasets:[{data:cluesData.map(c=>c[2]),backgroundColor:cluesData.map((_,i)=>i<3?'#ab0033':i<6?'#bc955c':'#ddc9a3'),borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y.toLocaleString()} egresos`}}},scales:{y:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    const tbody=document.getElementById('clues-tbody');
+    cluesData.forEach(([clues,mun,n],i)=>{const pct=((n/TOTAL)*100).toFixed(1);const bw=Math.round((n/MAX_CLUES)*100);const tr=document.createElement('tr');tr.innerHTML=`<td><span class="rank">${String(i+1).padStart(2,'0')}</span></td><td><strong>${clues}</strong></td><td>${mun}</td><td><span style="font-family:'DM Mono',monospace;font-weight:500">${n.toLocaleString()}</span></td><td><span class="badge ${i<3?'badge-red':i<6?'badge-gold':'badge-gray'}">${pct}%</span></td><td><div class="bar-bg"><div class="bar-fill" style="width:${bw}%;background:${i<3?'#ab0033':i<6?'#bc955c':'#ddc9a3'}"></div></div></td>`;tbody.appendChild(tr);});
+  }
+};
+
+function showTab(name,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');btn.classList.add('active');setTimeout(()=>{if(!initialized[name]){DEFS[name]();initialized[name]=true;}},30);}
+DEFS['resumen']();initialized['resumen']=true;
+</script>
+</body>
+</html>
