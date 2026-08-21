@@ -101,7 +101,7 @@
       </div>
     </div>
     <div class="header-right">
-      <div class="header-badge">4 tableros activos</div>
+      <div class="header-badge">5 tableros activos</div>
       <div class="header-date">Actualizado: 10 agosto 2026</div>
     </div>
   </div>
@@ -116,6 +116,7 @@
     <button class="nav-item" id="nav-disc" onclick="showTablero('discapacidad')">♿ Discapacidad</button>
     <button class="nav-item" id="nav-def" onclick="showTablero('defunciones')">📋 Defunciones</button>
     <button class="nav-item" id="nav-egr" onclick="showTablero('egresos')">🏥 Egresos Hosp.</button>
+    <button class="nav-item" id="nav-coe" onclick="showTablero('coermi')">👶 COERMI</button>
   </div>
 </div>
 
@@ -136,82 +137,95 @@
           <strong>Fuente de datos:</strong> Certificados de nacimiento (CEN_2022 / SINBA2) y Certificados de Discapacidad · Secretaría de Salud Tamaulipas · <strong>Corte: julio/agosto 2026</strong>
         </div>
       </div>
+      <!-- RESUMEN 5 TABLEROS -->
+      <style>
+        .resumen-strip{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px;}
+        .resumen-head{display:flex;align-items:center;gap:10px;padding:11px 20px;border-bottom:1px solid var(--border);background:#FBF7F5;}
+        .resumen-head-title{font-size:14px;font-weight:500;color:var(--text);}
+        .resumen-head-date{font-size:11px;color:var(--text3);font-family:monospace;margin-left:4px;}
+        .resumen-head-link{margin-left:auto;font-size:12px;color:#ab0033;font-weight:500;text-decoration:none;}
+        .resumen-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));padding:12px 20px;gap:10px;}
+        .rk-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+        .rk-val{font-size:20px;font-weight:600;font-family:monospace;}
+        .rk-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+        .resumen-section-title{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;}
+      </style>
 
-      <div class="cards-grid">
+      <p class="resumen-section-title">Resumen general de indicadores</p>
 
-        <!-- NACIMIENTOS -->
-        <a class="dash-card" href="#" onclick="showTablero('nacimientos'); return false;" style="--card-color:#ab0033; --card-light:#F5E0E6;">
-          <div class="card-top">
-            <div class="card-icon">👶</div>
-            <div class="card-title">Nacimientos</div>
-            <div class="card-desc">Registros de nacimientos ocurridos en Tamaulipas. Incluye municipio, tipo de parto, unidad médica, afiliación y perfil de la madre.</div>
-          </div>
-          <div class="card-stats">
-            <div class="stat"><div class="stat-val">19,502</div><div class="stat-label">Registros</div></div>
-            <div class="stat"><div class="stat-val">68.6%</div><div class="stat-label">Cesáreas</div></div>
-            <div class="stat"><div class="stat-val">Ene–Jul</div><div class="stat-label">Período</div></div>
-          </div>
-          <div class="card-footer">
-            <span class="card-source">CEN_2022 / SINBA2</span>
-            <span class="card-cta">Ver tablero →</span>
-          </div>
-        </a>
-
-        <!-- DISCAPACIDAD -->
-        <a class="dash-card" href="#" onclick="showTablero('discapacidad'); return false;" style="--card-color:#bc955c; --card-light:#F0E8D5;">
-          <div class="card-top">
-            <div class="card-icon">♿</div>
-            <div class="card-title">Discapacidad</div>
-            <div class="card-desc">Certificados de discapacidad emitidos en Tamaulipas. Incluye condición de salud, funciones corporales, ayudas técnicas y unidades médicas.</div>
-          </div>
-          <div class="card-stats">
-            <div class="stat"><div class="stat-val">712</div><div class="stat-label">Certificados</div></div>
-            <div class="stat"><div class="stat-val">4</div><div class="stat-label">Unidades</div></div>
-            <div class="stat"><div class="stat-val">Jul 2026</div><div class="stat-label">Corte</div></div>
-          </div>
-          <div class="card-footer">
-            <span class="card-source">Cert. Discapacidad</span>
-            <span class="card-cta" style="color:#bc955c;">Ver tablero →</span>
-          </div>
-        </a>
-
-        <!-- DEFUNCIONES -->
-        <a class="dash-card" href="#" onclick="showTablero('defunciones'); return false;" style="--card-color:#7a0025; --card-light:#F5E0E6;">
-          <div class="card-top">
-            <div class="card-icon">📋</div>
-            <div class="card-title">Defunciones</div>
-            <div class="card-desc">Registros de defunciones por municipio, causa CIE-10, sitio, unidad médica, afiliación y perfil del fallecido.</div>
-          </div>
-          <div class="card-stats">
-            <div class="stat"><div class="stat-val">14,045</div><div class="stat-label">Registros</div></div>
-            <div class="stat"><div class="stat-val">15</div><div class="stat-label">Municipios</div></div>
-            <div class="stat"><div class="stat-val">Ene–Jul</div><div class="stat-label">Período</div></div>
-          </div>
-          <div class="card-footer">
-            <span class="card-source">CED · Certificados</span>
-            <span class="card-cta" style="color:#7a0025;">Ver tablero →</span>
-          </div>
-        </a>
-
-        <!-- EGRESOS HOSPITALARIOS -->
-        <a class="dash-card" href="#" onclick="showTablero('egresos'); return false;" style="--card-color:#54565a; --card-light:#E8E6E3;">
-          <div class="card-top">
-            <div class="card-icon">🏥</div>
-            <div class="card-title">Egresos Hospitalarios</div>
-            <div class="card-desc">Egresos por servicio, motivo, tipo de parto, muertes maternas, derechohabiencia, municipio y unidad médica CLUES.</div>
-          </div>
-          <div class="card-stats">
-            <div class="stat"><div class="stat-val" style="color:#54565a;">36,205</div><div class="stat-label">Egresos</div></div>
-            <div class="stat"><div class="stat-val" style="color:#54565a;">9</div><div class="stat-label">Secciones</div></div>
-            <div class="stat"><div class="stat-val" style="color:#54565a;">Ene–Jul</div><div class="stat-label">Período</div></div>
-          </div>
-          <div class="card-footer">
-            <span class="card-source">SEH · Egresos 2026</span>
-            <span class="card-cta" style="color:#54565a;">Ver tablero →</span>
-          </div>
-        </a>
-
+      <div class="resumen-strip">
+        <div class="resumen-head"><span style="font-size:16px">👶</span><span class="resumen-head-title">Nacimientos</span><span class="resumen-head-date">Ene–Jul 2026 · Corte 24 julio</span><a class="resumen-head-link" href="#" onclick="showTablero('nacimientos');return false;">Ver tablero →</a></div>
+        <div class="resumen-kpis">
+          <div><div class="rk-label">Total registros</div><div class="rk-val" style="color:#ab0033">19,502</div></div>
+          <div><div class="rk-label">Cesáreas</div><div class="rk-val" style="color:#7a0025">68.3%</div></div>
+          <div><div class="rk-label">Atención prenatal</div><div class="rk-val" style="color:#8a6a30">97.4%</div></div>
+          <div><div class="rk-label">Municipio líder</div><div class="rk-val" style="font-size:15px;color:#ab0033">Reynosa</div><div class="rk-sub">4,563 nacimientos</div></div>
+          <div><div class="rk-label">Sin afiliación</div><div class="rk-val" style="color:#54565a">37.0%</div></div>
+          <div><div class="rk-label">Peso prom. RN</div><div class="rk-val" style="color:#ab0033">3,139g</div></div>
+        </div>
       </div>
+
+      <div class="resumen-strip">
+        <div class="resumen-head"><span style="font-size:16px">📋</span><span class="resumen-head-title">Defunciones</span><span class="resumen-head-date">Ene–Ago 2026 · Corte 03 agosto</span><a class="resumen-head-link" href="#" onclick="showTablero('defunciones');return false;">Ver tablero →</a></div>
+        <div class="resumen-kpis">
+          <div><div class="rk-label">Total defunciones</div><div class="rk-val" style="color:#ab0033">14,045</div></div>
+          <div><div class="rk-label">Edad promedio</div><div class="rk-val" style="color:#7a0025">68.3</div><div class="rk-sub">años</div></div>
+          <div><div class="rk-label">Principal causa</div><div class="rk-val" style="font-size:13px;color:#ab0033">Infarto / Cardiopatía</div><div class="rk-sub">32.9% del total</div></div>
+          <div><div class="rk-label">Municipio líder</div><div class="rk-val" style="font-size:15px;color:#ab0033">Reynosa</div><div class="rk-sub">2,519 defunciones</div></div>
+          <div><div class="rk-label">Sin afiliación</div><div class="rk-val" style="color:#54565a">27.0%</div></div>
+          <div><div class="rk-label">Prom. mensual</div><div class="rk-val" style="color:#ab0033">2,007</div></div>
+        </div>
+      </div>
+
+      <div class="resumen-strip">
+        <div class="resumen-head"><span style="font-size:16px">♿</span><span class="resumen-head-title">Discapacidad</span><span class="resumen-head-date">Corte 15 julio 2026</span><a class="resumen-head-link" href="#" onclick="showTablero('discapacidad');return false;">Ver tablero →</a></div>
+        <div class="resumen-kpis">
+          <div><div class="rk-label">Certificados vigentes</div><div class="rk-val" style="color:#ab0033">712</div></div>
+          <div><div class="rk-label">Cond. más frecuente</div><div class="rk-val" style="font-size:15px;color:#ab0033">TEA</div><div class="rk-sub">134 personas · 18.8%</div></div>
+          <div><div class="rk-label">Sin empleo (barreras)</div><div class="rk-val" style="color:#7a0025">43.2%</div></div>
+          <div><div class="rk-label">Municipio líder</div><div class="rk-val" style="font-size:15px;color:#ab0033">Matamoros</div><div class="rk-sub">489 certificados</div></div>
+          <div><div class="rk-label">Sin afiliación</div><div class="rk-val" style="color:#54565a">12.1%</div></div>
+          <div><div class="rk-label">Unidades activas</div><div class="rk-val" style="color:#ab0033">4</div></div>
+        </div>
+      </div>
+
+      <div class="resumen-strip">
+        <div class="resumen-head"><span style="font-size:16px">🏥</span><span class="resumen-head-title">Egresos Hospitalarios</span><span class="resumen-head-date">Ene–Jul 2026</span><a class="resumen-head-link" href="#" onclick="showTablero('egresos');return false;">Ver tablero →</a></div>
+        <div class="resumen-kpis">
+          <div><div class="rk-label">Total egresos</div><div class="rk-val" style="color:#ab0033">36,205</div></div>
+          <div><div class="rk-label">Mejoría</div><div class="rk-val" style="color:#8a6a30">90.6%</div></div>
+          <div><div class="rk-label">Cesáreas (partos)</div><div class="rk-val" style="color:#7a0025">53.7%</div></div>
+          <div><div class="rk-label">Muertes maternas</div><div class="rk-val" style="color:#ab0033">6</div></div>
+          <div><div class="rk-label">Municipio líder</div><div class="rk-val" style="font-size:15px;color:#ab0033">Victoria</div><div class="rk-sub">7,515 egresos</div></div>
+          <div><div class="rk-label">Prom. mensual</div><div class="rk-val" style="color:#ab0033">5,172</div></div>
+        </div>
+      </div>
+
+      <div class="resumen-strip" style="margin-bottom:32px">
+        <div class="resumen-head"><span style="font-size:16px">👶</span><span class="resumen-head-title">COERMI · Mortalidad Infantil</span><span class="resumen-head-date">Ene–Jul 2026 · &lt;5 años</span><a class="resumen-head-link" href="#" onclick="showTablero('coermi');return false;">Ver tablero →</a></div>
+        <div class="resumen-kpis">
+          <div><div class="rk-label">Total &lt;5 años</div><div class="rk-val" style="color:#ab0033">280</div></div>
+          <div><div class="rk-label">Mort. infantil &lt;1 año</div><div class="rk-val" style="color:#7a0025">242</div></div>
+          <div><div class="rk-label">Neonatal temprana</div><div class="rk-val" style="color:#ab0033">121</div><div class="rk-sub">0–6 días · 43.2%</div></div>
+          <div><div class="rk-label">Principal causa</div><div class="rk-val" style="font-size:13px;color:#ab0033">Sepsis bact. RN</div><div class="rk-sub">55 casos</div></div>
+          <div><div class="rk-label">Sin afiliación</div><div class="rk-val" style="color:#54565a">40.7%</div><div class="rk-sub">114 menores</div></div>
+          <div><div class="rk-label">EDA / IRA &lt;5 años</div><div class="rk-val" style="color:#ab0033">1 / 7</div><div class="rk-sub">casos trazadores</div></div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- TABLERO COERMI -->
+    <div class="iframe-view" id="view-coermi">
+      <div class="iframe-bar">
+        <div class="iframe-title">👶 <strong>COERMI · Mortalidad Infantil · Tamaulipas 2026</strong> · 280 def. &lt;5 años · Ene–Ago</div>
+        <div class="iframe-actions">
+          <button class="btn" onclick="showPortal()">← Inicio</button>
+          <a class="btn btn-primary" href="coermi.html" target="_blank">Abrir en pantalla completa ↗</a>
+        </div>
+      </div>
+      <iframe class="tablero" id="iframe-coe" src="" height="900" title="COERMI Mortalidad Infantil Tamaulipas 2026"></iframe>
     </div>
 
     <!-- TABLERO NACIMIENTOS -->
@@ -280,6 +294,7 @@ function showPortal() {
   document.getElementById('view-nacimientos').style.display = 'none';
   document.getElementById('view-defunciones').style.display = 'none';
   document.getElementById('view-egresos').style.display = 'none';
+  document.getElementById('view-coermi').style.display = 'none';
   document.getElementById('view-discapacidad').style.display = 'none';
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-inicio').classList.add('active');
@@ -291,6 +306,7 @@ function showTablero(name) {
   document.getElementById('view-nacimientos').style.display = 'none';
   document.getElementById('view-defunciones').style.display = 'none';
   document.getElementById('view-egresos').style.display = 'none';
+  document.getElementById('view-coermi').style.display = 'none';
   document.getElementById('view-discapacidad').style.display = 'none';
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
@@ -304,6 +320,11 @@ function showTablero(name) {
     document.getElementById('nav-egr').classList.add('active');
     const fe = document.getElementById('iframe-egr');
     if (!fe.src || fe.src === window.location.href) fe.src = 'egresos-hospitalarios.html';
+  } else if (name === 'coermi') {
+    document.getElementById('view-coermi').style.display = 'block';
+    document.getElementById('nav-coe').classList.add('active');
+    const fc = document.getElementById('iframe-coe');
+    if (!fc.src || fc.src === window.location.href) fc.src = 'coermi.html';
   } else if (name === 'defunciones') {
     document.getElementById('view-defunciones').style.display = 'block';
     document.getElementById('nav-def').classList.add('active');
