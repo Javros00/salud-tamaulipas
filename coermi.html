@@ -1,95 +1,105 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>COERMI · Mortalidad Infantil · Tamaulipas 2026</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>COERMI · Secretaría de Salud Tamaulipas 2026</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@300;400;500;600;700&family=Encode+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  :root{--rojo:#ab0033;--rojo-dark:#7a0025;--rojo-light:#F5E0E6;--dorado:#bc955c;--dorado-dark:#8a6a30;--dorado-light:#F0E8D5;--arena:#ddc9a3;--gris:#54565a;--gris-light:#E8E6E3;--bg:#F5F0E8;--surface:#FFFFFF;--surface2:#EDE5D4;--border:#D4C5A8;--text:#2A1A1A;--text2:#54565a;--text3:#9A8A7A;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,0.08);}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-  .header{background:linear-gradient(135deg,#ab0033 0%,#7a0025 100%);color:#fff;padding:20px 28px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
-  .header-left{display:flex;align-items:center;gap:14px;}
-  .header-icon{width:44px;height:44px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;}
-  .header-title{font-size:20px;font-weight:600;letter-spacing:-0.3px;}
-  .header-sub{font-size:13px;opacity:.75;margin-top:2px;}
-  .header-badge{background:rgba(255,255,255,0.2);font-size:12px;padding:4px 12px;border-radius:20px;font-family:'DM Mono',monospace;}
-  .header-date{font-size:12px;opacity:.6;margin-top:5px;text-align:right;}
-  .stripe{height:4px;background:linear-gradient(90deg,#ab0033 0%,#bc955c 50%,#ddc9a3 100%);}
-  .back-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 28px;font-size:12px;}
-  .back-link{color:var(--rojo);text-decoration:none;font-weight:500;}
+  :root{
+    --p187:#902142;--p187m:#B5294E;--p187l:#F5E6EB;
+    --p465:#A88961;--p465l:#F0EAE0;--p465d:#8a6a30;
+    --p468:#DAD0AE;
+    --pgray:#54565A;--pgrayl:#EDEDEE;
+    --bg:#F7F4EF;--surface:#fff;--surface2:#F2EDE6;
+    --border:#DDD5C8;--border2:#EDE5DA;
+    --txt:#1C1410;--txt2:#54565A;--txt3:#8A8075;
+    --sans:'Encode Sans',system-ui,sans-serif;
+    --cond:'Encode Sans Condensed','Encode Sans',system-ui,sans-serif;
+    --r:8px;--sh:0 1px 4px rgba(28,20,16,.07),0 1px 2px rgba(28,20,16,.04);
+  }
+  body{font-family:var(--sans);background:var(--bg);color:var(--txt);min-height:100vh;font-size:14px;}
+  /* HEADER */
+  .hdr{background:var(--p187);color:#fff;}
+  .hdr-top{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;flex-wrap:wrap;gap:12px;}
+  .hdr-logos{display:flex;align-items:center;}
+  .logo-gov{display:flex;align-items:center;gap:10px;padding-right:18px;border-right:1px solid rgba(255,255,255,.25);}
+  .logo-ss{display:flex;align-items:center;gap:10px;padding-left:18px;}
+  .logo-name{font-weight:600;font-size:14px;line-height:1.2;font-family:var(--sans);}
+  .logo-sub{font-weight:300;font-size:10px;opacity:.8;}
+  .hdr-meta{text-align:right;}
+  .hdr-badge{background:rgba(255,255,255,.18);padding:4px 12px;border-radius:20px;font-family:var(--cond);font-size:12px;font-weight:500;border:1px solid rgba(255,255,255,.15);display:inline-block;}
+  .hdr-date{font-size:11px;opacity:.6;margin-top:5px;}
+  .stripe{height:5px;background:linear-gradient(90deg,var(--p187) 0%,var(--p465) 50%,var(--p468) 100%);}
+  .hdr-sub{background:var(--p187m);padding:6px 32px;font-family:var(--cond);font-size:11px;font-weight:500;color:rgba(255,255,255,.9);letter-spacing:.5px;text-transform:uppercase;}
+  .back-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:7px 32px;font-size:12px;}
+  .back-link{color:var(--p187);text-decoration:none;font-weight:600;font-family:var(--cond);}
   .back-link:hover{text-decoration:underline;}
-  .tabs-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;overflow-x:auto;}
-  .tab{padding:13px 16px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;white-space:nowrap;transition:all .15s;font-family:'DM Sans',sans-serif;}
-  .tab:hover{color:var(--rojo);}.tab.active{color:var(--rojo);border-bottom-color:var(--rojo);}
-  .content{padding:24px 28px;max-width:1200px;}
+  /* TABS */
+  .tabs-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;display:flex;overflow-x:auto;}
+  .tab{padding:12px 15px;font-size:13px;font-weight:500;color:var(--txt2);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;white-space:nowrap;font-family:var(--sans);transition:color .15s,border-color .15s;}
+  .tab:hover{color:var(--p187);}.tab.active{color:var(--p187);border-bottom-color:var(--p187);}
+  /* CONTENT */
+  .content{padding:22px 32px;max-width:1200px;}
   .section{display:none;}.section.active{display:block;}
-  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin-bottom:22px;}
-  .metric-card{background:var(--surface);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden;}
-  .metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--mc,var(--rojo));}
-  .metric-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px;}
-  .metric-value{font-size:24px;font-weight:600;color:var(--mc,var(--rojo));letter-spacing:-0.5px;font-family:'DM Mono',monospace;}
-  .metric-sub{font-size:11px;color:var(--text2);margin-top:4px;}
-  .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px;}
+  /* METRICS */
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin-bottom:20px;}
+  .metric-card{background:var(--surface);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);border:1px solid var(--border2);position:relative;overflow:hidden;}
+  .metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--mc,var(--p187));}
+  .metric-label{font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:7px;font-family:var(--cond);}
+  .metric-value{font-size:23px;font-weight:700;color:var(--mc,var(--p187));letter-spacing:-.5px;font-family:var(--cond);}
+  .metric-sub{font-size:11px;color:var(--txt2);margin-top:4px;}
+  /* CHARTS */
+  .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
   .charts-grid.single{grid-template-columns:1fr;}.charts-grid.thirds{grid-template-columns:2fr 1fr;}
   @media(max-width:720px){.charts-grid,.charts-grid.thirds{grid-template-columns:1fr;}}
-  .chart-card{background:var(--surface);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);border:1px solid var(--border);}
-  .chart-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
-  .chart-sub{font-size:12px;color:var(--text3);margin-bottom:14px;}
+  .chart-card{background:var(--surface);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);border:1px solid var(--border2);}
+  .chart-title{font-size:13px;font-weight:600;color:var(--txt);margin-bottom:3px;font-family:var(--sans);}
+  .chart-sub{font-size:11px;color:var(--txt3);margin-bottom:14px;}
+  /* LEGEND */
   .legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
-  .legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2);}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--txt2);}
   .legend-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
-  .table-card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;margin-bottom:18px;}
-  .table-header{padding:14px 20px 10px;border-bottom:1px solid var(--border);}
+  /* TABLE */
+  .table-card{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--border2);overflow:hidden;margin-bottom:18px;}
+  .table-header{padding:14px 18px 10px;border-bottom:1px solid var(--border);}
   .table-wrap{overflow-x:auto;}
   table{width:100%;border-collapse:collapse;font-size:13px;}
-  th{padding:9px 14px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border);}
-  td{padding:9px 14px;border-bottom:1px solid #F0EBE0;color:var(--text);}
-  tr:last-child td{border-bottom:none;}tr:hover td{background:#FAF7F2;}
-  .rank{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-right:6px;}
-  .bar-bg{background:#E8E0D0;border-radius:3px;height:5px;margin-top:4px;}
+  th{padding:9px 14px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--txt3);background:var(--surface2);border-bottom:1px solid var(--border);font-family:var(--cond);}
+  td{padding:9px 14px;border-bottom:1px solid var(--border2);color:var(--txt);}
+  tr:last-child td{border-bottom:none;}tr:hover td{background:#FAF7F3;}
+  .rank{font-size:11px;color:var(--txt3);font-family:var(--cond);margin-right:6px;}
+  .bar-bg{background:var(--border);border-radius:3px;height:5px;margin-top:4px;}
   .bar-fill{height:5px;border-radius:3px;}
-  .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;}
-  .badge-red{background:var(--rojo-light);color:var(--rojo-dark);}
-  .badge-gold{background:var(--dorado-light);color:var(--dorado-dark);}
-  .badge-gray{background:var(--gris-light);color:var(--gris);}
-  .alert{border-radius:var(--radius);padding:11px 15px;font-size:13px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;}
-  .alert-red{background:var(--rojo-light);color:var(--rojo-dark);border:1px solid #D4A0B0;}
-  .alert-gold{background:var(--dorado-light);color:var(--dorado-dark);border:1px solid var(--border);}
+  /* BADGES */
+  .badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;font-family:var(--cond);letter-spacing:.3px;}
+  .badge-red{background:var(--p187l);color:var(--p187);}
+  .badge-gold{background:var(--p465l);color:var(--p465d);}
+  .badge-gray{background:var(--pgrayl);color:var(--pgray);}
+  /* ALERTS */
+  .alert{border-radius:var(--r);padding:11px 14px;font-size:12px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;}
+  .alert-red{background:var(--p187l);color:var(--p187);border:1px solid #D4A0B0;}
+  .alert-gold{background:var(--p465l);color:var(--p465d);border:1px solid #D4C0A0;}
   .alert-blue{background:#E8F0FB;color:#185FA5;border:1px solid #B5D4F4;}
-  .pyr-row{display:flex;align-items:center;gap:10px;font-size:12px;margin-bottom:8px;}
-  .pyr-label{width:160px;text-align:right;color:var(--text2);flex-shrink:0;line-height:1.3;}
-  .pyr-bar-wrap{flex:1;display:flex;align-items:center;gap:8px;}
-  .pyr-bar{height:26px;border-radius:4px;}
-  .pyr-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;}
-  .pyr-pct{font-size:11px;color:var(--text3);}
-  .cie-box{background:var(--surface2);border-radius:var(--radius);border:1px solid var(--border);}
-  .cie-row{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);font-size:13px;}
-  .cie-row:last-child{border-bottom:none;}
-  .cie-code{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);}
-  .footer{padding:14px 28px;border-top:1px solid var(--border);font-size:12px;color:var(--text3);display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;background:var(--surface);}
+  /* FOOTER */
+  .inst-footer{padding:12px 32px;border-top:1px solid var(--border);font-size:11px;color:var(--txt3);display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;background:var(--surface);font-family:var(--cond);}
 </style>
-</head>
-<body>
-<div class="header">
-  <div class="header-left">
-    <div class="header-icon">👶</div>
-    <div>
-      <div class="header-title">COERMI · Mortalidad Infantil · Tamaulipas</div>
-      <div class="header-sub">Comité de Estudio y Prevención de la Mortalidad Infantil · 2026</div>
-    </div>
-  </div>
-  <div style="text-align:right">
-    <div class="header-badge">280 defunciones &lt;5 años</div>
-    <div class="header-date">Enero – Julio 2026</div>
-  </div>
-</div>
-<div class="stripe"></div>
-<div class="back-bar"><a class="back-link" href="./">← Regresar al portal principal</a></div>
 
+<style>
+.pyr-row{display:flex;align-items:center;gap:10px;font-size:12px;margin-bottom:8px;}
+.pyr-label{width:155px;text-align:right;color:var(--txt2);flex-shrink:0;line-height:1.3;font-family:var(--cond);}
+.pyr-bar-wrap{flex:1;display:flex;align-items:center;gap:8px;}
+.pyr-bar{height:26px;border-radius:4px;}
+.pyr-val{font-family:var(--cond);font-size:13px;font-weight:600;color:var(--txt);white-space:nowrap;}
+.pyr-pct{font-size:11px;color:var(--txt3);}
+.cie-box{background:var(--surface2);border-radius:var(--r);border:1px solid var(--border);}
+.cie-row{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border2);font-size:13px;}
+.cie-row:last-child{border-bottom:none;}
+.cie-code{font-family:var(--cond);font-size:10px;color:var(--txt3);}
+</style>
+</head><body>
+<div class="hdr"><div class="hdr-top"><div class="hdr-logos"><div class="logo-gov"><svg width="34" height="38" viewBox="0 0 34 38" fill="none"><path d="M5 5h24v5H18v23h-5V10H5z" fill="#fff"/><path d="M2 6C.5 4.5-.2 2.5 1.5 1 4-1 7 2 9 5L5 6z" fill="#A88961"/><path d="M32 6c1.5-1.5 2.2-3.5.5-5C30-1 27 2 25 5l5 1z" fill="#A88961"/><circle cx="17" cy="2.5" r="2" fill="#A88961"/></svg><div><div class="logo-name">Tamaulipas</div><div class="logo-sub">Gobierno del Estado</div></div></div><div class="logo-ss"><svg width="30" height="30" viewBox="0 0 30 30" fill="none"><path d="M3 6Q3 2 7 2h13q4 0 4 4v16q0 7-6 7H13Q3 29 3 21z" fill="#A88961" opacity=".8"/><path d="M5 7Q5 3 8 3h13q4 0 4 4v14q0 7-5 7H13Q5 28 5 21z" fill="#902142"/><line x1="15" y1="8" x2="15" y2="24" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M15 11c-2.5 1.5-3.5 3.5-1.5 4.5s1.5 3.5-2 5.5" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M15 11c2.5 1.5 3.5 3.5 1.5 4.5S15 19 18.5 21" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M15 9.5c-3-1.5-5.5-.5-5.5 1 1.5 0 3 0 5.5 1" fill="#fff" opacity=".9"/><path d="M15 9.5c3-1.5 5.5-.5 5.5 1-1.5 0-3 0-5.5 1" fill="#fff" opacity=".9"/><circle cx="15" cy="7.5" r="1.5" fill="#fff"/></svg><div><div class="logo-name">Secretaría<br>de Salud</div></div></div></div><div class="hdr-meta"><div class="hdr-badge">280 defunciones &lt;5 años</div><div class="hdr-date">Enero–Julio 2026</div></div></div></div>
+<div class="stripe"></div>
+<div class="hdr-sub">Información en Salud, Análisis e Interpretación &nbsp;·&nbsp; COERMI · Mortalidad Infantil · Tamaulipas 2026</div>
+<div class="back-bar"><a class="back-link" href="./">← Portal principal</a></div>
 <div class="tabs-wrap">
   <button class="tab active" onclick="showTab('resumen',this)">📊 Resumen general</button>
   <button class="tab" onclick="showTab('neonatal',this)">🍼 Mortalidad neonatal</button>
@@ -99,312 +109,156 @@
   <button class="tab" onclick="showTab('municipios',this)">📍 Municipios</button>
   <button class="tab" onclick="showTab('unidades',this)">🏥 Unidades</button>
 </div>
-
 <div class="content">
-
-  <!-- RESUMEN -->
   <div id="tab-resumen" class="section active">
     <div class="alert alert-blue"><span>ℹ️</span><span>Datos reales de <strong>280 certificados de defunción</strong> en menores de 5 años. Clasificación por <strong>CLAVEEDAD y EDAD</strong>. Enero–Julio 2026.</span></div>
     <div class="metrics">
-      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Total &lt;5 años</div><div class="metric-value">280</div><div class="metric-sub">Defunciones 2026</div></div>
-      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">Mortalidad infantil</div><div class="metric-value">242</div><div class="metric-sub">Menores de 1 año · 86.4%</div></div>
-      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">1 a 4 años</div><div class="metric-value">38</div><div class="metric-sub">Edad preescolar · 13.6%</div></div>
-      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Neonatal temprana</div><div class="metric-value">121</div><div class="metric-sub">0 a 6 días · 43.2%</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Total &lt;5 años</div><div class="metric-value">280</div><div class="metric-sub">Defunciones 2026</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Mortalidad infantil</div><div class="metric-value">242</div><div class="metric-sub">Menores de 1 año · 86.4%</div></div>
+      <div class="metric-card" style="--mc:#A88961"><div class="metric-label">1 a 4 años</div><div class="metric-value">38</div><div class="metric-sub">Edad preescolar · 13.6%</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Neonatal temprana</div><div class="metric-value">121</div><div class="metric-sub">0 a 6 días · 43.2%</div></div>
       <div class="metric-card" style="--mc:#8a6a30"><div class="metric-label">Neonatal tardía</div><div class="metric-value">54</div><div class="metric-sub">7 a 27 días · 19.3%</div></div>
-      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">Postneonatal</div><div class="metric-value">67</div><div class="metric-sub">28 días–11 meses · 23.9%</div></div>
+      <div class="metric-card" style="--mc:#54565A"><div class="metric-label">Postneonatal</div><div class="metric-value">67</div><div class="metric-sub">28 días–11 meses · 23.9%</div></div>
     </div>
-
     <div class="charts-grid thirds">
-      <div class="chart-card">
-        <div class="chart-title">Defunciones por grupo de edad — menores de 5 años</div>
-        <div class="chart-sub">Clasificación por etapa de vida según CLAVEEDAD</div>
-        <div style="height:250px"><canvas id="c-grupos"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">Composición &lt;1 año</div>
-        <div class="chart-sub">242 defunciones infantiles</div>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Neonatal temp. 50.0%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#8a6a30"></div>Neonatal tardía 22.3%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Postneonatal 27.7%</div>
-        </div>
-        <div style="height:180px"><canvas id="c-inf-dona"></canvas></div>
-      </div>
+      <div class="chart-card"><div class="chart-title">Defunciones por grupo de edad</div><div class="chart-sub">Menores de 5 años · clasificación por etapa de vida</div><div style="height:240px"><canvas id="c-grupos"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Composición &lt;1 año</div><div class="chart-sub">242 defunciones infantiles</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#902142"></div>Neonatal temp. 50.0%</div><div class="legend-item"><div class="legend-dot" style="background:#8a6a30"></div>Neonatal tardía 22.3%</div><div class="legend-item"><div class="legend-dot" style="background:#A88961"></div>Postneonatal 27.7%</div></div><div style="height:170px"><canvas id="c-inf-dona"></canvas></div></div>
     </div>
-
-    <div class="chart-card" style="margin-bottom:22px">
-      <div class="chart-title">Pirámide de mortalidad por etapa</div>
-      <div class="chart-sub">Defunciones y porcentaje respecto al total de menores de 5 años (280)</div>
-      <div style="padding:12px 0" id="pyramid"></div>
-    </div>
-
+    <div class="chart-card" style="margin-bottom:20px"><div class="chart-title">Pirámide de mortalidad por etapa</div><div class="chart-sub">Defunciones y porcentaje respecto al total &lt;5 años (280)</div><div style="padding:12px 0" id="pyramid"></div></div>
     <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-title">Defunciones por mes</div>
-        <div class="chart-sub">Tendencia mensual enero–julio 2026</div>
-        <div style="height:220px"><canvas id="c-mes"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">Sexo del fallecido</div>
-        <div class="chart-sub">167 hombres (59.6%) · 113 mujeres (40.4%)</div>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Hombre 59.6%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Mujer 40.4%</div>
-        </div>
-        <div style="height:180px"><canvas id="c-sexo"></canvas></div>
-      </div>
+      <div class="chart-card"><div class="chart-title">Defunciones por mes</div><div class="chart-sub">Tendencia mensual enero–julio 2026</div><div style="height:210px"><canvas id="c-mes"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Sexo del fallecido</div><div class="chart-sub">167 hombres (59.6%) · 113 mujeres (40.4%)</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#902142"></div>Hombre 59.6%</div><div class="legend-item"><div class="legend-dot" style="background:#A88961"></div>Mujer 40.4%</div></div><div style="height:170px"><canvas id="c-sexo"></canvas></div></div>
     </div>
   </div>
-
-  <!-- NEONATAL -->
   <div id="tab-neonatal" class="section">
     <div class="alert alert-red"><span>🔴</span><span>La mortalidad neonatal (0–27 días) suma <strong>175 defunciones</strong> — el 72.3% de toda la mortalidad infantil. La sepsis bacteriana del RN es la principal causa (55 casos).</span></div>
     <div class="metrics">
-      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Neonatal temprana</div><div class="metric-value">121</div><div class="metric-sub">0–6 días · 69.1% del neonatal</div></div>
-      <div class="metric-card" style="--mc:#8a6a30"><div class="metric-label">Neonatal tardía</div><div class="metric-value">54</div><div class="metric-sub">7–27 días · 30.9% del neonatal</div></div>
-      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">Total neonatal</div><div class="metric-value">175</div><div class="metric-sub">0–27 días</div></div>
-      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">% mort. infantil</div><div class="metric-value">72.3%</div><div class="metric-sub">De las 242 def. &lt;1 año</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Neonatal temprana</div><div class="metric-value">121</div><div class="metric-sub">0–6 días · 69.1% del neonatal</div></div>
+      <div class="metric-card" style="--mc:#8a6a30"><div class="metric-label">Neonatal tardía</div><div class="metric-value">54</div><div class="metric-sub">7–27 días · 30.9%</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Total neonatal</div><div class="metric-value">175</div><div class="metric-sub">0–27 días</div></div>
+      <div class="metric-card" style="--mc:#54565A"><div class="metric-label">% mort. infantil</div><div class="metric-value">72.3%</div><div class="metric-sub">De 242 def. &lt;1 año</div></div>
     </div>
     <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-title">Neonatal temprana vs tardía por sexo</div>
-        <div class="chart-sub">Distribución por sexo en cada período neonatal</div>
-        <div style="height:260px"><canvas id="c-neo-sexo"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">Top 10 — Causas básicas neonatales</div>
-        <div class="chart-sub">CIE-10 más frecuentes en 0–27 días</div>
-        <div style="height:300px"><canvas id="c-neo-causas"></canvas></div>
-      </div>
+      <div class="chart-card"><div class="chart-title">Neonatal temprana vs tardía por sexo</div><div class="chart-sub">Distribución por sexo en cada período</div><div style="height:260px"><canvas id="c-neo-sexo"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Top 10 — Causas básicas neonatales (0–27 días)</div><div class="chart-sub">CIE-10 más frecuentes</div><div style="height:300px"><canvas id="c-neo-causas"></canvas></div></div>
     </div>
   </div>
-
-  <!-- POSTNEONATAL -->
   <div id="tab-postneonatal" class="section">
     <div class="metrics">
-      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">Total postneonatal</div><div class="metric-value">67</div><div class="metric-sub">28 días–11 meses</div></div>
-      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Hombres</div><div class="metric-value">41</div><div class="metric-sub">61.2% del grupo</div></div>
-      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">Mujeres</div><div class="metric-value">26</div><div class="metric-sub">38.8% del grupo</div></div>
-      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">% mort. infantil</div><div class="metric-value">27.7%</div><div class="metric-sub">De las 242 def. &lt;1 año</div></div>
+      <div class="metric-card" style="--mc:#54565A"><div class="metric-label">Total postneonatal</div><div class="metric-value">67</div><div class="metric-sub">28 días–11 meses</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Hombres</div><div class="metric-value">41</div><div class="metric-sub">61.2% del grupo</div></div>
+      <div class="metric-card" style="--mc:#A88961"><div class="metric-label">Mujeres</div><div class="metric-value">26</div><div class="metric-sub">38.8% del grupo</div></div>
+      <div class="metric-card" style="--mc:#54565A"><div class="metric-label">% mort. infantil</div><div class="metric-value">27.7%</div><div class="metric-sub">De 242 def. &lt;1 año</div></div>
     </div>
     <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-title">Composición mortalidad infantil (&lt;1 año)</div>
-        <div class="chart-sub">Neonatal vs postneonatal</div>
-        <div style="height:260px"><canvas id="c-post-comp"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">Top causas postneonatales</div>
-        <div class="chart-sub">Principales diagnósticos 28 días–11 meses</div>
-        <div style="height:280px"><canvas id="c-post-causas"></canvas></div>
-      </div>
+      <div class="chart-card"><div class="chart-title">Composición mortalidad infantil (&lt;1 año)</div><div class="chart-sub">Neonatal vs postneonatal</div><div style="height:250px"><canvas id="c-post-comp"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Top causas postneonatales</div><div class="chart-sub">Principales diagnósticos 28 días–11 meses</div><div style="height:270px"><canvas id="c-post-causas"></canvas></div></div>
     </div>
   </div>
-
-  <!-- PREESCOLAR -->
   <div id="tab-preescolar" class="section">
     <div class="metrics">
-      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">Total 1–4 años</div><div class="metric-value">38</div><div class="metric-sub">Edad preescolar</div></div>
-      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Hombres</div><div class="metric-value">22</div><div class="metric-sub">57.9% del grupo</div></div>
-      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">Mujeres</div><div class="metric-value">16</div><div class="metric-sub">42.1% del grupo</div></div>
-      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">IRA en 1–4 años</div><div class="metric-value">4</div><div class="metric-sub">10.5% del grupo</div></div>
+      <div class="metric-card" style="--mc:#A88961"><div class="metric-label">Total 1–4 años</div><div class="metric-value">38</div><div class="metric-sub">Edad preescolar</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Hombres</div><div class="metric-value">22</div><div class="metric-sub">57.9% del grupo</div></div>
+      <div class="metric-card" style="--mc:#A88961"><div class="metric-label">Mujeres</div><div class="metric-value">16</div><div class="metric-sub">42.1% del grupo</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">IRA en 1–4 años</div><div class="metric-value">4</div><div class="metric-sub">10.5% del grupo</div></div>
     </div>
     <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-title">Top causas — 1 a 4 años</div>
-        <div class="chart-sub">Diagnósticos más frecuentes en edad preescolar</div>
-        <div style="height:300px"><canvas id="c-presc-causas"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">Distribución por sexo — 1 a 4 años</div>
-        <div class="chart-sub">22 hombres · 16 mujeres</div>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>Hombre 57.9%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Mujer 42.1%</div>
-        </div>
-        <div style="height:200px"><canvas id="c-presc-sexo"></canvas></div>
-        <div class="alert alert-red" style="margin-bottom:0"><span>⚠️</span><span>IRA representa el 10.5% (4 casos) de las defunciones en 1–4 años — causa prevenible prioritaria.</span></div>
-      </div>
+      <div class="chart-card"><div class="chart-title">Top causas — 1 a 4 años</div><div class="chart-sub">Diagnósticos más frecuentes en edad preescolar</div><div style="height:290px"><canvas id="c-presc-causas"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Distribución por sexo — 1 a 4 años</div><div class="chart-sub">22 hombres · 16 mujeres</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#902142"></div>Hombre 57.9%</div><div class="legend-item"><div class="legend-dot" style="background:#A88961"></div>Mujer 42.1%</div></div><div style="height:195px"><canvas id="c-presc-sexo"></canvas></div><div class="alert alert-red"><span>⚠️</span><span>IRA representa el 10.5% (4 casos) de las defunciones en 1–4 años.</span></div></div>
     </div>
   </div>
-
-  <!-- EDA / IRA -->
   <div id="tab-edaira" class="section">
-    <div class="alert alert-blue"><span>ℹ️</span><span><strong>EDA</strong>: Enf. Diarreica Aguda · CIE-10 A000–A099 &nbsp;|&nbsp; <strong>IRA</strong>: Infección Respiratoria Aguda · CIE-10 J000–J189. Causas <strong>prevenibles y trazadoras</strong> de calidad de atención.</span></div>
+    <div class="alert alert-blue"><span>ℹ️</span><span><strong>EDA</strong>: Enf. Diarreica Aguda · CIE-10 A000–A099 &nbsp;|&nbsp; <strong>IRA</strong>: Infección Respiratoria Aguda · CIE-10 J000–J189. Causas <strong>prevenibles y trazadoras</strong>.</span></div>
     <div class="metrics">
-      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">EDA &lt;5 años</div><div class="metric-value">1</div><div class="metric-sub">A090 · Postneonatal</div></div>
-      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">IRA &lt;5 años</div><div class="metric-value">7</div><div class="metric-sub">J129,J111,J189,J159</div></div>
-      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">EDA en grupo &lt;5</div><div class="metric-value">0.4%</div><div class="metric-sub">1 de 280</div></div>
-      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">IRA en grupo &lt;5</div><div class="metric-value">2.5%</div><div class="metric-sub">7 de 280</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">EDA &lt;5 años</div><div class="metric-value">1</div><div class="metric-sub">A090 · Postneonatal</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">IRA &lt;5 años</div><div class="metric-value">7</div><div class="metric-sub">J129, J111, J189, J159</div></div>
+      <div class="metric-card" style="--mc:#54565A"><div class="metric-label">EDA en grupo &lt;5</div><div class="metric-value">0.4%</div><div class="metric-sub">1 de 280</div></div>
+      <div class="metric-card" style="--mc:#A88961"><div class="metric-label">IRA en grupo &lt;5</div><div class="metric-value">2.5%</div><div class="metric-sub">7 de 280</div></div>
     </div>
     <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-title">EDA e IRA dentro de los 280 casos &lt;5 años</div>
-        <div class="chart-sub">Causas trazadoras vs otras causas</div>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#7a0025"></div>IRA 7 casos (2.5%)</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>EDA 1 caso (0.4%)</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>Otras causas 272 (97.1%)</div>
-        </div>
-        <div style="height:260px"><canvas id="c-eda-dona"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">Detalle por diagnóstico CIE-10</div>
-        <div class="chart-sub">Casos de EDA e IRA con diagnóstico específico</div>
-        <div class="cie-box" style="margin-bottom:14px">
-          <div class="cie-row" style="background:var(--rojo-light)">
-            <div><div style="font-weight:500;color:#7a0025">EDA — Enf. diarreica aguda</div><div class="cie-code">CIE-10: A000–A099</div></div>
-            <div style="text-align:right"><div style="font-size:24px;font-weight:600;color:#ab0033;font-family:monospace">1</div><div style="font-size:11px;color:#7a0025">Postneonatal</div></div>
-          </div>
-          <div class="cie-row"><span style="color:var(--text2);font-size:12px">A090 — Otras gastroenteritis y colitis de origen infeccioso</span><span class="badge badge-gray">1 caso</span></div>
+      <div class="chart-card"><div class="chart-title">EDA e IRA dentro de los 280 casos &lt;5 años</div><div class="chart-sub">Causas trazadoras vs otras causas</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#902142"></div>IRA 7 casos (2.5%)</div><div class="legend-item"><div class="legend-dot" style="background:#A88961"></div>EDA 1 caso (0.4%)</div><div class="legend-item"><div class="legend-dot" style="background:#DAD0AE"></div>Otras causas 272 (97.1%)</div></div><div style="height:250px"><canvas id="c-eda-dona"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Diagnósticos CIE-10 específicos</div><div class="chart-sub">Detalle de casos EDA e IRA</div>
+        <div class="cie-box" style="margin-bottom:12px">
+          <div class="cie-row" style="background:var(--p187l)"><div><div style="font-weight:600;color:#902142;font-size:13px">EDA — Enf. diarreica aguda</div><div class="cie-code">CIE-10: A000–A099</div></div><div style="text-align:right"><div style="font-size:24px;font-weight:700;color:#902142;font-family:var(--cond)">1</div><div style="font-size:11px;color:#902142">caso</div></div></div>
+          <div class="cie-row"><span style="font-size:12px;color:var(--txt2)">A090 — Otras gastroenteritis y colitis de origen infeccioso</span><span class="badge badge-gray">1</span></div>
         </div>
         <div class="cie-box">
-          <div class="cie-row" style="background:var(--rojo-light)">
-            <div><div style="font-weight:500;color:#7a0025">IRA — Infección respiratoria aguda</div><div class="cie-code">CIE-10: J000–J189</div></div>
-            <div style="text-align:right"><div style="font-size:24px;font-weight:600;color:#ab0033;font-family:monospace">7</div><div style="font-size:11px;color:#7a0025">Total IRA</div></div>
-          </div>
-          <div class="cie-row"><span style="font-size:12px;color:var(--text2)">J189 — Neumonía no especificada</span><span class="badge badge-red">3 casos</span></div>
-          <div class="cie-row"><span style="font-size:12px;color:var(--text2)">J159 — Neumonía bacteriana no especificada</span><span class="badge badge-red">2 casos</span></div>
-          <div class="cie-row"><span style="font-size:12px;color:var(--text2)">J129 — Neumonía viral no especificada</span><span class="badge badge-gold">1 caso</span></div>
-          <div class="cie-row"><span style="font-size:12px;color:var(--text2)">J111 — Influenza con otras manif. resp.</span><span class="badge badge-gold">1 caso</span></div>
+          <div class="cie-row" style="background:var(--p187l)"><div><div style="font-weight:600;color:#902142;font-size:13px">IRA — Infección respiratoria aguda</div><div class="cie-code">CIE-10: J000–J189</div></div><div style="text-align:right"><div style="font-size:24px;font-weight:700;color:#902142;font-family:var(--cond)">7</div><div style="font-size:11px;color:#902142">casos</div></div></div>
+          <div class="cie-row"><span style="font-size:12px;color:var(--txt2)">J189 — Neumonía no especificada</span><span class="badge badge-red">3</span></div>
+          <div class="cie-row"><span style="font-size:12px;color:var(--txt2)">J159 — Neumonía bacteriana no especificada</span><span class="badge badge-red">2</span></div>
+          <div class="cie-row"><span style="font-size:12px;color:var(--txt2)">J129 — Neumonía viral no especificada</span><span class="badge badge-gold">1</span></div>
+          <div class="cie-row"><span style="font-size:12px;color:var(--txt2)">J111 — Influenza con otras manif. respiratorias</span><span class="badge badge-gold">1</span></div>
         </div>
-        <div class="alert alert-gold" style="margin-top:12px;margin-bottom:0"><span>💡</span><span>Las IRA (7 casos) superan a las EDA en menores de 5 años. La neumonía es el diagnóstico más frecuente.</span></div>
       </div>
     </div>
   </div>
-
-  <!-- MUNICIPIOS -->
   <div id="tab-municipios" class="section">
     <div class="metrics">
-      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Municipio líder</div><div class="metric-value" style="font-size:18px">Reynosa</div><div class="metric-sub">65 defunciones · 23.2%</div></div>
-      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Top 3 concentran</div><div class="metric-value">50.7%</div><div class="metric-sub">Reynosa+Matamoros+N.Laredo</div></div>
-      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">Jurisdicción líder</div><div class="metric-value" style="font-size:16px">Reynosa</div><div class="metric-sub">80 defunciones · 28.6%</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Municipio líder</div><div class="metric-value" style="font-size:17px">Reynosa</div><div class="metric-sub">65 defunciones · 23.2%</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Top 3 concentran</div><div class="metric-value">50.7%</div><div class="metric-sub">Reynosa+Matamoros+N.Laredo</div></div>
+      <div class="metric-card" style="--mc:#A88961"><div class="metric-label">Jurisdicción líder</div><div class="metric-value" style="font-size:16px">Reynosa</div><div class="metric-sub">80 defunciones · 28.6%</div></div>
     </div>
-    <div class="charts-grid single">
-      <div class="chart-card">
-        <div class="chart-title">Defunciones por municipio de residencia — Top 12</div>
-        <div class="chart-sub">Municipio de residencia habitual del menor fallecido</div>
-        <div style="height:340px"><canvas id="c-mun"></canvas></div>
-      </div>
-    </div>
+    <div class="charts-grid single"><div class="chart-card"><div class="chart-title">Defunciones por municipio — Top 12</div><div class="chart-sub">Municipio de residencia habitual del menor</div><div style="height:320px"><canvas id="c-mun"></canvas></div></div></div>
     <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-title">Por jurisdicción sanitaria</div>
-        <div class="chart-sub">Distribución por jurisdicción de defunción</div>
-        <div style="height:280px"><canvas id="c-juris"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">Sitio de defunción</div>
-        <div class="chart-sub">Lugar donde ocurrió el fallecimiento</div>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#ab0033"></div>IMSS Bienestar 48.9%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#7a0025"></div>IMSS 29.6%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#ddc9a3"></div>Hogar 6.4%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#bc955c"></div>Privada 5.7%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#54565a"></div>Otros 9.3%</div>
-        </div>
-        <div style="height:230px"><canvas id="c-sitio"></canvas></div>
-      </div>
+      <div class="chart-card"><div class="chart-title">Por jurisdicción sanitaria</div><div class="chart-sub">Distribución por jurisdicción de defunción</div><div style="height:270px"><canvas id="c-juris"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Sitio de defunción</div><div class="chart-sub">Lugar donde ocurrió el fallecimiento</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#902142"></div>IMSS Bienestar 48.9%</div><div class="legend-item"><div class="legend-dot" style="background:#B5294E"></div>IMSS 29.6%</div><div class="legend-item"><div class="legend-dot" style="background:#DAD0AE"></div>Hogar 6.4%</div><div class="legend-item"><div class="legend-dot" style="background:#A88961"></div>Privada 5.7%</div></div><div style="height:220px"><canvas id="c-sitio"></canvas></div></div>
     </div>
   </div>
-
-  <!-- UNIDADES -->
   <div id="tab-unidades" class="section">
     <div class="metrics">
-      <div class="metric-card" style="--mc:#ab0033"><div class="metric-label">Principal unidad</div><div class="metric-value" style="font-size:13px">Hosp. Materno Inf. Reynosa</div><div class="metric-sub">28 defunciones</div></div>
-      <div class="metric-card" style="--mc:#7a0025"><div class="metric-label">HGZ 13 Matamoros</div><div class="metric-value">19</div><div class="metric-sub">2da unidad</div></div>
-      <div class="metric-card" style="--mc:#bc955c"><div class="metric-label">Hosp. Infantil Tam.</div><div class="metric-value">17</div><div class="metric-sub">3ra unidad</div></div>
-      <div class="metric-card" style="--mc:#54565a"><div class="metric-label">HGR 6 Cd. Madero</div><div class="metric-value">17</div><div class="metric-sub">3ra unidad (empate)</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Principal unidad</div><div class="metric-value" style="font-size:12px">Hosp. Materno Inf. Reynosa</div><div class="metric-sub">28 defunciones</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">HGZ 13 Matamoros</div><div class="metric-value">19</div><div class="metric-sub">2da unidad</div></div>
+      <div class="metric-card" style="--mc:#A88961"><div class="metric-label">Hosp. Infantil Tam.</div><div class="metric-value">17</div><div class="metric-sub">3ra unidad</div></div>
     </div>
-    <div class="charts-grid single">
-      <div class="chart-card">
-        <div class="chart-title">Top 10 unidades médicas — defunciones infantiles</div>
-        <div class="chart-sub">Unidad médica donde ocurrió la defunción del menor</div>
-        <div style="height:360px"><canvas id="c-unidad"></canvas></div>
-      </div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">Afiliación de los menores fallecidos</div>
-      <div class="chart-sub">Derechohabiencia al momento del fallecimiento</div>
-      <div style="height:240px"><canvas id="c-afil"></canvas></div>
-      <div class="alert alert-red" style="margin-top:14px;margin-bottom:0"><span>⚠️</span><span><strong>114 menores fallecidos (40.7%) sin ninguna afiliación médica</strong> — el grupo sin cobertura más numeroso, lo que refleja una brecha crítica de acceso a servicios de salud.</span></div>
-    </div>
+    <div class="charts-grid single"><div class="chart-card"><div class="chart-title">Top 10 unidades médicas — defunciones infantiles</div><div class="chart-sub">Unidad médica donde ocurrió la defunción del menor</div><div style="height:340px"><canvas id="c-unidad"></canvas></div></div></div>
+    <div class="chart-card"><div class="chart-title">Afiliación de los menores fallecidos</div><div class="chart-sub">Derechohabiencia al momento del fallecimiento</div><div style="height:230px"><canvas id="c-afil"></canvas></div><div class="alert alert-red" style="margin-top:14px;margin-bottom:0"><span>⚠️</span><span><strong>114 menores fallecidos (40.7%) sin ninguna afiliación médica</strong> — la brecha de cobertura más crítica del sistema.</span></div></div>
   </div>
-
 </div>
-
-<div class="footer">
-  <span>📁 Fuente: COERMI · Certificados de Defunción · Secretaría de Salud Tamaulipas</span>
-  <span>📅 Enero–Julio 2026 · 280 defunciones &lt;5 años · Datos reales</span>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<div class="inst-footer"><span>📁 COERMI · Certificados de Defunción · Secretaría de Salud Tamaulipas</span><span>📅 Enero–Julio 2026 · 280 defunciones en menores de 5 años</span></div>
 <script>
-const gridC='rgba(0,0,0,0.05)',tc='#9A8A7A';
+const gridC='rgba(28,20,16,0.05)',tc='#8A8075';
 const initialized={};
-
-// Pirámide
 const pyrData=[
-  {label:'Neonatal temprana\n0–6 días',val:121,pct:'43.2%',color:'#ab0033'},
-  {label:'Postneonatal\n28 días–11 meses',val:67,pct:'23.9%',color:'#bc955c'},
+  {label:'Neonatal temprana\n0–6 días',val:121,pct:'43.2%',color:'#902142'},
+  {label:'Postneonatal\n28 días–11 meses',val:67,pct:'23.9%',color:'#A88961'},
   {label:'Neonatal tardía\n7–27 días',val:54,pct:'19.3%',color:'#8a6a30'},
-  {label:'1 a 4 años\nPreescolar',val:38,pct:'13.6%',color:'#ddc9a3'},
+  {label:'1 a 4 años\nPreescolar',val:38,pct:'13.6%',color:'#DAD0AE'}
 ];
 const pyr=document.getElementById('pyramid');
-pyrData.forEach(d=>{
-  const bw=Math.round((d.val/121)*100);
-  pyr.innerHTML+=`<div class="pyr-row">
-    <div class="pyr-label">${d.label.replace('\n','<br>')}</div>
-    <div class="pyr-bar-wrap">
-      <div class="pyr-bar" style="width:${bw}%;background:${d.color};min-width:28px"></div>
-      <span class="pyr-val">${d.val}</span>
-      <span class="pyr-pct">${d.pct}</span>
-    </div>
-  </div>`;
-});
-
+pyrData.forEach(d=>{const bw=Math.round((d.val/121)*100);pyr.innerHTML+=`<div class="pyr-row"><div class="pyr-label">${d.label.replace('\n','<br>')}</div><div class="pyr-bar-wrap"><div class="pyr-bar" style="width:${bw}%;background:${d.color};min-width:30px"></div><span class="pyr-val">${d.val}</span><span class="pyr-pct">${d.pct}</span></div></div>`;});
 const DEFS={
   resumen:()=>{
-    new Chart(document.getElementById('c-grupos'),{type:'bar',data:{labels:['Neonatal\ntemprana\n0–6 días','Postneonatal\n28d–11m','Neonatal\ntardía\n7–27 días','1 a 4 años\nPreescolar'],datasets:[{data:[121,67,54,38],backgroundColor:['#ab0033','#bc955c','#8a6a30','#ddc9a3'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
-    new Chart(document.getElementById('c-inf-dona'),{type:'doughnut',data:{labels:['Neonatal temprana','Neonatal tardía','Postneonatal'],datasets:[{data:[121,54,67],backgroundColor:['#ab0033','#8a6a30','#bc955c'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
-    new Chart(document.getElementById('c-mes'),{type:'line',data:{labels:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio'],datasets:[{label:'Defunciones',data:[41,44,39,37,50,37,32],borderColor:'#ab0033',backgroundColor:'rgba(171,0,51,0.08)',fill:true,tension:0.4,pointRadius:5,pointBackgroundColor:'#ab0033'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
-    new Chart(document.getElementById('c-sexo'),{type:'doughnut',data:{labels:['Hombre','Mujer'],datasets:[{data:[167,113],backgroundColor:['#ab0033','#bc955c'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'65%'}});
+    new Chart(document.getElementById('c-grupos'),{type:'bar',data:{labels:['Neonatal temp.\n0–6 días','Postneonatal\n28d–11m','Neonatal tardía\n7–27 días','1 a 4 años\nPreescolar'],datasets:[{data:[121,67,54,38],backgroundColor:['#902142','#A88961','#8a6a30','#DAD0AE'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-inf-dona'),{type:'doughnut',data:{labels:['Neonatal temprana','Neonatal tardía','Postneonatal'],datasets:[{data:[121,54,67],backgroundColor:['#902142','#8a6a30','#A88961'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
+    new Chart(document.getElementById('c-mes'),{type:'line',data:{labels:['Enero','Feb','Mar','Abr','Mayo','Jun','Jul'],datasets:[{label:'Defunciones',data:[41,44,39,37,50,37,32],borderColor:'#902142',backgroundColor:'rgba(144,33,66,0.08)',fill:true,tension:0.4,pointRadius:5,pointBackgroundColor:'#902142'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-sexo'),{type:'doughnut',data:{labels:['Hombre','Mujer'],datasets:[{data:[167,113],backgroundColor:['#902142','#A88961'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'65%'}});
   },
   neonatal:()=>{
-    new Chart(document.getElementById('c-neo-sexo'),{type:'bar',data:{labels:['Neonatal temprana\n(0–6 días)','Neonatal tardía\n(7–27 días)'],datasets:[{label:'Hombre',data:[70,34],backgroundColor:'#ab0033',borderRadius:4},{label:'Mujer',data:[51,20],backgroundColor:'#bc955c',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:12},boxWidth:10}}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
-    new Chart(document.getElementById('c-neo-causas'),{type:'bar',data:{labels:['Sepsis bacteriana\ndel RN','Sínd. dificultad\nrespiratoria RN','Inmaturidad\nextrema','Dificultad resp.\nRN no espec.','Neumonía\ncongénita','Malform. card.\ncongénita','Enterocolitis\nnecrotizante','Otros RN\nPretérmino','Sepsis\nno espec.','Obst. resp.\nno espec.'],datasets:[{data:[55,22,17,14,10,7,5,5,5,5],backgroundColor:'#ab0033',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-neo-sexo'),{type:'bar',data:{labels:['Neonatal temprana\n(0–6 días)','Neonatal tardía\n(7–27 días)'],datasets:[{label:'Hombre',data:[70,34],backgroundColor:'#902142',borderRadius:4},{label:'Mujer',data:[51,20],backgroundColor:'#A88961',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:12},boxWidth:10}}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-neo-causas'),{type:'bar',data:{labels:['Sepsis bacteriana\ndel RN','Sínd. dific. resp.\nRN','Inmaturidad\nextrema','Dific. resp.\nRN no espec.','Neumonía\ncongénita','Malform. card.\ncongénita','Enterocolitis\nnecrotizante','Otros RN\nPretérmino','Sepsis\nno espec.','Obst. resp.\nno espec.'],datasets:[{data:[55,22,17,14,10,7,5,5,5,5],backgroundColor:'#902142',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
   },
   postneonatal:()=>{
-    new Chart(document.getElementById('c-post-comp'),{type:'doughnut',data:{labels:['Neonatal temprana','Neonatal tardía','Postneonatal'],datasets:[{data:[121,54,67],backgroundColor:['#ab0033','#8a6a30','#bc955c'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tc,font:{size:11},boxWidth:8,padding:8}}},cutout:'55%'}});
-    new Chart(document.getElementById('c-post-causas'),{type:'bar',data:{labels:['Sepsis\nno espec.','Sínd. muerte\nsúbita infant.','Neumonía\nno espec.','Malform. card.\ncongénita','Otras causas\n(agrupadas)'],datasets:[{data:[5,4,2,2,54],backgroundColor:['#ab0033','#7a0025','#bc955c','#8a6a30','#ddc9a3'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-post-comp'),{type:'doughnut',data:{labels:['Neonatal temprana','Neonatal tardía','Postneonatal'],datasets:[{data:[121,54,67],backgroundColor:['#902142','#8a6a30','#A88961'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tc,font:{size:11},boxWidth:8,padding:8}}},cutout:'55%'}});
+    new Chart(document.getElementById('c-post-causas'),{type:'bar',data:{labels:['Sepsis\nno espec.','Sínd. muerte\nsúbita infant.','Neumonía\nno espec.','Malform. card.\ncongénita','Otras causas'],datasets:[{data:[5,4,2,2,54],backgroundColor:['#902142','#B5294E','#A88961','#8a6a30','#DAD0AE'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
   },
   preescolar:()=>{
-    new Chart(document.getElementById('c-presc-causas'),{type:'bar',data:{labels:['Obst. resp. no\nespec. vivienda','IRA / Neumonía\n(J-codes)','EDA\n(A-codes)','Sepsis\nno espec.','Otras causas'],datasets:[{data:[5,4,0,5,24],backgroundColor:['#ab0033','#7a0025','#bc955c','#8a6a30','#ddc9a3'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
-    new Chart(document.getElementById('c-presc-sexo'),{type:'doughnut',data:{labels:['Hombre','Mujer'],datasets:[{data:[22,16],backgroundColor:['#ab0033','#bc955c'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
+    new Chart(document.getElementById('c-presc-causas'),{type:'bar',data:{labels:['IRA / Neumonía','Sepsis\nno espec.','Obst. resp.\nvivienda','EDA\n(A-codes)','Otras causas'],datasets:[{data:[4,5,5,0,24],backgroundColor:['#902142','#B5294E','#A88961','#8a6a30','#DAD0AE'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-presc-sexo'),{type:'doughnut',data:{labels:['Hombre','Mujer'],datasets:[{data:[22,16],backgroundColor:['#902142','#A88961'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
   },
   edaira:()=>{
-    new Chart(document.getElementById('c-eda-dona'),{type:'doughnut',data:{labels:['IRA (7 casos)','EDA (1 caso)','Otras causas (272)'],datasets:[{data:[7,1,272],backgroundColor:['#7a0025','#bc955c','#ddc9a3'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
+    new Chart(document.getElementById('c-eda-dona'),{type:'doughnut',data:{labels:['IRA (7 casos)','EDA (1 caso)','Otras causas (272)'],datasets:[{data:[7,1,272],backgroundColor:['#902142','#A88961','#DAD0AE'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
   },
   municipios:()=>{
     const muns=[['REYNOSA',65],['MATAMOROS',42],['NUEVO LAREDO',35],['VICTORIA',27],['ALTAMIRA',16],['CIUDAD MADERO',14],['RIO BRAVO',11],['TAMPICO',11],['EL MANTE',9],['GÜEMEZ',6],['VALLE HERMOSO',5],['TULA',4]];
-    new Chart(document.getElementById('c-mun'),{type:'bar',data:{labels:muns.map(m=>m[0]),datasets:[{data:muns.map(m=>m[1]),backgroundColor:muns.map((_,i)=>i<3?'#ab0033':i<6?'#bc955c':'#ddc9a3'),borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x} defunciones (${((ctx.parsed.x/280)*100).toFixed(1)}%)`}}},scales:{x:{ticks:{color:tc},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:12}},grid:{display:false}}}}});
-    new Chart(document.getElementById('c-juris'),{type:'bar',data:{labels:['REYNOSA','VICTORIA','TAMPICO','MATAMOROS','NUEVO LAREDO','MANTE','ALTAMIRA','VALLE HERMOSO','Otros'],datasets:[{data:[80,52,51,37,35,8,6,5,6],backgroundColor:['#ab0033','#7a0025','#bc955c','#bc955c','#8a6a30','#ddc9a3','#ddc9a3','#ddc9a3','#54565a'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
-    new Chart(document.getElementById('c-sitio'),{type:'doughnut',data:{labels:['IMSS Bienestar','IMSS','Hogar','Privada','Otro lugar','Vía pública','SSA','ISSSTE'],datasets:[{data:[137,83,18,16,12,6,5,3],backgroundColor:['#ab0033','#7a0025','#ddc9a3','#bc955c','#54565a','#9A8A7A','#8a6a30','#E8E6E3'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'55%'}});
+    new Chart(document.getElementById('c-mun'),{type:'bar',data:{labels:muns.map(m=>m[0]),datasets:[{data:muns.map(m=>m[1]),backgroundColor:muns.map((_,i)=>i<3?'#902142':i<6?'#A88961':'#DAD0AE'),borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:12}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-juris'),{type:'bar',data:{labels:['REYNOSA','VICTORIA','TAMPICO','MATAMOROS','NUEVO LAREDO','MANTE','ALTAMIRA','Otros'],datasets:[{data:[80,52,51,37,35,8,6,11],backgroundColor:['#902142','#B5294E','#A88961','#A88961','#8a6a30','#DAD0AE','#DAD0AE','#54565A'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-sitio'),{type:'doughnut',data:{labels:['IMSS Bienestar','IMSS','Hogar','Privada','Otro lugar','Vía pública','SSA'],datasets:[{data:[137,83,18,16,12,6,8],backgroundColor:['#902142','#B5294E','#DAD0AE','#A88961','#54565A','#C8A882','#8a6a30'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'55%'}});
   },
   unidades:()=>{
-    new Chart(document.getElementById('c-unidad'),{type:'bar',data:{labels:['Hosp. Materno Inf.\nReynosa','HGZ 13\nMatamoros','Hosp. Infantil\nTamaulipas','HGR 6\nCd. Madero','Hosp. Gral.\nTampico','HGR 270\nReynosa','Hosp. Gral.\nMatamoros','HGZUMAA 15\nReynosa','Hosp. Gral. Reynosa\nDr. Cantu','Hosp. Gral.\nDr. Treviño'],datasets:[{data:[28,19,17,17,15,14,13,12,11,10],backgroundColor:['#ab0033','#7a0025','#bc955c','#bc955c','#8a6a30','#8a6a30','#ddc9a3','#ddc9a3','#54565a','#54565a'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
-    new Chart(document.getElementById('c-afil'),{type:'bar',data:{labels:['NINGUNA','IMSS','IMSS Bienestar','SE IGNORA','OPD IMSS B.','ISSSTE','OTRA'],datasets:[{data:[114,88,34,30,7,6,1],backgroundColor:['#54565a','#ab0033','#7a0025','#9A8A7A','#bc955c','#8a6a30','#ddc9a3'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-unidad'),{type:'bar',data:{labels:['Hosp. Materno Inf.\nReynosa','HGZ 13\nMatamoros','Hosp. Infantil\nTamaulipas','HGR 6\nCd. Madero','Hosp. Gral.\nTampico','HGR 270\nReynosa','Hosp. Gral.\nMatamoros','HGZUMAA 15\nReynosa','HGZMF 1\nVictoria','HGZ 3\nMante'],datasets:[{data:[28,19,17,17,15,14,13,12,11,10],backgroundColor:['#902142','#B5294E','#A88961','#A88961','#8a6a30','#8a6a30','#DAD0AE','#DAD0AE','#54565A','#54565A'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-afil'),{type:'bar',data:{labels:['NINGUNA','IMSS','IMSS Bienestar','SE IGNORA','OPD IMSS B.','ISSSTE'],datasets:[{data:[114,88,34,30,7,6],backgroundColor:['#54565A','#902142','#B5294E','#C8A882','#A88961','#8a6a30'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
   }
 };
-
-function showTab(name,btn){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
-  btn.classList.add('active');
-  setTimeout(()=>{if(!initialized[name]){DEFS[name]();initialized[name]=true;}},30);
-}
+function showTab(name,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');btn.classList.add('active');setTimeout(()=>{if(!initialized[name]){DEFS[name]();initialized[name]=true;}},30);}
 DEFS['resumen']();initialized['resumen']=true;
-</script>
-</body>
-</html>
+</script></body></html>

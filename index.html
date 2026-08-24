@@ -3,120 +3,143 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sector Salud Tamaulipas · Tableros de Información</title>
+<title>Secretaría de Salud Tamaulipas · Información en Salud</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@300;400;500;600;700&family=Encode+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --rojo: #ab0033; --rojo-dark: #7a0025; --rojo-light: #F5E0E6;
-    --dorado: #bc955c; --dorado-dark: #8a6a30; --dorado-light: #F0E8D5;
-    --arena: #ddc9a3; --gris: #54565a; --gris-light: #E8E6E3;
-    --bg: #F5F0E8; --surface: #FFFFFF; --border: #D4C5A8;
-    --text: #2A1A1A; --text2: #54565a; --text3: #9A8A7A;
-    --radius: 12px; --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --p187:#902142;--p187m:#B5294E;--p187l:#F5E6EB;
+    --p465:#A88961;--p465l:#F0EAE0;
+    --p468:#DAD0AE;
+    --pgray:#54565A;--pgrayl:#EDEDEE;
+    --bg:#F7F4EF;--surface:#fff;--surface2:#F2EDE6;
+    --border:#DDD5C8;--border2:#EDE5DA;
+    --txt:#1C1410;--txt2:#54565A;--txt3:#8A8075;
+    --sans:'Encode Sans',system-ui,sans-serif;
+    --cond:'Encode Sans Condensed','Encode Sans',system-ui,sans-serif;
+    --r:8px;--rl:12px;
+    --sh:0 1px 4px rgba(28,20,16,.07),0 1px 2px rgba(28,20,16,.04);
   }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+  body{font-family:var(--sans);background:var(--bg);color:var(--txt);min-height:100vh;display:flex;flex-direction:column;font-size:14px;}
 
   /* HEADER */
-  .header { background: linear-gradient(135deg, #ab0033 0%, #7a0025 100%); color: #fff; padding: 28px 40px; }
-  .header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-  .logo-area { display: flex; align-items: center; gap: 16px; }
-  .logo-circle { width: 54px; height: 54px; background: rgba(255,255,255,0.15); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; border: 1px solid rgba(255,255,255,0.2); }
-  .header-title { font-size: 22px; font-weight: 600; letter-spacing: -0.4px; }
-  .header-sub { font-size: 13px; opacity: .75; margin-top: 3px; }
-  .header-right { text-align: right; }
-  .header-badge { background: rgba(255,255,255,0.18); font-size: 12px; padding: 5px 14px; border-radius: 20px; font-family: 'DM Mono', monospace; border: 1px solid rgba(255,255,255,0.15); }
-  .header-date { font-size: 12px; opacity: .6; margin-top: 6px; }
-  .stripe { height: 5px; background: linear-gradient(90deg, #ab0033 0%, #bc955c 50%, #ddc9a3 100%); }
+  .hdr{background:var(--p187);color:#fff;}
+  .hdr-top{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 36px;height:64px;flex-wrap:wrap;gap:12px;}
+  .hdr-logos{display:flex;align-items:center;}
+  .logo-gov{display:flex;align-items:center;gap:10px;padding-right:20px;border-right:1px solid rgba(255,255,255,.25);}
+  .logo-ss{display:flex;align-items:center;gap:10px;padding-left:20px;}
+  .logo-name{font-weight:600;font-size:15px;line-height:1.2;}
+  .logo-sub{font-weight:300;font-size:10px;opacity:.8;}
+  .hdr-meta{text-align:right;}
+  .hdr-badge{background:rgba(255,255,255,.18);padding:4px 12px;border-radius:20px;font-family:var(--cond);font-size:12px;font-weight:500;border:1px solid rgba(255,255,255,.15);display:inline-block;}
+  .hdr-date{font-size:11px;opacity:.6;margin-top:5px;}
+  .stripe{height:5px;background:linear-gradient(90deg,var(--p187) 0%,var(--p465) 50%,var(--p468) 100%);}
+  .hdr-subtitle{background:var(--p187m);padding:6px 36px;font-family:var(--cond);font-size:11px;font-weight:500;color:rgba(255,255,255,.9);letter-spacing:.6px;text-transform:uppercase;}
+  .hdr-subtitle .hdr-sub-inner{max-width:1200px;margin:0 auto;}
 
   /* NAV */
-  .nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 40px; }
-  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; }
-  .nav-item { padding: 14px 20px; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; border: none; background: none; border-bottom: 2.5px solid transparent; white-space: nowrap; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 8px; transition: all .15s; text-decoration: none; }
-  .nav-item:hover { color: var(--rojo); }
-  .nav-item.active { color: var(--rojo); border-bottom-color: var(--rojo); }
+  .nav{background:var(--surface);border-bottom:1px solid var(--border);}
+  .nav-inner{max-width:1200px;margin:0 auto;padding:0 36px;display:flex;overflow-x:auto;}
+  .nav-btn{padding:13px 18px;font-size:13px;font-weight:500;color:var(--txt2);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;white-space:nowrap;font-family:var(--sans);transition:color .15s,border-color .15s;}
+  .nav-btn:hover{color:var(--p187);}
+  .nav-btn.active{color:var(--p187);border-bottom-color:var(--p187);}
 
   /* MAIN */
-  main { flex: 1; padding: 40px; }
-  .main-inner { max-width: 1100px; margin: 0 auto; }
+  main{flex:1;padding:32px 36px;}
+  .main-inner{max-width:1200px;margin:0 auto;}
 
-  /* PORTAL VIEW */
-  .portal { display: block; }
-  .portal-hero { text-align: center; margin-bottom: 40px; }
-  .portal-hero h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; color: var(--text); margin-bottom: 10px; }
-  .portal-hero p { font-size: 15px; color: var(--text2); max-width: 520px; margin: 0 auto; }
+  /* PORTAL */
+  .portal{display:block;}
+  .portal-head{margin-bottom:28px;}
+  .portal-title{font-size:22px;font-weight:700;color:var(--txt);letter-spacing:-.3px;font-family:var(--sans);}
+  .portal-desc{font-size:13px;color:var(--txt2);margin-top:6px;max-width:600px;}
 
-  /* CARDS GRID */
-  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 40px; }
-  .dash-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; cursor: pointer; transition: transform .15s, box-shadow .15s; text-decoration: none; display: block; }
-  .dash-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
-  .card-top { padding: 28px 28px 20px; position: relative; overflow: hidden; }
-  .card-top::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--card-color, var(--rojo)); }
-  .card-icon { width: 52px; height: 52px; border-radius: 12px; background: var(--card-light, var(--rojo-light)); display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 16px; }
-  .card-title { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
-  .card-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
-  .card-stats { padding: 16px 28px; background: var(--bg); border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .stat { text-align: center; }
-  .stat-val { font-size: 18px; font-weight: 600; color: var(--card-color, var(--rojo)); font-family: 'DM Mono', monospace; }
-  .stat-label { font-size: 11px; color: var(--text3); margin-top: 2px; }
-  .card-footer { padding: 14px 28px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
-  .card-cta { color: var(--card-color, var(--rojo)); font-weight: 500; display: flex; align-items: center; gap: 5px; }
-  .card-source { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; }
-
-  /* INFO STRIP */
-  .info-strip { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 28px; display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
-  .info-icon { font-size: 24px; flex-shrink: 0; }
-  .info-text { font-size: 13px; color: var(--text2); line-height: 1.6; }
-  .info-text strong { color: var(--text); font-weight: 500; }
+  /* RESUMEN STRIPS */
+  .resumen-label{font-family:var(--cond);font-size:11px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;}
+  .strip{background:var(--surface);border-radius:var(--r);border:1px solid var(--border2);box-shadow:var(--sh);overflow:hidden;margin-bottom:10px;transition:box-shadow .15s;}
+  .strip:hover{box-shadow:0 4px 16px rgba(28,20,16,.10);}
+  .strip-head{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid var(--border2);background:var(--surface2);}
+  .strip-icon{font-size:16px;flex-shrink:0;}
+  .strip-title{font-size:13px;font-weight:600;color:var(--txt);font-family:var(--sans);}
+  .strip-date{font-size:10px;color:var(--txt3);font-family:var(--cond);margin-left:4px;}
+  .strip-link{margin-left:auto;font-size:11px;color:var(--p187);font-weight:600;text-decoration:none;font-family:var(--cond);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;}
+  .strip-link:hover{text-decoration:underline;}
+  .strip-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));padding:12px 18px;gap:10px;}
+  .kp-label{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;font-family:var(--cond);font-weight:500;}
+  .kp-val{font-size:19px;font-weight:700;font-family:var(--cond);line-height:1.1;}
+  .kp-sub{font-size:10px;color:var(--txt3);margin-top:2px;}
+  .strip-divider{width:1px;background:var(--border2);align-self:stretch;}
 
   /* IFRAME VIEW */
-  .iframe-view { display: none; }
-  .iframe-bar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 20px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .iframe-title { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
-  .iframe-actions { display: flex; gap: 8px; }
-  .btn { font-size: 12px; padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
-  .btn:hover { background: var(--bg); color: var(--rojo); border-color: var(--rojo); }
-  .btn-primary { background: var(--rojo); color: #fff; border-color: var(--rojo); }
-  .btn-primary:hover { background: var(--rojo-dark); color: #fff; border-color: var(--rojo-dark); }
-  iframe.tablero { width: 100%; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; }
+  .iframe-view{display:none;}
+  .iframe-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .iframe-title{font-size:13px;font-weight:500;}
+  .btn{font-size:12px;padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--txt2);cursor:pointer;font-family:var(--sans);transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px;}
+  .btn:hover{background:var(--bg);color:var(--p187);border-color:var(--p187);}
+  .btn-primary{background:var(--p187);color:#fff;border-color:var(--p187);}
+  .btn-primary:hover{background:var(--p187m);color:#fff;border-color:var(--p187m);}
+  iframe.tablero{width:100%;border:1px solid var(--border);border-radius:var(--r);background:#fff;}
 
   /* FOOTER */
-  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 16px 40px; }
-  .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 12px; color: var(--text3); }
+  .site-footer{background:var(--surface);border-top:1px solid var(--border);padding:12px 36px;}
+  .site-footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--txt3);font-family:var(--cond);}
 
-  @media(max-width:640px){ main { padding: 20px; } .header { padding: 20px; } .nav { padding: 0 20px; } footer { padding: 12px 20px; } }
+  @media(max-width:640px){main{padding:20px 16px;}.hdr-top,.hdr-subtitle,.nav-inner{padding-left:16px;padding-right:16px;}.site-footer{padding:12px 16px;}}
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
-<div class="header">
-  <div class="header-inner">
-    <div class="logo-area">
-      <div class="logo-circle">🏥</div>
-      <div>
-        <div class="header-title">Sector Salud · Tamaulipas</div>
-        <div class="header-sub">Sistema de Información en Salud · Tableros de datos 2026</div>
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="hdr-logos">
+      <div class="logo-gov">
+        <svg width="36" height="40" viewBox="0 0 36 40" fill="none" aria-label="Gobierno de Tamaulipas">
+          <path d="M5 5h26v5.5H21v24h-6V10.5H5z" fill="#fff"/>
+          <path d="M2 6.5C.5 4.5-.2 2.5 1.5 1 4-1 8 2 10 5L5 6.5z" fill="#A88961"/>
+          <path d="M34 6.5c1.5-2 2.2-4 .5-5.5C32-1 28 2 26 5l5 1.5z" fill="#A88961"/>
+          <circle cx="18" cy="2.5" r="2.2" fill="#A88961"/>
+        </svg>
+        <div>
+          <div class="logo-name">Tamaulipas</div>
+          <div class="logo-sub">Gobierno del Estado</div>
+        </div>
+      </div>
+      <div class="logo-ss">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-label="Secretaría de Salud">
+          <path d="M3 7Q3 2 8 2h14q5 0 5 5v18q0 7-6 7H14Q3 31 3 22z" fill="#A88961" opacity=".8"/>
+          <path d="M5 8Q5 3 9 3h14q4 0 4 5v16q0 7-6 7H14Q5 30 5 22z" fill="#902142"/>
+          <line x1="16" y1="9" x2="16" y2="26" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          <path d="M16 12c-3 1.5-4 4-1.5 5s1.5 4-2 6" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M16 12c3 1.5 4 4 1.5 5S16 21 19.5 23" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M16 10c-3-1.5-6-.5-6 1 1.5 0 3.5 0 6 1" fill="#fff" opacity=".9"/>
+          <path d="M16 10c3-1.5 6-.5 6 1-1.5 0-3.5 0-6 1" fill="#fff" opacity=".9"/>
+          <circle cx="16" cy="8.2" r="1.7" fill="#fff"/>
+        </svg>
+        <div>
+          <div class="logo-name">Secretaría<br>de Salud</div>
+        </div>
       </div>
     </div>
-    <div class="header-right">
-      <div class="header-badge">5 tableros activos</div>
-      <div class="header-date">Actualizado: 10 agosto 2026</div>
+    <div class="hdr-meta">
+      <div class="hdr-badge">5 tableros activos</div>
+      <div class="hdr-date">Actualizado: agosto 2026</div>
     </div>
   </div>
 </div>
 <div class="stripe"></div>
+<div class="hdr-subtitle"><div class="hdr-sub-inner">Información en Salud, Análisis e Interpretación · Sistema de Tableros 2026</div></div>
 
 <!-- NAV -->
 <div class="nav">
   <div class="nav-inner">
-    <button class="nav-item active" id="nav-inicio" onclick="showPortal()">🏠 Inicio</button>
-    <button class="nav-item" id="nav-nac" onclick="showTablero('nacimientos')">👶 Nacimientos</button>
-    <button class="nav-item" id="nav-disc" onclick="showTablero('discapacidad')">♿ Discapacidad</button>
-    <button class="nav-item" id="nav-def" onclick="showTablero('defunciones')">📋 Defunciones</button>
-    <button class="nav-item" id="nav-egr" onclick="showTablero('egresos')">🏥 Egresos Hosp.</button>
-    <button class="nav-item" id="nav-coe" onclick="showTablero('coermi')">👶 COERMI</button>
+    <button class="nav-btn active" id="nav-inicio" onclick="showPortal()">🏠 Inicio</button>
+    <button class="nav-btn" id="nav-nac"  onclick="showTablero('nacimientos')">👶 Nacimientos</button>
+    <button class="nav-btn" id="nav-def"  onclick="showTablero('defunciones')">📋 Defunciones</button>
+    <button class="nav-btn" id="nav-disc" onclick="showTablero('discapacidad')">♿ Discapacidad</button>
+    <button class="nav-btn" id="nav-egr"  onclick="showTablero('egresos')">🏥 Egresos Hosp.</button>
+    <button class="nav-btn" id="nav-coe"  onclick="showTablero('coermi')">🍼 COERMI</button>
   </div>
 </div>
 
@@ -126,216 +149,178 @@
 
     <!-- PORTAL -->
     <div class="portal" id="view-portal">
-      <div class="portal-hero">
-        <h1>Tableros de información en salud</h1>
-        <p>Datos oficiales del Sector Salud de Tamaulipas. Selecciona un tablero para explorar los indicadores.</p>
+      <div class="portal-head">
+        <div class="portal-title">Sistema de Información en Salud · Tamaulipas 2026</div>
+        <div class="portal-desc">Datos oficiales de la Secretaría de Salud del Estado. Indicadores de nacimientos, defunciones, discapacidad, egresos hospitalarios y mortalidad infantil.</div>
       </div>
 
-      <div class="info-strip">
-        <div class="info-icon">📊</div>
-        <div class="info-text">
-          <strong>Fuente de datos:</strong> Certificados de nacimiento (CEN_2022 / SINBA2) y Certificados de Discapacidad · Secretaría de Salud Tamaulipas · <strong>Corte: julio/agosto 2026</strong>
+      <p class="resumen-label">Resumen de indicadores por tablero</p>
+
+      <!-- NACIMIENTOS -->
+      <div class="strip">
+        <div class="strip-head">
+          <span class="strip-icon">👶</span>
+          <span class="strip-title">Nacimientos</span>
+          <span class="strip-date">Ene–Jul 2026 · Corte 24 julio</span>
+          <a class="strip-link" href="#" onclick="showTablero('nacimientos');return false;">Ver tablero →</a>
         </div>
-      </div>
-      <!-- RESUMEN 5 TABLEROS -->
-      <style>
-        .resumen-strip{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px;}
-        .resumen-head{display:flex;align-items:center;gap:10px;padding:11px 20px;border-bottom:1px solid var(--border);background:#FBF7F5;}
-        .resumen-head-title{font-size:14px;font-weight:500;color:var(--text);}
-        .resumen-head-date{font-size:11px;color:var(--text3);font-family:monospace;margin-left:4px;}
-        .resumen-head-link{margin-left:auto;font-size:12px;color:#ab0033;font-weight:500;text-decoration:none;}
-        .resumen-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));padding:12px 20px;gap:10px;}
-        .rk-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
-        .rk-val{font-size:20px;font-weight:600;font-family:monospace;}
-        .rk-sub{font-size:11px;color:var(--text3);margin-top:1px;}
-        .resumen-section-title{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;}
-      </style>
-
-      <p class="resumen-section-title">Resumen general de indicadores</p>
-
-      <div class="resumen-strip">
-        <div class="resumen-head"><span style="font-size:16px">👶</span><span class="resumen-head-title">Nacimientos</span><span class="resumen-head-date">Ene–Jul 2026 · Corte 24 julio</span><a class="resumen-head-link" href="#" onclick="showTablero('nacimientos');return false;">Ver tablero →</a></div>
-        <div class="resumen-kpis">
-          <div><div class="rk-label">Total registros</div><div class="rk-val" style="color:#ab0033">19,502</div></div>
-          <div><div class="rk-label">Cesáreas</div><div class="rk-val" style="color:#7a0025">68.3%</div></div>
-          <div><div class="rk-label">Atención prenatal</div><div class="rk-val" style="color:#8a6a30">97.4%</div></div>
-          <div><div class="rk-label">Municipio líder</div><div class="rk-val" style="font-size:15px;color:#ab0033">Reynosa</div><div class="rk-sub">4,563 nacimientos</div></div>
-          <div><div class="rk-label">Sin afiliación</div><div class="rk-val" style="color:#54565a">37.0%</div></div>
-          <div><div class="rk-label">Peso prom. RN</div><div class="rk-val" style="color:#ab0033">3,139g</div></div>
+        <div class="strip-kpis">
+          <div><div class="kp-label">Total registros</div><div class="kp-val" style="color:#902142">19,502</div></div>
+          <div><div class="kp-label">Cesáreas</div><div class="kp-val" style="color:#902142">68.3%</div></div>
+          <div><div class="kp-label">Atención prenatal</div><div class="kp-val" style="color:#8a6a30">97.4%</div></div>
+          <div><div class="kp-label">Sin afiliación</div><div class="kp-val" style="color:#54565A">37.0%</div></div>
+          <div><div class="kp-label">Municipio líder</div><div class="kp-val" style="font-size:14px;color:#902142">Reynosa</div><div class="kp-sub">4,563 nacimientos</div></div>
+          <div><div class="kp-label">Peso prom. RN</div><div class="kp-val" style="color:#902142">3,139g</div></div>
         </div>
       </div>
 
-      <div class="resumen-strip">
-        <div class="resumen-head"><span style="font-size:16px">📋</span><span class="resumen-head-title">Defunciones</span><span class="resumen-head-date">Ene–Ago 2026 · Corte 03 agosto</span><a class="resumen-head-link" href="#" onclick="showTablero('defunciones');return false;">Ver tablero →</a></div>
-        <div class="resumen-kpis">
-          <div><div class="rk-label">Total defunciones</div><div class="rk-val" style="color:#ab0033">14,045</div></div>
-          <div><div class="rk-label">Edad promedio</div><div class="rk-val" style="color:#7a0025">68.3</div><div class="rk-sub">años</div></div>
-          <div><div class="rk-label">Principal causa</div><div class="rk-val" style="font-size:13px;color:#ab0033">Infarto / Cardiopatía</div><div class="rk-sub">32.9% del total</div></div>
-          <div><div class="rk-label">Municipio líder</div><div class="rk-val" style="font-size:15px;color:#ab0033">Reynosa</div><div class="rk-sub">2,519 defunciones</div></div>
-          <div><div class="rk-label">Sin afiliación</div><div class="rk-val" style="color:#54565a">27.0%</div></div>
-          <div><div class="rk-label">Prom. mensual</div><div class="rk-val" style="color:#ab0033">2,007</div></div>
+      <!-- DEFUNCIONES -->
+      <div class="strip">
+        <div class="strip-head">
+          <span class="strip-icon">📋</span>
+          <span class="strip-title">Defunciones</span>
+          <span class="strip-date">Ene–Ago 2026 · Corte 03 agosto</span>
+          <a class="strip-link" href="#" onclick="showTablero('defunciones');return false;">Ver tablero →</a>
+        </div>
+        <div class="strip-kpis">
+          <div><div class="kp-label">Total defunciones</div><div class="kp-val" style="color:#902142">14,045</div></div>
+          <div><div class="kp-label">Edad promedio</div><div class="kp-val" style="color:#902142">68.3</div><div class="kp-sub">años al fallecer</div></div>
+          <div><div class="kp-label">Principal causa</div><div class="kp-val" style="font-size:13px;color:#902142">Infarto / Cardiopatía</div><div class="kp-sub">32.9% del total</div></div>
+          <div><div class="kp-label">Sin afiliación</div><div class="kp-val" style="color:#54565A">27.0%</div></div>
+          <div><div class="kp-label">Municipio líder</div><div class="kp-val" style="font-size:14px;color:#902142">Reynosa</div><div class="kp-sub">2,519 defunciones</div></div>
+          <div><div class="kp-label">Prom. mensual</div><div class="kp-val" style="color:#902142">2,007</div></div>
         </div>
       </div>
 
-      <div class="resumen-strip">
-        <div class="resumen-head"><span style="font-size:16px">♿</span><span class="resumen-head-title">Discapacidad</span><span class="resumen-head-date">Corte 15 julio 2026</span><a class="resumen-head-link" href="#" onclick="showTablero('discapacidad');return false;">Ver tablero →</a></div>
-        <div class="resumen-kpis">
-          <div><div class="rk-label">Certificados vigentes</div><div class="rk-val" style="color:#ab0033">712</div></div>
-          <div><div class="rk-label">Cond. más frecuente</div><div class="rk-val" style="font-size:15px;color:#ab0033">TEA</div><div class="rk-sub">134 personas · 18.8%</div></div>
-          <div><div class="rk-label">Sin empleo (barreras)</div><div class="rk-val" style="color:#7a0025">43.2%</div></div>
-          <div><div class="rk-label">Municipio líder</div><div class="rk-val" style="font-size:15px;color:#ab0033">Matamoros</div><div class="rk-sub">489 certificados</div></div>
-          <div><div class="rk-label">Sin afiliación</div><div class="rk-val" style="color:#54565a">12.1%</div></div>
-          <div><div class="rk-label">Unidades activas</div><div class="rk-val" style="color:#ab0033">4</div></div>
+      <!-- DISCAPACIDAD -->
+      <div class="strip">
+        <div class="strip-head">
+          <span class="strip-icon">♿</span>
+          <span class="strip-title">Discapacidad</span>
+          <span class="strip-date">Corte 15 julio 2026</span>
+          <a class="strip-link" href="#" onclick="showTablero('discapacidad');return false;">Ver tablero →</a>
+        </div>
+        <div class="strip-kpis">
+          <div><div class="kp-label">Certificados vigentes</div><div class="kp-val" style="color:#902142">712</div></div>
+          <div><div class="kp-label">Cond. más frecuente</div><div class="kp-val" style="font-size:14px;color:#902142">TEA</div><div class="kp-sub">134 personas · 18.8%</div></div>
+          <div><div class="kp-label">Sin empleo (barreras)</div><div class="kp-val" style="color:#902142">43.2%</div></div>
+          <div><div class="kp-label">Sin afiliación</div><div class="kp-val" style="color:#54565A">12.1%</div></div>
+          <div><div class="kp-label">Municipio líder</div><div class="kp-val" style="font-size:14px;color:#902142">Matamoros</div><div class="kp-sub">489 certificados</div></div>
+          <div><div class="kp-label">Unidades activas</div><div class="kp-val" style="color:#902142">4</div></div>
         </div>
       </div>
 
-      <div class="resumen-strip">
-        <div class="resumen-head"><span style="font-size:16px">🏥</span><span class="resumen-head-title">Egresos Hospitalarios</span><span class="resumen-head-date">Ene–Jul 2026</span><a class="resumen-head-link" href="#" onclick="showTablero('egresos');return false;">Ver tablero →</a></div>
-        <div class="resumen-kpis">
-          <div><div class="rk-label">Total egresos</div><div class="rk-val" style="color:#ab0033">36,205</div></div>
-          <div><div class="rk-label">Mejoría</div><div class="rk-val" style="color:#8a6a30">90.6%</div></div>
-          <div><div class="rk-label">Cesáreas (partos)</div><div class="rk-val" style="color:#7a0025">53.7%</div></div>
-          <div><div class="rk-label">Muertes maternas</div><div class="rk-val" style="color:#ab0033">6</div></div>
-          <div><div class="rk-label">Municipio líder</div><div class="rk-val" style="font-size:15px;color:#ab0033">Victoria</div><div class="rk-sub">7,515 egresos</div></div>
-          <div><div class="rk-label">Prom. mensual</div><div class="rk-val" style="color:#ab0033">5,172</div></div>
+      <!-- EGRESOS -->
+      <div class="strip">
+        <div class="strip-head">
+          <span class="strip-icon">🏥</span>
+          <span class="strip-title">Egresos Hospitalarios</span>
+          <span class="strip-date">Ene–Jul 2026</span>
+          <a class="strip-link" href="#" onclick="showTablero('egresos');return false;">Ver tablero →</a>
+        </div>
+        <div class="strip-kpis">
+          <div><div class="kp-label">Total egresos</div><div class="kp-val" style="color:#902142">36,205</div></div>
+          <div><div class="kp-label">Mejoría</div><div class="kp-val" style="color:#8a6a30">90.6%</div></div>
+          <div><div class="kp-label">Cesáreas (partos)</div><div class="kp-val" style="color:#902142">53.7%</div></div>
+          <div><div class="kp-label">Muertes maternas</div><div class="kp-val" style="color:#902142">6</div></div>
+          <div><div class="kp-label">Municipio líder</div><div class="kp-val" style="font-size:14px;color:#902142">Victoria</div><div class="kp-sub">7,515 egresos</div></div>
+          <div><div class="kp-label">Prom. mensual</div><div class="kp-val" style="color:#902142">5,172</div></div>
         </div>
       </div>
 
-      <div class="resumen-strip" style="margin-bottom:32px">
-        <div class="resumen-head"><span style="font-size:16px">👶</span><span class="resumen-head-title">COERMI · Mortalidad Infantil</span><span class="resumen-head-date">Ene–Jul 2026 · &lt;5 años</span><a class="resumen-head-link" href="#" onclick="showTablero('coermi');return false;">Ver tablero →</a></div>
-        <div class="resumen-kpis">
-          <div><div class="rk-label">Total &lt;5 años</div><div class="rk-val" style="color:#ab0033">280</div></div>
-          <div><div class="rk-label">Mort. infantil &lt;1 año</div><div class="rk-val" style="color:#7a0025">242</div></div>
-          <div><div class="rk-label">Neonatal temprana</div><div class="rk-val" style="color:#ab0033">121</div><div class="rk-sub">0–6 días · 43.2%</div></div>
-          <div><div class="rk-label">Principal causa</div><div class="rk-val" style="font-size:13px;color:#ab0033">Sepsis bact. RN</div><div class="rk-sub">55 casos</div></div>
-          <div><div class="rk-label">Sin afiliación</div><div class="rk-val" style="color:#54565a">40.7%</div><div class="rk-sub">114 menores</div></div>
-          <div><div class="rk-label">EDA / IRA &lt;5 años</div><div class="rk-val" style="color:#ab0033">1 / 7</div><div class="rk-sub">casos trazadores</div></div>
+      <!-- COERMI -->
+      <div class="strip">
+        <div class="strip-head">
+          <span class="strip-icon">🍼</span>
+          <span class="strip-title">COERMI · Mortalidad Infantil</span>
+          <span class="strip-date">Ene–Jul 2026 · &lt;5 años</span>
+          <a class="strip-link" href="#" onclick="showTablero('coermi');return false;">Ver tablero →</a>
+        </div>
+        <div class="strip-kpis">
+          <div><div class="kp-label">Total &lt;5 años</div><div class="kp-val" style="color:#902142">280</div></div>
+          <div><div class="kp-label">Mort. infantil &lt;1 año</div><div class="kp-val" style="color:#902142">242</div></div>
+          <div><div class="kp-label">Neonatal temprana</div><div class="kp-val" style="color:#902142">121</div><div class="kp-sub">0–6 días · 43.2%</div></div>
+          <div><div class="kp-label">Sin afiliación</div><div class="kp-val" style="color:#54565A">40.7%</div><div class="kp-sub">114 menores</div></div>
+          <div><div class="kp-label">Principal causa</div><div class="kp-val" style="font-size:12px;color:#902142">Sepsis bacteriana RN</div><div class="kp-sub">55 casos</div></div>
+          <div><div class="kp-label">EDA / IRA &lt;5 años</div><div class="kp-val" style="color:#902142">1 / 7</div><div class="kp-sub">casos trazadores</div></div>
         </div>
       </div>
 
+    </div><!-- /portal -->
 
-    </div>
-
-    <!-- TABLERO COERMI -->
-    <div class="iframe-view" id="view-coermi">
-      <div class="iframe-bar">
-        <div class="iframe-title">👶 <strong>COERMI · Mortalidad Infantil · Tamaulipas 2026</strong> · 280 def. &lt;5 años · Ene–Ago</div>
-        <div class="iframe-actions">
-          <button class="btn" onclick="showPortal()">← Inicio</button>
-          <a class="btn btn-primary" href="coermi.html" target="_blank">Abrir en pantalla completa ↗</a>
-        </div>
-      </div>
-      <iframe class="tablero" id="iframe-coe" src="" height="900" title="COERMI Mortalidad Infantil Tamaulipas 2026"></iframe>
-    </div>
-
-    <!-- TABLERO NACIMIENTOS -->
+    <!-- IFRAMES -->
     <div class="iframe-view" id="view-nacimientos">
       <div class="iframe-bar">
         <div class="iframe-title">👶 <strong>Nacimientos · Tamaulipas 2026</strong> · 19,502 registros · Ene–Jul</div>
-        <div class="iframe-actions">
-          <button class="btn" onclick="showPortal()">← Inicio</button>
-          <a class="btn btn-primary" href="nacimientos.html" target="_blank">Abrir en pantalla completa ↗</a>
-        </div>
+        <div style="display:flex;gap:8px"><button class="btn" onclick="showPortal()">← Inicio</button><a class="btn btn-primary" href="nacimientos.html" target="_blank">Pantalla completa ↗</a></div>
       </div>
-      <iframe class="tablero" id="iframe-nac" src="" height="900" title="Tablero de Nacimientos Tamaulipas 2026"></iframe>
+      <iframe class="tablero" id="iframe-nac" src="" height="920" title="Tablero Nacimientos"></iframe>
     </div>
 
-    <!-- TABLERO EGRESOS -->
-    <div class="iframe-view" id="view-egresos">
-      <div class="iframe-bar">
-        <div class="iframe-title">🏥 <strong>Egresos Hospitalarios · Tamaulipas 2026</strong> · 36,205 registros · Ene–May</div>
-        <div class="iframe-actions">
-          <button class="btn" onclick="showPortal()">← Inicio</button>
-          <a class="btn btn-primary" href="egresos-hospitalarios.html" target="_blank">Abrir en pantalla completa ↗</a>
-        </div>
-      </div>
-      <iframe class="tablero" id="iframe-egr" src="" height="900" title="Egresos Hospitalarios Tamaulipas 2026"></iframe>
-    </div>
-
-    <!-- TABLERO DEFUNCIONES -->
     <div class="iframe-view" id="view-defunciones">
       <div class="iframe-bar">
-        <div class="iframe-title">📋 <strong>Defunciones · Tamaulipas 2026</strong> · 14,045 registros · Ene–Jul</div>
-        <div class="iframe-actions">
-          <button class="btn" onclick="showPortal()">← Inicio</button>
-          <a class="btn btn-primary" href="defunciones.html" target="_blank">Abrir en pantalla completa ↗</a>
-        </div>
+        <div class="iframe-title">📋 <strong>Defunciones · Tamaulipas 2026</strong> · 14,045 registros · Ene–Ago</div>
+        <div style="display:flex;gap:8px"><button class="btn" onclick="showPortal()">← Inicio</button><a class="btn btn-primary" href="defunciones.html" target="_blank">Pantalla completa ↗</a></div>
       </div>
-      <iframe class="tablero" id="iframe-def" src="" height="900" title="Tablero de Defunciones Tamaulipas 2026"></iframe>
+      <iframe class="tablero" id="iframe-def" src="" height="920" title="Tablero Defunciones"></iframe>
     </div>
 
-    <!-- TABLERO DISCAPACIDAD -->
     <div class="iframe-view" id="view-discapacidad">
       <div class="iframe-bar">
         <div class="iframe-title">♿ <strong>Discapacidad · Tamaulipas 2026</strong> · 712 certificados · Jul 2026</div>
-        <div class="iframe-actions">
-          <button class="btn" onclick="showPortal()">← Inicio</button>
-          <a class="btn btn-primary" href="discapacidad.html" target="_blank">Abrir en pantalla completa ↗</a>
-        </div>
+        <div style="display:flex;gap:8px"><button class="btn" onclick="showPortal()">← Inicio</button><a class="btn btn-primary" href="discapacidad.html" target="_blank">Pantalla completa ↗</a></div>
       </div>
-      <iframe class="tablero" id="iframe-disc" src="" height="900" title="Tablero de Discapacidad Tamaulipas 2026"></iframe>
+      <iframe class="tablero" id="iframe-disc" src="" height="920" title="Tablero Discapacidad"></iframe>
+    </div>
+
+    <div class="iframe-view" id="view-egresos">
+      <div class="iframe-bar">
+        <div class="iframe-title">🏥 <strong>Egresos Hospitalarios · Tamaulipas 2026</strong> · 36,205 egresos · Ene–Jul</div>
+        <div style="display:flex;gap:8px"><button class="btn" onclick="showPortal()">← Inicio</button><a class="btn btn-primary" href="egresos-hospitalarios.html" target="_blank">Pantalla completa ↗</a></div>
+      </div>
+      <iframe class="tablero" id="iframe-egr" src="" height="920" title="Tablero Egresos"></iframe>
+    </div>
+
+    <div class="iframe-view" id="view-coermi">
+      <div class="iframe-bar">
+        <div class="iframe-title">🍼 <strong>COERMI · Mortalidad Infantil · Tamaulipas 2026</strong> · 280 def. &lt;5 años</div>
+        <div style="display:flex;gap:8px"><button class="btn" onclick="showPortal()">← Inicio</button><a class="btn btn-primary" href="coermi.html" target="_blank">Pantalla completa ↗</a></div>
+      </div>
+      <iframe class="tablero" id="iframe-coe" src="" height="920" title="Tablero COERMI"></iframe>
     </div>
 
   </div>
 </main>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <span>🏥 Sector Salud · Gobierno del Estado de Tamaulipas</span>
-    <span>📅 Sistema de Información en Salud · 2026</span>
-    <span>📊 Datos oficiales de uso institucional</span>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span>Secretaría de Salud · Gobierno del Estado de Tamaulipas</span>
+    <span>Sistema de Información en Salud, Análisis e Interpretación · 2026</span>
   </div>
 </footer>
 
 <script>
-function showPortal() {
-  document.getElementById('view-portal').style.display = 'block';
-  document.getElementById('view-nacimientos').style.display = 'none';
-  document.getElementById('view-defunciones').style.display = 'none';
-  document.getElementById('view-egresos').style.display = 'none';
-  document.getElementById('view-coermi').style.display = 'none';
-  document.getElementById('view-discapacidad').style.display = 'none';
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+const VIEWS=['nacimientos','defunciones','discapacidad','egresos','coermi'];
+const SRCS={nacimientos:'nacimientos.html',defunciones:'defunciones.html',discapacidad:'discapacidad.html',egresos:'egresos-hospitalarios.html',coermi:'coermi.html'};
+
+function showPortal(){
+  document.getElementById('view-portal').style.display='block';
+  VIEWS.forEach(v=>document.getElementById('view-'+v).style.display='none');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('nav-inicio').classList.add('active');
   window.scrollTo(0,0);
 }
 
-function showTablero(name) {
-  document.getElementById('view-portal').style.display = 'none';
-  document.getElementById('view-nacimientos').style.display = 'none';
-  document.getElementById('view-defunciones').style.display = 'none';
-  document.getElementById('view-egresos').style.display = 'none';
-  document.getElementById('view-coermi').style.display = 'none';
-  document.getElementById('view-discapacidad').style.display = 'none';
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
-  if (name === 'nacimientos') {
-    document.getElementById('view-nacimientos').style.display = 'block';
-    document.getElementById('nav-nac').classList.add('active');
-    const f = document.getElementById('iframe-nac');
-    if (!f.src || f.src === window.location.href) f.src = 'nacimientos.html';
-  } else if (name === 'egresos') {
-    document.getElementById('view-egresos').style.display = 'block';
-    document.getElementById('nav-egr').classList.add('active');
-    const fe = document.getElementById('iframe-egr');
-    if (!fe.src || fe.src === window.location.href) fe.src = 'egresos-hospitalarios.html';
-  } else if (name === 'coermi') {
-    document.getElementById('view-coermi').style.display = 'block';
-    document.getElementById('nav-coe').classList.add('active');
-    const fc = document.getElementById('iframe-coe');
-    if (!fc.src || fc.src === window.location.href) fc.src = 'coermi.html';
-  } else if (name === 'defunciones') {
-    document.getElementById('view-defunciones').style.display = 'block';
-    document.getElementById('nav-def').classList.add('active');
-    const fd = document.getElementById('iframe-def');
-    if (!fd.src || fd.src === window.location.href) fd.src = 'defunciones.html';
-  } else {
-    document.getElementById('view-discapacidad').style.display = 'block';
-    document.getElementById('nav-disc').classList.add('active');
-    const f = document.getElementById('iframe-disc');
-    if (!f.src || f.src === window.location.href) f.src = 'discapacidad.html';
-  }
+function showTablero(name){
+  document.getElementById('view-portal').style.display='none';
+  VIEWS.forEach(v=>document.getElementById('view-'+v).style.display='none');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+name).style.display='block';
+  const navId={nacimientos:'nav-nac',defunciones:'nav-def',discapacidad:'nav-disc',egresos:'nav-egr',coermi:'nav-coe'}[name];
+  if(navId) document.getElementById(navId).classList.add('active');
+  const iframeId={nacimientos:'iframe-nac',defunciones:'iframe-def',discapacidad:'iframe-disc',egresos:'iframe-egr',coermi:'iframe-coe'}[name];
+  const f=document.getElementById(iframeId);
+  if(f && (!f.src || f.src===window.location.href)) f.src=SRCS[name];
   window.scrollTo(0,0);
 }
 </script>
