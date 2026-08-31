@@ -143,13 +143,26 @@
   <div id="tab-unidades" class="section">
     <div class="metrics">
       <div class="metric-card" style="--mc:#902142"><div class="metric-label">Unidades registradas</div><div class="metric-value">4</div><div class="metric-sub">Con certificados activos</div></div>
-      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Principal unidad</div><div class="metric-value" style="font-size:14px">TSIMB000893</div><div class="metric-sub">490 certificados · 65.9%</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Principal unidad</div><div class="metric-value" style="font-size:11px">TSIMB000893</div><div class="metric-sub">Centro de Salud Euskadi · 490 certs.</div></div>
       <div class="metric-card" style="--mc:#A88961"><div class="metric-label">TSIMB001955</div><div class="metric-value">140</div><div class="metric-sub">18.8% · Victoria</div></div>
       <div class="metric-card" style="--mc:#54565A"><div class="metric-label">TSIMB002351</div><div class="metric-value">99</div><div class="metric-sub">13.9% · Xicotencatl</div></div>
     </div>
     <div class="charts-grid thirds">
       <div class="chart-card"><div class="chart-title">Certificados por unidad médica (CLUES)</div><div class="chart-sub">Número de certificados emitidos por unidad</div><div style="height:250px"><canvas id="c-clues-bar"></canvas></div></div>
-      <div class="chart-card"><div class="chart-title">Distribución porcentual</div><div class="chart-sub">Por unidad médica</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#902142"></div>TSIMB000893 68.7%</div><div class="legend-item"><div class="legend-dot" style="background:#A88961"></div>TSIMB001955 18.8%</div><div class="legend-item"><div class="legend-dot" style="background:#DAD0AE"></div>TSIMB002351 13.9%</div><div class="legend-item"><div class="legend-dot" style="background:#54565A"></div>TSIMB003232 2.2%</div></div><div style="height:190px"><canvas id="c-clues-pie"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Distribución porcentual</div><div class="chart-sub">Por unidad médica</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#902142"></div>TSIMB000893 65.9%</div><div class="legend-item"><div class="legend-dot" style="background:#A88961"></div>TSIMB001955 18.8%</div><div class="legend-item"><div class="legend-dot" style="background:#DAD0AE"></div>TSIMB002351 13.3%</div><div class="legend-item"><div class="legend-dot" style="background:#54565A"></div>TSIMB003232 2.2%</div></div><div style="height:190px"><canvas id="c-clues-pie"></canvas></div></div>
+    </div>
+    <div class="table-card" style="margin-top:16px">
+      <div class="table-header"><div class="chart-title">Detalle por unidad médica · CLUES</div><div class="chart-sub">Nombre oficial, municipio y certificados emitidos</div></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>CLUES</th><th>Nombre de la unidad</th><th>Municipio</th><th>Institución</th><th>Certs.</th><th>%</th></tr></thead>
+        <tbody>
+          <tr><td><span class="rank">01</span></td><td><strong>TSIMB000893</strong></td><td>Centro de Salud Euskadi</td><td>Matamoros</td><td>IMSS Bienestar</td><td><strong>490</strong></td><td><span class="badge badge-red">65.9%</span></td></tr>
+          <tr><td><span class="rank">02</span></td><td><strong>TSIMB001955</strong></td><td>Hospital General Dr. Norberto Treviño Zapata</td><td>Victoria</td><td>IMSS Bienestar</td><td><strong>140</strong></td><td><span class="badge badge-gold">18.8%</span></td></tr>
+          <tr><td><span class="rank">03</span></td><td><strong>TSIMB002351</strong></td><td>Centro de Salud Xicotencatl</td><td>Xicotencatl</td><td>IMSS Bienestar</td><td><strong>99</strong></td><td><span class="badge badge-gold">13.3%</span></td></tr>
+          <tr><td><span class="rank">04</span></td><td><strong>TSIMB003232</strong></td><td>Centro de Salud La Mesa del Señor</td><td>Victoria</td><td>IMSS Bienestar</td><td><strong>16</strong></td><td><span class="badge badge-gray">2.2%</span></td></tr>
+        </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
@@ -180,8 +193,8 @@ const DEFS={
     new Chart(document.getElementById('c-municipio'),{type:'doughnut',data:{labels:['Matamoros','Victoria','Xicotencatl','Otros'],datasets:[{data:[490,141,99,14],backgroundColor:['#902142','#A88961','#DAD0AE','#54565A'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
   },
   unidades:()=>{
-    new Chart(document.getElementById('c-clues-bar'),{type:'bar',data:{labels:['TSIMB000893','TSIMB001955','TSIMB002351','TSIMB003232'],datasets:[{data:[489,140,99,16],backgroundColor:['#902142','#A88961','#DAD0AE','#54565A'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
-    new Chart(document.getElementById('c-clues-pie'),{type:'doughnut',data:{labels:['TSIMB000893','TSIMB001955','TSIMB002351','TSIMB003232'],datasets:[{data:[489,140,99,16],backgroundColor:['#902142','#A88961','#DAD0AE','#54565A'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
+    new Chart(document.getElementById('c-clues-bar'),{type:'bar',data:{labels:['TSIMB000893\nMatamoros','TSIMB001955\nVictoria','TSIMB002351\nXicotencatl','TSIMB003232\nVictoria'],datasets:[{data:[489,140,99,16],backgroundColor:['#902142','#A88961','#DAD0AE','#54565A'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc},grid:{color:gridC}},x:{ticks:{color:tc},grid:{display:false}}}}});
+    new Chart(document.getElementById('c-clues-pie'),{type:'doughnut',data:{labels:['TSIMB000893\nMatamoros','TSIMB001955\nVictoria','TSIMB002351\nXicotencatl','TSIMB003232\nVictoria'],datasets:[{data:[489,140,99,16],backgroundColor:['#902142','#A88961','#DAD0AE','#54565A'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
   }
 };
 function showTab(name,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');btn.classList.add('active');setTimeout(()=>{if(!initialized[name]){DEFS[name]();initialized[name]=true;}},30);}
