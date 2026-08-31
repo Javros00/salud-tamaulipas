@@ -92,6 +92,7 @@
   <button class="tab" onclick="showTab('municipios',this)">📍 Municipios</button>
   <button class="tab" onclick="showTab('atencion',this)">🏥 Atención médica</button>
   <button class="tab" onclick="showTab('madre',this)">👩 Perfil de la madre</button>
+  <button class="tab" onclick="showTab('unidades',this)">🏥 Unidades médicas</button>
 </div>
 <div class="content">
   <div id="tab-resumen" class="section active">
@@ -141,6 +142,54 @@
       <div class="metric-card" style="--mc:#8a6a30"><div class="metric-label">Prenatal 1er trimestre</div><div class="metric-value">79.5%</div><div class="metric-sub">18,590 madres</div></div>
     </div>
     <div class="chart-card"><div class="chart-title">Escolaridad de la madre</div><div class="chart-sub">Nivel educativo al momento del registro del nacimiento</div><div style="height:360px"><canvas id="c-escol"></canvas></div></div>
+  </div>
+  <div id="tab-unidades" class="section">
+    <div class="metrics">
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Unidades registradas</div><div class="metric-value">124</div><div class="metric-sub">Unidades activas en el período</div></div>
+      <div class="metric-card" style="--mc:#902142"><div class="metric-label">Unidad líder</div><div class="metric-value" style="font-size:11px">HGZ-UMAA 15 Reynosa</div><div class="metric-sub">1,275 nacimientos · 5.5%</div></div>
+      <div class="metric-card" style="--mc:#54565A"><div class="metric-label">IMSS</div><div class="metric-value">5,188</div><div class="metric-sub">22.2% del total</div></div>
+      <div class="metric-card" style="--mc:#8a6a30"><div class="metric-label">IMSS Bienestar</div><div class="metric-value">8,202</div><div class="metric-sub">35.1% del total</div></div>
+      <div class="metric-card" style="--mc:#A88961"><div class="metric-label">Privada</div><div class="metric-value">9,989</div><div class="metric-sub">42.7% del total</div></div>
+    </div>
+    <div class="charts-grid single">
+      <div class="chart-card">
+        <div class="chart-title">Nacimientos por tipo de institución</div>
+        <div class="chart-sub">IMSS Bienestar, IMSS y sector privado</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#A88961"></div>Privada 42.7%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#8a6a30"></div>IMSS Bienestar 35.1%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#902142"></div>IMSS 22.2%</div>
+        </div>
+        <div style="height:220px"><canvas id="c-tipo-inst"></canvas></div>
+      </div>
+    </div>
+    <div class="charts-grid single">
+      <div class="chart-card">
+        <div class="chart-title">Top 20 unidades médicas por nacimientos</div>
+        <div class="chart-sub">Enero–Agosto 2026 · Corte 26 agosto</div>
+        <div style="height:520px"><canvas id="c-unidades"></canvas></div>
+      </div>
+    </div>
+    <div class="charts-grid single">
+      <div class="chart-card">
+        <div class="chart-title">% de cesáreas por unidad médica — Top 20</div>
+        <div class="chart-sub">Tasa de cesárea respecto al total de nacimientos de cada unidad</div>
+        <div style="height:520px"><canvas id="c-cesarea-unidad"></canvas></div>
+        <div class="alert alert-red"><span>⚠️</span><span>Las clínicas privadas (Lancet 91.0%, Clínica Victoria 92.3%, Hosp. Victoria La Salle 91.9%) presentan las tasas más altas de cesárea, muy por encima del umbral recomendado por la OMS (10–15%).</span></div>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-header">
+        <div class="chart-title">Tabla detallada — Top 25 unidades médicas</div>
+        <div class="chart-sub">Ordenadas por número de nacimientos registrados</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Unidad médica</th><th>Nacimientos</th><th>%</th><th>% Cesárea</th><th style="width:100px">Distribución</th></tr></thead>
+          <tbody id="unidad-tbody"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 <div class="inst-footer"><span>📁 CEN_2022 / SINBA2 · Secretaría de Salud Tamaulipas</span><span>📅 Enero–Agosto 2026 · Corte: 24 julio 2026 · 23,379 registros</span></div>
