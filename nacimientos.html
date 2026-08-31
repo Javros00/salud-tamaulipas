@@ -216,7 +216,62 @@ const DEFS={
   },
   madre:()=>{
     new Chart(document.getElementById('c-escol'),{type:'bar',data:{labels:['Bachillerato/Prepa\ncompleta','Secundaria\ncompleta','Licenciatura\ncompleta','Prepa\nincompleta','Primaria\ncompleta','Licenciatura\nincompleta','Secundaria\nincompleta','Primaria\nincompleta','Posgrado','Ninguna'],datasets:[{data:[6551,6210,5201,1484,1236,1037,847,302,283,65],backgroundColor:['#902142','#902142','#902142','#A88961','#A88961','#A88961','#DAD0AE','#DAD0AE','#8a6a30','#54565A'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x.toLocaleString()} madres`}}},scales:{x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+  },
+  unidades:()=>{
+    const gridC='rgba(28,20,16,0.05)',tc='#8A8075';
+    new Chart(document.getElementById('c-tipo-inst'),{type:'doughnut',data:{labels:['Privada','IMSS Bienestar','IMSS'],datasets:[{data:[9989,8202,5188],backgroundColor:['#A88961','#8a6a30','#902142'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tc,font:{size:12},boxWidth:10}}},cutout:'60%'}});
+
+    const unids=[
+      ['HGZ-UMAA 15 Reynosa',1275,5.5,51.4],
+      ['Hosp. Materno Inf. Reynosa',1255,5.4,48.0],
+      ['Hosp. Gral. Matamoros',1160,5.0,45.5],
+      ['HGR 6 Cd. Madero',1117,4.8,61.8],
+      ['Hosp. Gral. Tampico Dr. C. Canseco',1033,4.4,47.6],
+      ['HGZ 13 Matamoros',868,3.7,57.9],
+      ['HGZ 11 Nuevo Laredo',801,3.4,45.4],
+      ['Hosp. Dr. Norberto Treviño Zapata',782,3.3,65.7],
+      ['Hosp. Especialidades Santander',577,2.5,90.5],
+      ['Hosp. San Gerardo',556,2.4,65.5],
+      ['HGZMF 1 Ciudad Victoria',552,2.4,64.7],
+      ['Hosp. Gral. Reynosa Dr. J.M. Cantú',521,2.2,54.1],
+      ['Hosp. Gral. Civil Nuevo Laredo',500,2.1,50.6],
+      ['Hosp. Gral. Mante Dr. E. Martínez',486,2.1,61.1],
+      ['Hosp. Gral. Nuevo Laredo',479,2.0,40.5],
+      ['Lancet',477,2.0,91.0],
+      ['Hosp. Gral. Civil Cd. Madero',474,2.0,66.9],
+      ['Victoria',465,2.0,92.3],
+      ['Hosp. Victoria La Salle',447,1.9,91.9],
+      ['Hosp. Gral. Civil Victoria',425,1.8,62.6],
+    ];
+
+    const bgNac=unids.map(u=>['Lancet','Victoria','Hosp. Victoria La Salle','Hosp. Especialidades Santander','Hosp. San Gerardo'].some(k=>u[0].includes(k))?'#A88961':'#902142');
+    new Chart(document.getElementById('c-unidades'),{type:'bar',data:{labels:unids.map(u=>u[0]),datasets:[{data:unids.map(u=>u[1]),backgroundColor:bgNac,borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x.toLocaleString()} nacimientos (${unids[ctx.dataIndex][2]}%)`}}},scales:{x:{ticks:{color:tc,callback:v=>v.toLocaleString()},grid:{color:gridC}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+
+    const cesColors=unids.map(u=>u[3]>=85?'#902142':u[3]>=60?'#B5294E':u[3]>=40?'#A88961':'#8a6a30');
+    new Chart(document.getElementById('c-cesarea-unidad'),{type:'bar',data:{labels:unids.map(u=>u[0]),datasets:[{data:unids.map(u=>u[3]),backgroundColor:cesColors,borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x}% cesareas`}}},scales:{x:{ticks:{color:tc,callback:v=>v+'%'},grid:{color:gridC},min:0,max:100},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+
+    const all25=[...unids,
+      ['HGZ 3 Mante',410,1.8,57.1],
+      ['Hosp. Gral. Altamira',363,1.6,56.2],
+      ['Christus Muguerza',363,1.6,93.1],
+      ['Medica Universidad',358,1.5,89.7],
+      ['Tula (Municipal)',328,1.4,42.7],
+    ];
+    const tbody=document.getElementById('unidad-tbody');
+    all25.forEach(([name,n,pct,ces],i)=>{
+      const bw=Math.round((n/1275)*100);
+      const cesColor=ces>=85?'#902142':ces>=60?'#B5294E':ces>=40?'#A88961':'#8a6a30';
+      const tr=document.createElement('tr');
+      tr.innerHTML='<td><span class="rank">'+String(i+1).padStart(2,'0')+'</span></td>'
+        +'<td style="font-size:12px"><strong>'+name+'</strong></td>'
+        +'<td><span style="font-family:monospace;font-weight:600">'+n.toLocaleString()+'</span></td>'
+        +'<td><span class="badge '+(i<3?'badge-red':i<8?'badge-gold':'badge-gray')+'">'+pct+'%</span></td>'
+        +'<td><span style="font-family:monospace;font-weight:600;color:'+cesColor+'">'+ces+'%</span></td>'
+        +'<td><div class="bar-bg"><div class="bar-fill" style="width:'+bw+'%;background:'+(i<3?'#902142':i<8?'#A88961':'#DAD0AE')+'"></div></div></td>';
+      tbody.appendChild(tr);
+    });
   }
+
 };
 function showTab(name,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');btn.classList.add('active');setTimeout(()=>{if(!initialized[name]){DEFS[name]();initialized[name]=true;}},30);}
 DEFS['resumen']();initialized['resumen']=true;
