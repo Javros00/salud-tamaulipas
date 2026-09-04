@@ -81,6 +81,29 @@
   .alert-blue{background:#E8F0FB;color:#185FA5;border:1px solid #B5D4F4;}
   /* FOOTER */
   .inst-footer{padding:12px 32px;border-top:1px solid var(--border);font-size:11px;color:var(--txt3);display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;background:var(--surface);font-family:var(--cond);}
+
+  /* ── FICHA TÉCNICA PRINT ── */
+  @media print {
+    body { background: #fff !important; font-family: 'Encode Sans', Arial, sans-serif !important; }
+    .hdr, .stripe, .hdr-sub, .back-bar, .tabs-wrap, .content, .inst-footer { display: none !important; }
+    .ficha-tecnica { display: block !important; }
+    .ficha-tecnica * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @page { size: letter portrait; margin: 15mm 15mm 15mm 15mm; }
+  }
+  .ficha-tecnica { display: none; }
+  .btn-ficha {
+    position: fixed; bottom: 24px; right: 24px; z-index: 999;
+    background: var(--p187, #902142); color: #fff;
+    border: none; border-radius: 8px; padding: 10px 18px;
+    font-family: 'Encode Sans Condensed', 'Encode Sans', sans-serif;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 4px 12px rgba(144,33,66,.35);
+    display: flex; align-items: center; gap: 7px;
+    transition: background .15s, transform .1s;
+  }
+  .btn-ficha:hover { background: #B5294E; transform: translateY(-1px); }
+  .btn-ficha:active { transform: translateY(0); }
+
 </style>
 </head><body>
 <div class="hdr"><div class="hdr-top"><div class="hdr-logos"><div class="logo-gov"><div><div class="logo-name">Tamaulipas</div><div class="logo-sub">Gobierno del Estado</div></div></div><div class="logo-ss"><div><div class="logo-name">Secretaría de Salud</div></div></div></div><div class="hdr-meta"><div class="hdr-badge">23,379 registros</div><div class="hdr-date">Corte: 26 agosto 2026 · Enero–Agosto</div></div></div></div>
@@ -275,4 +298,126 @@ const DEFS={
 };
 function showTab(name,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');btn.classList.add('active');setTimeout(()=>{if(!initialized[name]){DEFS[name]();initialized[name]=true;}},30);}
 DEFS['resumen']();initialized['resumen']=true;
-</script></body></html>
+</script>
+<div class="ficha-tecnica" id="ficha-print">
+  <div style="font-family:'Encode Sans',Arial,sans-serif;color:#1C1410;max-width:700px;margin:0 auto;">
+    <!-- Encabezado -->
+    <div style="background:#902142;color:#fff;padding:18px 22px;border-radius:6px 6px 0 0;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:11px;opacity:.8;letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px;">Secretaría de Salud · Tamaulipas</div>
+        <div style="font-size:18px;font-weight:700;letter-spacing:-.3px;">Ficha Técnica · Nacimientos 2026</div>
+        <div style="font-size:11px;opacity:.75;margin-top:3px;">Información en Salud, Análisis e Interpretación</div>
+      </div>
+      <div style="text-align:right;font-size:11px;opacity:.8;">
+        <div>Enero – Agosto 2026</div>
+        <div>Corte: 26 agosto 2026</div>
+      </div>
+    </div>
+    <div style="height:4px;background:linear-gradient(90deg,#902142,#A88961,#DAD0AE);"></div>
+    <!-- KPIs principales -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px 0 10px;">
+      <div style="background:#F5E6EB;border-radius:6px;padding:12px 14px;border-left:3px solid #902142;">
+        <div style="font-size:10px;color:#8A8075;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Total nacimientos</div>
+        <div style="font-size:26px;font-weight:700;color:#902142;">23,379</div>
+        <div style="font-size:11px;color:#54565A;">Ene–Ago 2026</div>
+      </div>
+      <div style="background:#F5E6EB;border-radius:6px;padding:12px 14px;border-left:3px solid #902142;">
+        <div style="font-size:10px;color:#8A8075;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Promedio mensual</div>
+        <div style="font-size:26px;font-weight:700;color:#902142;">2,922</div>
+        <div style="font-size:11px;color:#54565A;">8 meses registrados</div>
+      </div>
+      <div style="background:#F0EAE0;border-radius:6px;padding:12px 14px;border-left:3px solid #A88961;">
+        <div style="font-size:10px;color:#8A8075;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Municipio líder</div>
+        <div style="font-size:20px;font-weight:700;color:#A88961;">Reynosa</div>
+        <div style="font-size:11px;color:#54565A;">5,474 nacimientos (23.4%)</div>
+      </div>
+      <div style="background:#F5E6EB;border-radius:6px;padding:12px 14px;border-left:3px solid #902142;">
+        <div style="font-size:10px;color:#8A8075;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Tasa de cesárea</div>
+        <div style="font-size:26px;font-weight:700;color:#902142;">68.1%</div>
+        <div style="font-size:11px;color:#54565A;">OMS recomienda 10–15%</div>
+      </div>
+      <div style="background:#F0EAE0;border-radius:6px;padding:12px 14px;border-left:3px solid #A88961;">
+        <div style="font-size:10px;color:#8A8075;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Atención prenatal</div>
+        <div style="font-size:26px;font-weight:700;color:#A88961;">97.6%</div>
+        <div style="font-size:11px;color:#54565A;">22,808 madres</div>
+      </div>
+      <div style="background:#EDEDEE;border-radius:6px;padding:12px 14px;border-left:3px solid #54565A;">
+        <div style="font-size:10px;color:#8A8075;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Sin afiliación</div>
+        <div style="font-size:26px;font-weight:700;color:#54565A;">36.6%</div>
+        <div style="font-size:11px;color:#54565A;">8,560 madres</div>
+      </div>
+    </div>
+    <!-- Tabla municipios -->
+    <div style="margin-top:10px;">
+      <div style="font-size:12px;font-weight:600;color:#902142;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;">Top 5 Municipios por nacimientos</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead><tr style="background:#902142;color:#fff;">
+          <th style="padding:7px 10px;text-align:left;">Municipio</th>
+          <th style="padding:7px 10px;text-align:right;">Nacimientos</th>
+          <th style="padding:7px 10px;text-align:right;">%</th>
+        </tr></thead>
+        <tbody>
+          <tr style="background:#FBF7F5;"><td style="padding:6px 10px;">Reynosa</td><td style="padding:6px 10px;text-align:right;font-weight:600;">5,474</td><td style="padding:6px 10px;text-align:right;">23.4%</td></tr>
+          <tr><td style="padding:6px 10px;">Matamoros</td><td style="padding:6px 10px;text-align:right;font-weight:600;">3,248</td><td style="padding:6px 10px;text-align:right;">13.9%</td></tr>
+          <tr style="background:#FBF7F5;"><td style="padding:6px 10px;">Nuevo Laredo</td><td style="padding:6px 10px;text-align:right;font-weight:600;">3,038</td><td style="padding:6px 10px;text-align:right;">13.0%</td></tr>
+          <tr><td style="padding:6px 10px;">Victoria</td><td style="padding:6px 10px;text-align:right;font-weight:600;">2,081</td><td style="padding:6px 10px;text-align:right;">8.9%</td></tr>
+          <tr style="background:#FBF7F5;"><td style="padding:6px 10px;">Altamira</td><td style="padding:6px 10px;text-align:right;font-weight:600;">1,569</td><td style="padding:6px 10px;text-align:right;">6.7%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Indicadores clave -->
+    <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="border:1px solid #DDD5C8;border-radius:6px;padding:10px 14px;">
+        <div style="font-size:11px;font-weight:600;color:#902142;margin-bottom:6px;text-transform:uppercase;">Tipo de resolución</div>
+        <div style="font-size:12px;color:#54565A;line-height:1.8;">
+          Cesárea: <strong>68.1%</strong><br>
+          Eutócico: <strong>30.8%</strong><br>
+          Distócico: <strong>1.1%</strong>
+        </div>
+      </div>
+      <div style="border:1px solid #DDD5C8;border-radius:6px;padding:10px 14px;">
+        <div style="font-size:11px;font-weight:600;color:#902142;margin-bottom:6px;text-transform:uppercase;">Inicio atención prenatal</div>
+        <div style="font-size:12px;color:#54565A;line-height:1.8;">
+          1er trimestre: <strong>79.5%</strong><br>
+          2do trimestre: <strong>14.0%</strong><br>
+          Sin atención: <strong>2.4%</strong>
+        </div>
+      </div>
+      <div style="border:1px solid #DDD5C8;border-radius:6px;padding:10px 14px;">
+        <div style="font-size:11px;font-weight:600;color:#902142;margin-bottom:6px;text-transform:uppercase;">Características del RN</div>
+        <div style="font-size:12px;color:#54565A;line-height:1.8;">
+          Peso promedio: <strong>3,139 g</strong><br>
+          Edad gestacional: <strong>38.3 sem.</strong><br>
+          Hombres / Mujeres: <strong>50.8% / 49.2%</strong>
+        </div>
+      </div>
+      <div style="border:1px solid #DDD5C8;border-radius:6px;padding:10px 14px;">
+        <div style="font-size:11px;font-weight:600;color:#902142;margin-bottom:6px;text-transform:uppercase;">Lugar de nacimiento</div>
+        <div style="font-size:12px;color:#54565A;line-height:1.8;">
+          Privada: <strong>36.2%</strong><br>
+          IMSS Bienestar: <strong>35.2%</strong><br>
+          IMSS: <strong>24.3%</strong>
+        </div>
+      </div>
+    </div>
+    <!-- Footer -->
+    <div style="margin-top:16px;padding-top:10px;border-top:1px solid #DDD5C8;display:flex;justify-content:space-between;font-size:10px;color:#8A8075;">
+      <span>Fuente: CEN_2022 / SINBA2 · Secretaría de Salud Tamaulipas</span>
+      <span>Generado: septiembre 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- BOTÓN FICHA TÉCNICA -->
+<button class="btn-ficha" onclick="imprimirFicha()" title="Descargar ficha técnica en PDF">
+  📄 Ficha técnica PDF
+</button>
+<script>
+function imprimirFicha(){
+  document.getElementById('ficha-print').style.display='block';
+  window.print();
+  setTimeout(()=>{document.getElementById('ficha-print').style.display='none';},1000);
+}
+</script>
+
+</body></html>
